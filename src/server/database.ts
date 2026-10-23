@@ -7,12 +7,30 @@ import type { CmsCollection, CmsMedia, CmsRecord, CmsStatus } from "@/lib/cms-sh
 import { CmsError } from "./errors";
 
 const globalDatabase = globalThis as typeof globalThis & { elitaCmsDatabase?: DatabaseSync };
+const settingsSchemaReady = new WeakSet<DatabaseSync>();
+
+/** Also runs for a cached connection after a development hot reload. */
+function ensureSettingsSchema(db: DatabaseSync) {
+  if (settingsSchemaReady.has(db)) return;
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS cms_settings (
+      id TEXT PRIMARY KEY CHECK(id='site'), data TEXT NOT NULL,
+      revision INTEGER NOT NULL DEFAULT 1, updated_at TEXT NOT NULL
+    );
+    INSERT INTO cms_meta(key,value) VALUES('schema_version','2')
+      ON CONFLICT(key) DO UPDATE SET value=excluded.value WHERE CAST(cms_meta.value AS INTEGER)<2;
+  `);
+  settingsSchemaReady.add(db);
+}
 
 export function cmsDataDirectory() { return path.resolve(process.env.CMS_DATA_DIR || path.join(process.cwd(), ".data")); }
 
 export function getDatabase(): DatabaseSync {
   if (process.env.DEPLOY_TARGET === "github-pages") throw new CmsError(503, "مدیریت محتوا به میزبانی Node.js نیاز دارد.");
-  if (globalDatabase.elitaCmsDatabase) return globalDatabase.elitaCmsDatabase;
+  if (globalDatabase.elitaCmsDatabase) {
+    ensureSettingsSchema(globalDatabase.elitaCmsDatabase);
+    return globalDatabase.elitaCmsDatabase;
+  }
   const directory = cmsDataDirectory();
   mkdirSync(directory, { recursive: true, mode: 0o700 });
   const db = new DatabaseSync(path.join(directory, "elita.sqlite"), { timeout: 5000 });
@@ -45,6 +63,7 @@ export function getDatabase(): DatabaseSync {
     );
     INSERT OR IGNORE INTO cms_meta(key,value) VALUES('schema_version','1');
   `);
+  ensureSettingsSchema(db);
   globalDatabase.elitaCmsDatabase = db;
   return db;
 }
@@ -119,5 +138,9 @@ export function listMedia(): CmsMedia[] { return getDatabase().prepare("SELECT *
 export function mediaIsReferenced(url: string): boolean {
   // Exact traversal, including drafts, avoids both SQL wildcard surprises and accidental deletion.
   const contains = (value: unknown): boolean => value === url || (Array.isArray(value) ? value.some(contains) : value !== null && typeof value === "object" ? Object.values(value).some(contains) : false);
-  return getDatabase().prepare("SELECT data FROM cms_records").all().some(row => contains(JSON.parse(String(row.data))));
+  const db = getDatabase();
+  if (db.prepare("SELECT data FROM cms_records").all().some(row => contains(JSON.parse(String(row.data))))) return true;
+  // A settings image has the same protection as media used in published or draft records.
+  if (!db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='cms_settings'").get()) return false;
+  return db.prepare("SELECT data FROM cms_settings").all().some(row => contains(JSON.parse(String(row.data))));
 }

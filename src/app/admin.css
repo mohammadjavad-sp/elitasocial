@@ -129,6 +129,32 @@
 .admin-access .admin-text-link { margin-top: 18px; }
 .admin-access .admin-form-fields { gap: 20px; }
 .admin-access-card > .admin-button { margin-block: 12px; }
+.admin-settings-layout { display: grid; grid-template-columns: 180px minmax(0, 1fr); align-items: start; gap: 22px; }
+.admin-settings-navigation { position: sticky; top: 22px; display: grid; gap: 5px; padding: 10px; border: 1px solid var(--admin-line); border-radius: 11px; background: #fff; }
+.admin-settings-navigation button { min-height: 44px; border: 0; border-radius: 7px; background: transparent; padding: 10px 12px; text-align: start; color: #625b71; font-size: 12px; line-height: 1.8; }
+.admin-settings-navigation button:hover { color: var(--purple); background: #f7f4fe; }
+.admin-settings-navigation button[aria-current] { background: var(--admin-soft); color: #4d25ca; font-weight: 700; }
+.admin-settings-layout > form { min-width: 0; padding: 27px; border: 1px solid var(--admin-line); border-radius: 12px; background: #fff; }
+.admin-settings-content > #admin-settings-group { display: grid; gap: 25px; }
+.admin-settings-group-heading { padding-bottom: 18px; border-bottom: 1px solid var(--admin-line); }
+.admin-settings-group-heading h3 { font-size: 20px; }
+.admin-settings-group-heading h3:focus { outline: none; }
+.admin-settings-content .admin-repeater { margin-block: 0; }
+.admin-settings-content .admin-repeater .admin-image-field { margin-top: 22px; }
+.admin-settings-content .admin-image-field { min-width: 0; margin-bottom: 0; }
+.admin-settings-save { margin-top: 10px; }
+.admin-settings-updated { flex-basis: 100%; color: var(--admin-muted); font-size: 11px; line-height: 1.9; }
+@media (max-width: 1100px) {
+  .admin-settings-layout { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .admin-settings-navigation { position: static; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+  .admin-settings-navigation button { padding-inline: 9px; }
+}
+@media (max-width: 500px) {
+  .admin-settings-layout > form { padding: 17px; }
+  .admin-settings-navigation { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px; }
+  .admin-settings-navigation button { font-size: 11px; }
+  .admin-settings-save > .admin-button { width: 100%; }
+}
 @media (min-width: 1500px) { .admin-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 @media (max-width: 1100px) {
   .admin-shell { grid-template-columns: 210px minmax(0, 1fr); }

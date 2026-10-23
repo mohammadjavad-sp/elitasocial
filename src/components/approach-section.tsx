@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { homeContent } from "@/content/home";
+import { getSiteSettings } from "@/server/settings";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
 
-export function ApproachSection() {
-  const { approach, contact } = homeContent;
+export async function ApproachSection() {
+  const { home: { approach, contact } } = await getSiteSettings();
   return (
     <section id="approach" className="approach-section container" aria-labelledby="approach-title">
       <div className="section-heading">

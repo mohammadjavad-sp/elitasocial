@@ -17,11 +17,13 @@ async function main() {
   if (!destination.startsWith(`${backupRoot}${path.sep}`)) throw new Error("Invalid backup destination.");
   await mkdir(destination, { recursive: true, mode: 0o700 });
   const databaseFile = path.join(destination, "elita.sqlite");
-  await backup(getDatabase(), databaseFile);
+  const database = getDatabase();
+  await backup(database, databaseFile);
   await chmod(databaseFile, 0o600);
   const mediaDirectory = path.join(dataDirectory, "media");
   if (existsSync(mediaDirectory)) await cp(mediaDirectory, path.join(destination, "media"), { recursive: true, errorOnExist: true, force: false });
-  await writeFile(path.join(destination, "manifest.json"), JSON.stringify({ createdAt: new Date().toISOString(), database: "elita.sqlite", media: "media", schemaVersion: 1 }, null, 2), { mode: 0o600 });
+  const version = database.prepare("SELECT value FROM cms_meta WHERE key='schema_version'").get();
+  await writeFile(path.join(destination, "manifest.json"), JSON.stringify({ createdAt: new Date().toISOString(), database: "elita.sqlite", media: "media", schemaVersion: Number(version?.value ?? 1) }, null, 2), { mode: 0o600 });
   console.log(`CMS backup saved to ${destination}`);
 }
 

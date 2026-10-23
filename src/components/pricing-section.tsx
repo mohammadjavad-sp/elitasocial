@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { pricingContent, type DemoPlan, type PricingContent } from "@/content/pricing";
 import { planContactHref, readServiceSelection } from "@/lib/service-selection";
 import { Icon } from "./icons";
+import { useSiteSettings } from "./site-settings-provider";
 
 const priceFormatter = new Intl.NumberFormat("fa-IR");
 
 export function PricingSection({ pricing = pricingContent }: { pricing?: PricingContent }) {
+  const { sections } = useSiteSettings();
   const [categoryId, setCategoryId] = useState("instagram");
   useEffect(() => {
     function selectFromUrl() {
@@ -22,7 +24,7 @@ export function PricingSection({ pricing = pricingContent }: { pricing?: Pricing
   const plans: DemoPlan[] = category.plans;
   return (
     <section id="pricing" className="pricing-section container" aria-labelledby="pricing-title">
-      <div className="section-heading"><h2 id="pricing-title">{pricing.title.map(line => <span key={line}>{line}</span>)}</h2><p>{pricing.description}</p></div>
+      <div className="section-heading"><h2 id="pricing-title">{sections.pricingTitle.map((line, index) => <span key={index}>{line}</span>)}</h2><p>{sections.pricingDescription}</p></div>
       <div className="pricing-tabs" role="group" aria-label="نوع خدمات پلن‌ها">
         {pricing.categories.map(item => <button key={item.id} type="button" aria-pressed={category.id === item.id} aria-controls="pricing-plans" onClick={() => setCategoryId(item.id)}>{item.label}</button>)}
       </div>
@@ -38,7 +40,7 @@ export function PricingSection({ pricing = pricingContent }: { pricing?: Pricing
         </article>)}
       </div>
       {plans.length === 0 && <p className="demo-notice">برای این خدمت هنوز پلنی منتشر نشده؛ برای پیشنهاد همکاری با ما گفتگو کن.</p>}
-      <p className="pricing-footnote">هزینهٔ نهایی و محدودهٔ همکاری، بعد از بررسی نیازهای برندت مشخص می‌شود.</p>
+      <p className="pricing-footnote">{sections.pricingFootnote}</p>
     </section>
   );
 }

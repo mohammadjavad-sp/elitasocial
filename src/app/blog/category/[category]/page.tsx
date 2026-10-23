@@ -5,9 +5,10 @@ import { Icon } from "@/components/icons";
 import { MagazineGallery } from "@/components/magazine-gallery";
 import { SiteFooter } from "@/components/site-footer";
 import { articleCategories, getArticleCategory } from "@/content/articles";
-import { getNavigation, homeContent } from "@/content/home";
+import { getNavigation } from "@/content/home";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
+import { getSiteSettings } from "@/server/settings";
 
 type PageProps = { params: Promise<{ category: string }> };
 
@@ -15,8 +16,9 @@ export function generateStaticParams() { return process.env.DEPLOY_TARGET === "g
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { category: slug } = await params;
+  const { home: { brand } } = await getSiteSettings();
   const category = getArticleCategory(slug);
-  return category ? { title: `${category.label} | مجلهٔ الیتا`, description: category.description } : { title: "موضوع پیدا نشد | مجلهٔ الیتا" };
+  return category ? { title: `${category.label} | مجلهٔ ${brand.name}`, description: category.description } : { title: `موضوع پیدا نشد | مجلهٔ ${brand.name}` };
 }
 
 export default async function MagazineCategoryPage({ params }: PageProps) {
@@ -27,7 +29,7 @@ export default async function MagazineCategoryPage({ params }: PageProps) {
   return (
     <div className="home-shell magazine-shell">
       <a className="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
-      <Header activePage="blog" navigation={getNavigation("blog")} whatsapp={homeContent.contact.whatsapp} />
+      <Header activePage="blog" navigation={getNavigation("blog")} />
       <main id="main-content">
         <section className="magazine-intro container" aria-labelledby="magazine-category-title">
           <nav className="magazine-breadcrumb" aria-label="مسیر صفحه"><a href={sitePath("/")}>خانه</a><span aria-hidden="true">/</span><a href={sitePath("/blog/")}>مجلهٔ الیتا</a><span aria-hidden="true">/</span><span aria-current="page">{category.label}</span></nav>

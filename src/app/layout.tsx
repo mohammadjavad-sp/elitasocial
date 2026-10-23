@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { getSiteSettings } from "@/server/settings";
+import { SiteSettingsProvider } from "@/components/site-settings-provider";
 import "./globals.css";
 import "./sections.css";
 import "./portfolio.css";
@@ -12,16 +14,20 @@ import "./admin.css";
 
 const estedad = localFont({ src: "../../public/fonts/Estedad-Variable.woff2", variable: "--font-estedad", display: "swap", weight: "100 900" });
 
-export const metadata: Metadata = {
-  title: "الیتا سوشال | مدیریت اینستاگرام و طراحی سایت با الهه طاهری",
-  description: "با الهه طاهری در الیتا سوشال، از مدیریت اینستاگرام تا طراحی وب‌سایت همراه برند شما هستیم. برای مشاوره و شروع همکاری در ارتباط باشید.",
-  applicationName: "Elita Social",
-  robots: { index: false, follow: false },
-  openGraph: { title: "الیتا سوشال | حرفه‌ای دیده شو", description: "مدیریت اینستاگرام و طراحی وب‌سایت با الهه طاهری", locale: "fa_IR", type: "website" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo, home: { brand } } = await getSiteSettings();
+  return {
+    title: seo.title,
+    description: seo.description,
+    applicationName: brand.latinName,
+    robots: { index: false, follow: false },
+    openGraph: { title: seo.title, description: seo.description, locale: "fa_IR", type: "website" },
+  };
+}
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#f7f7fc" };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="fa" dir="rtl"><body className={estedad.variable}>{children}</body></html>;
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const settings = await getSiteSettings();
+  return <html lang="fa" dir="rtl"><body className={estedad.variable}><SiteSettingsProvider settings={settings}>{children}</SiteSettingsProvider></body></html>;
 }

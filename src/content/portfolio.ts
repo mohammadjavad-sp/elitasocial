@@ -36,6 +36,8 @@ export const portfolioProjects: PortfolioProject[] = [
 
 export const portfolioDemoNotice = "این طرح‌ها نمایشی‌اند و برای معرفی سبک طراحی ساخته شده‌اند؛ پروژهٔ واقعی مشتریان الیتا سوشال نیستند.";
 
-export function projectConsultationUrl(project: PortfolioProject) {
-  return "https://wa.me/989338234473?text=" + encodeURIComponent(`سلام، دربارهٔ خدمات مشابه ${project.isMock !== false ? "طرح نمایشی" : "پروژهٔ"} «${project.title}» مشاوره می‌خواهم.`);
+export function projectConsultationUrl(project: PortfolioProject, whatsapp: string) {
+  const url = new URL(whatsapp);
+  url.searchParams.set("text", `سلام، دربارهٔ خدمات مشابه ${project.isMock !== false ? "طرح نمایشی" : "پروژهٔ"} «${project.title}» مشاوره می‌خواهم.`);
+  return url.toString();
 }

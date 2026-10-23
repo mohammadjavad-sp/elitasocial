@@ -4,6 +4,7 @@ import { deleteRecord, getDatabase, listMedia, listRecords, saveRecord } from ".
 import { CmsError } from "./errors";
 import { deleteMedia, maxUploadBytes, serveMedia, uploadMedia } from "./media";
 import { collection, object, revision, status, text, validateRecord } from "./validation";
+import { readSiteSettings, saveSiteSettings } from "./site-settings";
 
 const privateHeaders = { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "same-origin" };
 function responseHeaders(additions?: HeadersInit) {
@@ -76,6 +77,11 @@ export async function handleCmsRequest(request: Request, context: RouteContext):
       const payload = await body(request, 16_000);
       changePassword(auth, passwordText(payload.currentPassword, "رمز فعلی"), passwordText(payload.newPassword, "رمز تازه"));
       return empty();
+    }
+    if (resource === "settings" && segments.length === 1 && method === "GET") return json(readSiteSettings());
+    if (resource === "settings" && segments.length === 1 && method === "PUT") {
+      const payload = await body(request, 160_000);
+      return json(saveSiteSettings(payload.data, revision(payload.revision)));
     }
     if (resource === "stats" && method === "GET" && segments.length === 1) {
       const counts = { articles: 0, services: 0, portfolio: 0, plans: 0, media: 0 };

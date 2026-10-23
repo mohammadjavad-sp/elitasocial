@@ -7,10 +7,11 @@ import { Header } from "@/components/header";
 import { Icon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
 import { articles as starterArticles, getArticle, getArticleCategory, getRelatedArticles } from "@/content/articles";
-import { getNavigation, homeContent } from "@/content/home";
+import { getNavigation } from "@/content/home";
 import { serviceContactHref } from "@/lib/service-selection";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
+import { getSiteSettings } from "@/server/settings";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -20,13 +21,13 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const { articles } = await getCmsContent();
+  const [{ articles }, { home: { brand } }] = await Promise.all([getCmsContent(), getSiteSettings()]);
   const article = getArticle(slug, articles);
-  if (!article) return { title: "مقاله پیدا نشد | الیتا سوشال" };
+  if (!article) return { title: `مقاله پیدا نشد | ${brand.name}` };
   return {
-    title: `${article.title} | مجلهٔ الیتا`,
+    title: `${article.title} | مجلهٔ ${brand.name}`,
     description: article.excerpt,
-    openGraph: { type: "article", title: article.title, description: article.excerpt, locale: "fa_IR", siteName: "الیتا سوشال" },
+    openGraph: { type: "article", title: article.title, description: article.excerpt, locale: "fa_IR", siteName: brand.name },
   };
 }
 
@@ -47,7 +48,7 @@ export default async function ArticlePage({ params }: PageProps) {
   return (
     <div className="home-shell article-shell">
       <a className="skip-link" href="#main-content">رفتن به محتوای مقاله</a>
-      <Header activePage="blog" navigation={getNavigation("blog")} whatsapp={homeContent.contact.whatsapp} />
+      <Header activePage="blog" navigation={getNavigation("blog")} />
       <main id="main-content">
         <article aria-labelledby="article-title">
           <header className="article-hero container">

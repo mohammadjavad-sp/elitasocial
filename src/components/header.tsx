@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import type { NavigationItem } from "@/content/home";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
+import { useSiteSettings } from "./site-settings-provider";
 
 type ActivePage = "home" | "portfolio" | "services" | "blog";
-type Props = { navigation: NavigationItem[]; whatsapp: string; activePage?: ActivePage };
+type Props = { navigation: NavigationItem[]; whatsapp?: string; activePage?: ActivePage };
 const activePaths: Record<ActivePage, string> = { home: "/", portfolio: "/portfolio/", services: "/services/", blog: "/blog/" };
 
 function NavigationLinks({ items, onNavigate, activePage }: { items: NavigationItem[]; onNavigate?: () => void; activePage: ActivePage }) {
@@ -22,7 +23,8 @@ function NavigationLinks({ items, onNavigate, activePage }: { items: NavigationI
   ));
 }
 
-export function Header({ navigation, whatsapp, activePage = "home" }: Props) {
+export function Header({ navigation, activePage = "home" }: Props) {
+  const { home: { brand, contact }, header } = useSiteSettings();
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
@@ -50,13 +52,13 @@ export function Header({ navigation, whatsapp, activePage = "home" }: Props) {
   return (
     <header className="site-header">
       <div className="header-inner container">
-        <a className="brand" href={sitePath("/")} aria-label="الیتا سوشال، خانه">
+        <a className="brand" href={sitePath("/")} aria-label={`${brand.name}، خانه`}>
           <span className="brand-symbol"><Icon name="sparkle" /></span>
-          <span className="brand-words"><span className="brand-persian">الیتا سوشال</span><span className="brand-latin" lang="en" dir="ltr">ELITA SOCIAL</span></span>
+          <span className="brand-words"><span className="brand-persian">{brand.name}</span><span className="brand-latin" lang="en" dir="ltr">{brand.latinName}</span></span>
         </a>
         <nav className="desktop-nav" aria-label="منوی اصلی"><NavigationLinks items={navigation} activePage={activePage} /></nav>
-        <a className="header-cta pill-button" href={whatsapp} target="_blank" rel="noopener noreferrer">
-          <span>بیا از برندت بگیم</span><span className="button-circle"><Icon name="arrow" /></span>
+        <a className="header-cta pill-button" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">
+          <span>{header.ctaLabel}</span><span className="button-circle"><Icon name="arrow" /></span>
         </a>
         <button className="menu-toggle" ref={toggle} type="button" aria-expanded={open} aria-controls="mobile-navigation"
           aria-label={open ? "بستن منو" : "باز کردن منو"} onClick={() => setOpen(!open)}>
@@ -65,7 +67,7 @@ export function Header({ navigation, whatsapp, activePage = "home" }: Props) {
       </div>
       <div className="mobile-panel container" id="mobile-navigation" ref={panel} hidden={!open}>
         <nav aria-label="منوی موبایل"><NavigationLinks items={navigation} activePage={activePage} onNavigate={() => setOpen(false)} /></nav>
-        <a className="mobile-contact" href={whatsapp} target="_blank" rel="noopener noreferrer">مشاوره و شروع همکاری <Icon name="arrow" /></a>
+        <a className="mobile-contact" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">{header.mobileCtaLabel} <Icon name="arrow" /></a>
       </div>
     </header>
   );

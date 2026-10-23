@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { homeContent } from "@/content/home";
+import { getSiteSettings } from "@/server/settings";
 import { Icon } from "./icons";
 import { ServiceArt } from "./service-art";
 import { sitePath } from "@/lib/site-path";
 import { services as starterServices, type ServiceDetail } from "@/content/services";
 
-export function AboutSection() {
-  const { about } = homeContent;
+export async function AboutSection() {
+  const { home: { about } } = await getSiteSettings();
   return (
     <section id="about" className="about-section container" aria-labelledby="about-title">
       <div className="about-main-image">
@@ -31,8 +31,8 @@ export function AboutSection() {
   );
 }
 
-export function ServicesSection({ items = starterServices }: { items?: ServiceDetail[] }) {
-  const { services } = homeContent;
+export async function ServicesSection({ items = starterServices }: { items?: ServiceDetail[] }) {
+  const { home: { services } } = await getSiteSettings();
   return (
     <section id="services" className="services-section container" aria-labelledby="services-title">
       <div className="services-heading">

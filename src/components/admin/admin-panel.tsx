@@ -5,10 +5,12 @@ import { cmsCollectionLabels, cmsCollections, type CmsCollection, type CmsMedia,
 import { publicRecordPath, recordTitle } from "../../lib/cms-editor-fields";
 import { sitePath } from "../../lib/site-path";
 import { RecordEditor, type CmsRequest } from "./record-editor";
+import { SiteSettingsEditor } from "./site-settings-editor";
+import { useSiteSettings } from "../site-settings-provider";
 
-type Tab = "dashboard" | CmsCollection | "media" | "account";
+type Tab = "dashboard" | CmsCollection | "media" | "settings" | "account";
 type Stats = { counts: Record<CmsCollection | "media", number> };
-const tabLabels: Record<Tab, string> = { dashboard: "پیشخوان", ...cmsCollectionLabels, media: "رسانه‌ها", account: "حساب کاربری" };
+const tabLabels: Record<Tab, string> = { dashboard: "پیشخوان", ...cmsCollectionLabels, media: "رسانه‌ها", settings: "تنظیمات سایت", account: "حساب کاربری" };
 const number = new Intl.NumberFormat("fa-IR");
 function message(error: unknown) { return error instanceof Error ? error.message : "ارتباط انجام نشد. دوباره تلاش کن."; }
 function date(value: string) { const valueDate = new Date(value); return Number.isNaN(valueDate.valueOf()) ? "—" : new Intl.DateTimeFormat("fa-IR", { dateStyle: "medium" }).format(valueDate); }
@@ -32,7 +34,7 @@ async function send<T>(path: string, options?: RequestInit, csrfToken?: string):
   return response.status === 204 ? undefined as T : response.json() as Promise<T>;
 }
 
-function AdminLogo() { return <a className="admin-brand" href={sitePath("/")}><strong>الیتا سوشال</strong><span>مدیریت محتوای سایت</span></a>; }
+function AdminLogo() { const { home } = useSiteSettings(); return <a className="admin-brand" href={sitePath("/")}><strong>{home.brand.name}</strong><span>مدیریت محتوای سایت</span></a>; }
 
 function Notice({ title, children, retry }: { title: string; children: ReactNode; retry?: () => void }) {
   return <main className="admin-access"><section className="admin-access-card"><AdminLogo /><h1>{title}</h1><div className="admin-access-copy">{children}</div>{retry && <button className="admin-button" onClick={retry}>تلاش دوباره</button>}<a className="admin-text-link" href={sitePath("/")}>بازگشت به سایت</a></section></main>;
@@ -158,5 +160,5 @@ export function AdminPanel() {
   if (loading) return <Notice title="در حال بررسی ورود"><p role="status">چند لحظه صبر کن…</p></Notice>;
   if (connectionError && !session) return <Notice title="ارتباط با پنل برقرار نشد" retry={checkSession}><p role="alert">{connectionError}</p></Notice>;
   if (!session) return <Login onLogin={(value) => { setSession(value); setTab("dashboard"); }} setupRequired={setupRequired} initialError="" />;
-  return <div className="admin-shell"><a className="skip-link" href="#admin-content">رفتن به محتوای پنل</a><aside className="admin-sidebar"><AdminLogo /><nav aria-label="بخش‌های پنل مدیریت">{(Object.entries(tabLabels) as [Tab, string][]).map(([key, label]) => <button key={key} aria-current={tab === key ? "page" : undefined} onClick={() => selectTab(key)}><span>{label}</span>{tab === key && <span className="admin-nav-dot" aria-hidden="true" />}</button>)}</nav><div className="admin-sidebar-bottom"><p>{session.user.name}</p><a href={sitePath("/")} target="_blank" rel="noreferrer">دیدن سایت</a><button className="admin-link-button" disabled={logoutBusy} onClick={logout}>{logoutBusy ? "در حال خروج…" : "خروج از حساب"}</button>{logoutError && <p className="admin-error" role="alert">{logoutError}</p>}</div></aside><div className="admin-workspace"><header className="admin-topbar"><div><span>پنل مدیریت</span><h1 ref={heading} tabIndex={-1}>{tabLabels[tab]}</h1></div><a href={sitePath("/")} target="_blank" rel="noreferrer">باز کردن سایت</a></header><main className="admin-content" id="admin-content">{tab === "dashboard" ? <Dashboard request={request} onSelect={selectTab} /> : tab === "media" ? <MediaLibrary request={request} /> : tab === "account" ? <Account session={session} request={request} /> : <Collection key={tab} collection={tab} request={request} onDirtyChange={dirtyChange} />}</main></div></div>;
+  return <div className="admin-shell"><a className="skip-link" href="#admin-content">رفتن به محتوای پنل</a><aside className="admin-sidebar"><AdminLogo /><nav aria-label="بخش‌های پنل مدیریت">{(Object.entries(tabLabels) as [Tab, string][]).map(([key, label]) => <button key={key} aria-current={tab === key ? "page" : undefined} onClick={() => selectTab(key)}><span>{label}</span>{tab === key && <span className="admin-nav-dot" aria-hidden="true" />}</button>)}</nav><div className="admin-sidebar-bottom"><p>{session.user.name}</p><a href={sitePath("/")} target="_blank" rel="noreferrer">دیدن سایت</a><button className="admin-link-button" disabled={logoutBusy} onClick={logout}>{logoutBusy ? "در حال خروج…" : "خروج از حساب"}</button>{logoutError && <p className="admin-error" role="alert">{logoutError}</p>}</div></aside><div className="admin-workspace"><header className="admin-topbar"><div><span>پنل مدیریت</span><h1 ref={heading} tabIndex={-1}>{tabLabels[tab]}</h1></div><a href={sitePath("/")} target="_blank" rel="noreferrer">باز کردن سایت</a></header><main className="admin-content" id="admin-content">{tab === "dashboard" ? <Dashboard request={request} onSelect={selectTab} /> : tab === "media" ? <MediaLibrary request={request} /> : tab === "account" ? <Account session={session} request={request} /> : tab === "settings" ? <SiteSettingsEditor request={request} onDirtyChange={dirtyChange} /> : <Collection key={tab} collection={tab} request={request} onDirtyChange={dirtyChange} />}</main></div></div>;
 }

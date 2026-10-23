@@ -4,21 +4,25 @@ import { Header } from "@/components/header";
 import { Icon } from "@/components/icons";
 import { ServiceArt } from "@/components/service-art";
 import { SiteFooter } from "@/components/site-footer";
-import { getNavigation, homeContent } from "@/content/home";
+import { getNavigation } from "@/content/home";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
+import { getSiteSettings } from "@/server/settings";
 
-export const metadata: Metadata = {
-  title: "خدمات دیجیتال مارکتینگ | الیتا سوشال",
-  description: "مدیریت اینستاگرام، طراحی وب‌سایت، تولید محتوا و سئو؛ با خدمات الیتا سوشال، خروجی‌ها و مراحل همکاری آشنا شوید.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { home: { brand } } = await getSiteSettings();
+  return {
+    title: `خدمات دیجیتال مارکتینگ | ${brand.name}`,
+    description: "مدیریت اینستاگرام، طراحی وب‌سایت، تولید محتوا و سئو؛ با خدمات الیتا سوشال، خروجی‌ها و مراحل همکاری آشنا شوید.",
+  };
+}
 
 export default async function ServicesPage() {
   const { services } = await getCmsContent();
   return (
     <div className="home-shell service-shell">
       <a className="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
-      <Header activePage="services" navigation={getNavigation("services")} whatsapp={homeContent.contact.whatsapp} />
+      <Header activePage="services" navigation={getNavigation("services")} />
       <main id="main-content">
         <section className="service-overview-hero container" aria-labelledby="services-page-title">
           <div className="service-overview-copy">

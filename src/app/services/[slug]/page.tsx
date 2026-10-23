@@ -5,11 +5,12 @@ import { Header } from "@/components/header";
 import { Icon } from "@/components/icons";
 import { ServiceArt } from "@/components/service-art";
 import { SiteFooter } from "@/components/site-footer";
-import { getNavigation, homeContent } from "@/content/home";
+import { getNavigation } from "@/content/home";
 import { services as starterServices } from "@/content/services";
 import { sitePath } from "@/lib/site-path";
 import { serviceContactHref, servicePricingHref } from "@/lib/service-selection";
 import { getCmsContent } from "@/server/content";
+import { getSiteSettings } from "@/server/settings";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -17,9 +18,9 @@ export function generateStaticParams() { return process.env.DEPLOY_TARGET === "g
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const { services } = await getCmsContent();
+  const [{ services }, { home: { brand } }] = await Promise.all([getCmsContent(), getSiteSettings()]);
   const service = services.find(item => item.slug === slug);
-  return service ? { title: `${service.title} | الیتا سوشال`, description: service.intro } : { title: "خدمت پیدا نشد | الیتا سوشال" };
+  return service ? { title: `${service.title} | ${brand.name}`, description: service.intro } : { title: `خدمت پیدا نشد | ${brand.name}` };
 }
 
 export default async function ServiceDetailPage({ params }: PageProps) {
@@ -34,7 +35,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   return (
     <div className={`home-shell service-shell service-detail-shell service-theme-${service.theme}`}>
       <a className="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
-      <Header activePage="services" navigation={getNavigation("services")} whatsapp={homeContent.contact.whatsapp} />
+      <Header activePage="services" navigation={getNavigation("services")} />
       <main id="main-content">
         <section className="service-detail-hero container" aria-labelledby="service-detail-title">
           <div>

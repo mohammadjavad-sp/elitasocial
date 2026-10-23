@@ -2,17 +2,18 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { closingContent } from "@/content/closing";
-import { homeContent } from "@/content/home";
 import { pricingContent, type PricingContent } from "@/content/pricing";
 import { readServiceSelection, serviceLabels, type SelectedPlan } from "@/lib/service-selection";
 import { Icon } from "./icons";
+import { socialAccountLabel, useSiteSettings } from "./site-settings-provider";
 
 export function TestimonialsSection() {
+  const { sections } = useSiteSettings();
   return (
     <section className="testimonials-section container" id="testimonials" aria-labelledby="testimonials-title">
       <div className="section-heading">
-        <h2 id="testimonials-title">بازخوردهای نمایشی</h2>
-        <p>تصویری از نیازهای متفاوت برندها؛ متن‌های این بخش نمونه‌اند و نظر مشتری واقعی نیستند.</p>
+        <h2 id="testimonials-title">{sections.testimonialsTitle}</h2>
+        <p>{sections.testimonialsDescription}</p>
       </div>
       <div className="testimonials-grid">
         {closingContent.testimonials.map(item => (
@@ -28,6 +29,7 @@ export function TestimonialsSection() {
 }
 
 export function ContactSection({ pricing = pricingContent }: { pricing?: PricingContent }) {
+  const { home: { contact, brand }, sections, faqs } = useSiteSettings();
   const [whatsappHref, setWhatsappHref] = useState("");
   const [selectedService, setSelectedService] = useState("هنوز مطمئن نیستم");
   const [selectedPlan, setSelectedPlan] = useState<SelectedPlan | null>(null);
@@ -49,40 +51,41 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
     const form = event.currentTarget;
     const fields = new FormData(form);
     const name = String(fields.get("name") ?? "").trim();
-    const contact = String(fields.get("contact") ?? "").trim();
+    const replyContact = String(fields.get("contact") ?? "").trim();
     const service = String(fields.get("service") ?? "");
     const message = String(fields.get("message") ?? "").trim();
     const nameInput = form.elements.namedItem("name") as HTMLInputElement;
     const contactInput = form.elements.namedItem("contact") as HTMLInputElement;
     const messageInput = form.elements.namedItem("message") as HTMLTextAreaElement;
-    const normalizedContact = contact.replace(/[۰-۹]/g, digit => String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit))).replace(/[٠-٩]/g, digit => String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)));
+    const normalizedContact = replyContact.replace(/[۰-۹]/g, digit => String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit))).replace(/[٠-٩]/g, digit => String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)));
     const digitCount = normalizedContact.replace(/\D/g, "").length;
     const isPhone = /^\+?[\d\s()-]+$/.test(normalizedContact) && digitCount >= 7 && digitCount <= 15;
-    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(replyContact);
     nameInput.setCustomValidity(name.length >= 2 ? "" : "نامت را با دست‌کم دو حرف بنویس.");
     contactInput.setCustomValidity(isPhone || isEmail ? "" : "شماره موبایل یا ایمیل معتبر بنویس.");
     messageInput.setCustomValidity(message.length >= 10 ? "" : "کمی بیشتر دربارهٔ درخواستت بنویس؛ دست‌کم ۱۰ حرف.");
     if (!form.reportValidity()) return;
     const planContext = selectedPlan ? `\nپلن مورد گفت‌وگو: ${selectedPlan.plan.name} (${selectedPlan.categoryLabel}${selectedPlan.plan.isMock ? "؛ پلن و قیمت نمایشی، نیازمند پیشنهاد نهایی" : ""})` : "";
-    const composed = `سلام، من ${name} هستم.\nموضوع گفتگو: ${service}${planContext}\nراه ارتباطی من: ${contact}\n\n${message}`;
-    setWhatsappHref(`${homeContent.contact.whatsapp}?text=${encodeURIComponent(composed)}`);
+    const composed = `سلام، من ${name} هستم.\nموضوع گفتگو: ${service}${planContext}\nراه ارتباطی من: ${replyContact}\n\n${message}`;
+    const destination = new URL(contact.whatsapp);
+    destination.searchParams.set("text", composed);
+    setWhatsappHref(destination.toString());
   }
-  const { contact } = homeContent;
   return (
     <section className="contact-section container" id="contact" aria-labelledby="contact-title">
-      <div className="section-heading"><h2 id="contact-title"><span>از ایده‌ات بگو،</span><span>قدم اول را با هم برداریم</span></h2><p>برای پیجت برنامه داری یا به یک وب‌سایت فکر می‌کنی؟ راه ارتباطی دلخواهت را انتخاب کن.</p></div>
+      <div className="section-heading"><h2 id="contact-title">{sections.contactTitle.map((line, index) => <span key={index}>{line}</span>)}</h2><p>{sections.contactDescription}</p></div>
       <div className="contact-grid">
         <aside className="contact-info" aria-labelledby="contact-info-title">
-          <h3 id="contact-info-title">مستقیم در ارتباط باشیم</h3>
-          <p>من الهه طاهری‌ام. دربارهٔ برندت و چیزی که می‌خوای بسازی، برام بنویس.</p>
-          <a className="contact-channel" href={contact.phone}><span className="contact-channel-icon"><Icon name="phone" /></span><span><small>تماس با الیتا</small><strong dir="ltr">{contact.phoneLabel}</strong></span></a>
-          <a className="contact-channel" href={contact.instagram} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><Icon name="instagram" /></span><span><small>اینستاگرام</small><strong dir="ltr">@elita.nasl</strong></span></a>
-          <a className="contact-channel" href={contact.telegram} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><Icon name="telegram" /></span><span><small>تلگرام</small><strong dir="ltr">@elitanasl</strong></span></a>
+          <h3 id="contact-info-title">{sections.contactInfoTitle}</h3>
+          <p>{sections.contactInfoDescription}</p>
+          <a className="contact-channel" href={contact.phone}><span className="contact-channel-icon"><Icon name="phone" /></span><span><small>تماس با {brand.name}</small><strong dir="ltr">{contact.phoneLabel}</strong></span></a>
+          <a className="contact-channel" href={contact.instagram} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><Icon name="instagram" /></span><span><small>اینستاگرام</small><strong dir="ltr">{socialAccountLabel(contact.instagram)}</strong></span></a>
+          <a className="contact-channel" href={contact.telegram} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><Icon name="telegram" /></span><span><small>تلگرام</small><strong dir="ltr">{socialAccountLabel(contact.telegram)}</strong></span></a>
           <a className="contact-whatsapp" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">شروع گفتگو در واتساپ<Icon name="arrow" /></a>
         </aside>
         <div className="contact-form-panel">
-          <h3>برندت به چی نیاز داره؟</h3>
-          <p>اطلاعات را بنویس تا پیامت برای ادامهٔ گفتگو در واتساپ آماده شود.</p>
+          <h3>{sections.contactFormTitle}</h3>
+          <p>{sections.contactFormDescription}</p>
           <form className="contact-form" onSubmit={prepareMessage} onChange={event => { setWhatsappHref(""); const field = event.target; if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) field.setCustomValidity(""); }}>
             <div className="contact-form-row">
               <label htmlFor="contact-name">نام شما<input id="contact-name" name="name" autoComplete="name" required minLength={2} maxLength={80} placeholder="نام و نام خانوادگی" /></label>
@@ -102,7 +105,7 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
           </form>
         </div>
       </div>
-      <div className="contact-faq" aria-labelledby="faq-title"><div><h3 id="faq-title">قبل از شروع، <br />شاید سؤال تو هم باشه</h3><p>چند نکته دربارهٔ مسیر همکاری</p></div><div className="contact-faq-list">{closingContent.faqs.map(faq => <details key={faq.question}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div></div>
+      <div className="contact-faq" aria-labelledby="faq-title"><div><h3 id="faq-title">{sections.faqTitle}</h3><p>{sections.faqDescription}</p></div><div className="contact-faq-list">{faqs.map((faq, index) => <details key={`${index}-${faq.question}`}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div></div>
     </section>
   );
 }

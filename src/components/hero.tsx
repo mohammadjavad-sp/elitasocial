@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { homeContent } from "@/content/home";
+import { getSiteSettings } from "@/server/settings";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
 
-export function Hero() {
-  const { hero, contact } = homeContent;
+export async function Hero() {
+  const { home: { hero, contact, brand } } = await getSiteSettings();
   return (
     <section className="hero container" aria-labelledby="hero-title">
       <div className="hero-copy">
@@ -21,9 +21,9 @@ export function Hero() {
         </div>
         <div className="hero-socials">
           <span className="social-label">اینجا هم در ارتباطیم</span><span className="social-divider" aria-hidden="true" />
-          <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="اینستاگرام الیتا سوشال (پنجره جدید)"><Icon name="instagram" /></a>
-          <a href={contact.telegram} target="_blank" rel="noopener noreferrer" aria-label="تلگرام الیتا سوشال (پنجره جدید)"><Icon name="telegram" /></a>
-          <a href={contact.phone} aria-label={`تماس با الیتا سوشال، ${contact.phoneLabel}`}><Icon name="phone" /></a>
+          <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label={`اینستاگرام ${brand.name} (پنجره جدید)`}><Icon name="instagram" /></a>
+          <a href={contact.telegram} target="_blank" rel="noopener noreferrer" aria-label={`تلگرام ${brand.name} (پنجره جدید)`}><Icon name="telegram" /></a>
+          <a href={contact.phone} aria-label={`تماس با ${brand.name}، ${contact.phoneLabel}`}><Icon name="phone" /></a>
         </div>
       </div>
       <div className="hero-visual">
@@ -45,7 +45,7 @@ export function Hero() {
         <svg className="sketch-arrow" viewBox="0 0 150 90" fill="none" aria-hidden="true"><path d="M145 70C94 81 77 13 18 20M18 20l17-13M18 20l18 13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /><path d="M135 76C93 82 74 33 43 28" stroke="currentColor" strokeWidth=".7" /></svg>
         <span className="little-star" aria-hidden="true"><Icon name="sparkle" /></span>
         <span className="visual-dot" aria-hidden="true" />
-        <span className="portrait-caption">الهه طاهری<span>همراهِ مسیر دیجیتال برند شما</span></span>
+        <span className="portrait-caption">{brand.owner}<span>همراهِ مسیر دیجیتال برند شما</span></span>
       </div>
     </section>
   );

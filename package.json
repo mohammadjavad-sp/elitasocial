@@ -13,7 +13,8 @@
     "check:ui": "node scripts/check-ui.mjs",
     "check:portfolio": "node scripts/check-portfolio.mjs",
     "cms:init": "node --conditions=react-server --import tsx scripts/cms-init.ts",
-    "cms:backup": "node --conditions=react-server --import tsx scripts/cms-backup.ts"
+    "cms:backup": "node --conditions=react-server --import tsx scripts/cms-backup.ts",
+    "cms:migrate": "node --conditions=react-server --import tsx scripts/cms-migrate.ts"
   },
   "dependencies": {
     "next": "16.4.3",

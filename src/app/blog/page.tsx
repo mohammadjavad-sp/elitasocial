@@ -5,14 +5,18 @@ import { Icon } from "@/components/icons";
 import { MagazineGallery } from "@/components/magazine-gallery";
 import { SiteFooter } from "@/components/site-footer";
 import { articleCategories, getArticleCategory } from "@/content/articles";
-import { getNavigation, homeContent } from "@/content/home";
+import { getNavigation } from "@/content/home";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
+import { getSiteSettings } from "@/server/settings";
 
-export const metadata: Metadata = {
-  title: "مجلهٔ الیتا | راهنمای محتوا، طراحی سایت و حضور دیجیتال",
-  description: "یادداشت‌های کاربردی الیتا دربارهٔ مدیریت اینستاگرام، طراحی وب‌سایت، تولید محتوا و سئو. موضوع دلخواهت را پیدا کن و قدم بعدی برندت را روشن‌تر بردار.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { home: { brand } } = await getSiteSettings();
+  return {
+    title: `مجلهٔ ${brand.name} | راهنمای محتوا، طراحی سایت و حضور دیجیتال`,
+    description: "یادداشت‌های کاربردی الیتا دربارهٔ مدیریت اینستاگرام، طراحی وب‌سایت، تولید محتوا و سئو. موضوع دلخواهت را پیدا کن و قدم بعدی برندت را روشن‌تر بردار.",
+  };
+}
 
 export default async function MagazinePage() {
   const { articles } = await getCmsContent();
@@ -21,7 +25,7 @@ export default async function MagazinePage() {
   return (
     <div className="home-shell magazine-shell">
       <a className="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
-      <Header activePage="blog" navigation={getNavigation("blog")} whatsapp={homeContent.contact.whatsapp} />
+      <Header activePage="blog" navigation={getNavigation("blog")} />
       <main id="main-content">
         <section className="magazine-intro container" aria-labelledby="magazine-title">
           <nav className="magazine-breadcrumb" aria-label="مسیر صفحه"><a href={sitePath("/")}>خانه</a><span aria-hidden="true">/</span><span aria-current="page">مجلهٔ الیتا</span></nav>
