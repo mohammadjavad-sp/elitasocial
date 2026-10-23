@@ -17,7 +17,7 @@ export const homeContent = {
   },
   navigation: [
     { label: "خانه", href: "/" },
-    { label: "خدمات", href: "#services" },
+    { label: "خدمات", href: "/services/" },
     { label: "نمونه‌کارها", href: "/portfolio/" },
     { label: "پلن‌ها", href: "#pricing" },
     { label: "مجله الیتا", href: "#insights" },
@@ -35,7 +35,7 @@ export const homeContent = {
   services: {
     title: ["برای حرفه‌ای دیده شدن،", "از اینجا شروع کن"],
     description: "از پیج اینستاگرام تا خانهٔ آنلاین برندت؛ خدماتی که کنار هم، حضورت را در دنیای دیجیتال کامل می‌کنند.",
-    actionLabel: "دربارهٔ همکاری صحبت کنیم",
+    actionLabel: "همهٔ خدمات الیتا",
     items: [
       { id: "instagram", title: "ادمینی و مدیریت اینستاگرام", description: "برنامه‌ریزی محتوا، مدیریت پیج و همراهی در ارتباط با مخاطب؛ با لحنی که به برندت میاد.", label: "برای مدیریت پیجم مشاوره می‌خوام.", theme: "pink" },
       { id: "website", title: "طراحی و توسعهٔ وب‌سایت", description: "وب‌سایتی متناسب با هویت برندت؛ با طراحی خوانا، تجربهٔ کاربری روان و نمایش درست در موبایل.", label: "برای طراحی سایت مشاوره می‌خوام.", theme: "lilac" },
@@ -86,9 +86,9 @@ export const homeContent = {
   },
 };
 
-export function getNavigation(page: "home" | "portfolio" = "home"): NavigationItem[] {
+export function getNavigation(page: "home" | "portfolio" | "services" = "home"): NavigationItem[] {
   return homeContent.navigation.map((item) => ({
     ...item,
-    href: page === "portfolio" && item.href?.startsWith("#") ? `/${item.href}` : item.href,
+    href: page !== "home" && item.href?.startsWith("#") ? `/${item.href}` : item.href,
   }));
 }

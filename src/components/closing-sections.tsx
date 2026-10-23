@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { closingContent } from "@/content/closing";
 import { homeContent } from "@/content/home";
 import { sitePath } from "@/lib/site-path";
+import { readServiceSelection, serviceLabels, type SelectedPlan } from "@/lib/service-selection";
 import { Icon } from "./icons";
 
 export function TestimonialsSection() {
@@ -64,7 +65,20 @@ export function InsightsSection() {
 
 export function ContactSection() {
   const [whatsappHref, setWhatsappHref] = useState("");
+  const [selectedService, setSelectedService] = useState("هنوز مطمئن نیستم");
+  const [selectedPlan, setSelectedPlan] = useState<SelectedPlan | null>(null);
   const preparedLink = useRef<HTMLAnchorElement>(null);
+  useEffect(() => {
+    function selectFromUrl() {
+      const selection = readServiceSelection(window.location.search);
+      setSelectedService(selection.service ? serviceLabels[selection.service] : "هنوز مطمئن نیستم");
+      setSelectedPlan(selection.selectedPlan);
+      setWhatsappHref("");
+    }
+    selectFromUrl();
+    window.addEventListener("popstate", selectFromUrl);
+    return () => window.removeEventListener("popstate", selectFromUrl);
+  }, []);
   useEffect(() => { if (whatsappHref) preparedLink.current?.focus(); }, [whatsappHref]);
   function prepareMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -85,7 +99,8 @@ export function ContactSection() {
     contactInput.setCustomValidity(isPhone || isEmail ? "" : "شماره موبایل یا ایمیل معتبر بنویس.");
     messageInput.setCustomValidity(message.length >= 10 ? "" : "کمی بیشتر دربارهٔ درخواستت بنویس؛ دست‌کم ۱۰ حرف.");
     if (!form.reportValidity()) return;
-    const composed = `سلام، من ${name} هستم.\nموضوع گفتگو: ${service}\nراه ارتباطی من: ${contact}\n\n${message}`;
+    const planContext = selectedPlan ? `\nپلن مورد گفت‌وگو: ${selectedPlan.plan.name} (${selectedPlan.categoryLabel}؛ پلن و قیمت نمایشی، نیازمند پیشنهاد نهایی)` : "";
+    const composed = `سلام، من ${name} هستم.\nموضوع گفتگو: ${service}${planContext}\nراه ارتباطی من: ${contact}\n\n${message}`;
     setWhatsappHref(`${homeContent.contact.whatsapp}?text=${encodeURIComponent(composed)}`);
   }
   const { contact } = homeContent;
@@ -109,7 +124,12 @@ export function ContactSection() {
               <label htmlFor="contact-name">نام شما<input id="contact-name" name="name" autoComplete="name" required minLength={2} maxLength={80} placeholder="نام و نام خانوادگی" /></label>
               <label htmlFor="contact-way">موبایل یا ایمیل<input id="contact-way" name="contact" autoComplete="off" required minLength={5} maxLength={120} dir="ltr" placeholder="09… / name@example.com" /></label>
             </div>
-            <label htmlFor="contact-service">خدمت موردنیاز<select id="contact-service" name="service" defaultValue="هنوز مطمئن نیستم"><option>هنوز مطمئن نیستم</option><option>مدیریت اینستاگرام</option><option>طراحی وب‌سایت</option><option>تولید محتوا</option><option>سئو و پشتیبانی سایت</option><option>چند خدمت در کنار هم</option></select></label>
+            <label htmlFor="contact-service">خدمت موردنیاز<select id="contact-service" name="service" value={selectedService} onChange={event => {
+              const nextService = event.target.value;
+              setSelectedService(nextService);
+              if (selectedPlan && nextService !== serviceLabels[selectedPlan.service]) setSelectedPlan(null);
+            }}><option>هنوز مطمئن نیستم</option>{Object.values(serviceLabels).map(label => <option key={label}>{label}</option>)}<option>چند خدمت در کنار هم</option></select></label>
+            {selectedPlan && <p className="contact-form-note" role="status"><strong>پلن انتخابی: {selectedPlan.plan.name} / {selectedPlan.categoryLabel}</strong><br />این پلن و قیمت آن نمایشی است؛ محدوده و هزینهٔ نهایی پس از مشاوره مشخص می‌شود.</p>}
             <label htmlFor="contact-message">کمی از کسب‌وکارت بگو<textarea id="contact-message" name="message" required minLength={10} maxLength={2000} rows={4} placeholder="چه کاری انجام می‌دی و دوست داری به کجا برسی؟" /></label>
             <p className="contact-form-note" id="contact-form-note">با ادامه، متن آماده را در واتساپ می‌بینی و خودت ارسال می‌کنی.</p>
             <button type="submit" className="pill-button" aria-describedby="contact-form-note">ادامهٔ گفتگو در واتساپ<span className="button-circle"><Icon name="arrow" /></span></button>

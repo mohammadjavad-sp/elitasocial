@@ -31,7 +31,7 @@ export function AboutSection() {
 }
 
 export function ServicesSection() {
-  const { services, contact } = homeContent;
+  const { services } = homeContent;
   return (
     <section id="services" className="services-section container" aria-labelledby="services-title">
       <div className="services-heading">
@@ -46,11 +46,11 @@ export function ServicesSection() {
             <h3>{service.title}</h3>
             <ServiceArt type={service.id} />
             <p>{service.description}</p>
-            <a href={`${contact.whatsapp}?text=${encodeURIComponent(`سلام، ${service.label}`)}`} target="_blank" rel="noopener noreferrer" aria-label={`مشاوره دربارهٔ ${service.title} در واتساپ (پنجره جدید)`}>شروع گفتگو<Icon name="arrow" /></a>
+            <a href={sitePath(`/services/${service.id}/`)} aria-label={`جزئیات ${service.title}`}>بیشتر دربارهٔ این خدمت<Icon name="arrow" /></a>
           </article>
         ))}
       </div>
-      <a className="pill-button services-action" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">{services.actionLabel}<span className="button-circle"><Icon name="arrow" /></span></a>
+      <a className="pill-button services-action" href={sitePath("/services/")}>{services.actionLabel}<span className="button-circle"><Icon name="arrow" /></span></a>
     </section>
   );
 }

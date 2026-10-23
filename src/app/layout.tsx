@@ -5,6 +5,7 @@ import "./sections.css";
 import "./portfolio.css";
 import "./pricing.css";
 import "./closing.css";
+import "./services.css";
 
 const estedad = localFont({ src: "../../public/fonts/Estedad-Variable.woff2", variable: "--font-estedad", display: "swap", weight: "100 900" });
 

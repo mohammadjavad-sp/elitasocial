@@ -1,14 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { pricingContent, type DemoPlan } from "@/content/pricing";
-import { homeContent } from "@/content/home";
+import { planContactHref, readServiceSelection } from "@/lib/service-selection";
 import { Icon } from "./icons";
 
 const priceFormatter = new Intl.NumberFormat("fa-IR");
 
 export function PricingSection() {
   const [categoryId, setCategoryId] = useState("instagram");
+  useEffect(() => {
+    function selectFromUrl() {
+      const { categoryId: requestedCategory } = readServiceSelection(window.location.search);
+      if (requestedCategory) setCategoryId(requestedCategory);
+    }
+    selectFromUrl();
+    window.addEventListener("popstate", selectFromUrl);
+    return () => window.removeEventListener("popstate", selectFromUrl);
+  }, []);
   const category = pricingContent.categories.find(item => item.id === categoryId)!;
   const plans: DemoPlan[] = category.plans;
   return (
@@ -25,7 +34,7 @@ export function PricingSection() {
           <h3>{plan.name}</h3><p className="plan-description">{plan.description}</p>
           <div className="plan-price"><data value={plan.price}>{priceFormatter.format(plan.price)}</data><span>{plan.currency}<small>{plan.period}</small></span></div>
           <ul>{plan.features.map(feature => <li key={feature}><svg viewBox="0 0 20 20" aria-hidden="true" fill="none"><path d="m4 10 4 4 8-8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>{feature}</li>)}</ul>
-          <a className={`pill-button ${plan.recommended ? "" : "secondary-button"}`} href={`${homeContent.contact.whatsapp}?text=${encodeURIComponent(`سلام، دربارهٔ همکاری برای ${category.label} با نیازهایی شبیه پلن نمایشی «${plan.name}» مشاوره می‌خوام.`)}`} target="_blank" rel="noopener noreferrer">مشاوره دربارهٔ این پلن<span className="button-circle"><Icon name="arrow" /></span></a>
+          <a className={`pill-button ${plan.recommended ? "" : "secondary-button"}`} href={planContactHref(category.id, plan.id)}>مشاوره دربارهٔ این پلن<span className="button-circle"><Icon name="arrow" /></span></a>
         </article>)}
       </div>
       <p className="pricing-footnote">هزینهٔ نهایی و محدودهٔ همکاری، بعد از بررسی نیازهای برندت مشخص می‌شود.</p>

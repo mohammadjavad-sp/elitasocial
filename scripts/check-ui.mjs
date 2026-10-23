@@ -124,11 +124,13 @@ try {
         assert.match(await plan.locator('.plan-price').innerText(), /تومان/, 'Plan states its currency');
         assert.match(await plan.locator('.plan-price small').innerText(), index === 1 ? /پروژه‌ای/ : /ماهانه/, 'Plan states the correct pricing period');
         assert(await plan.locator('li').count() >= 4, 'Plan includes useful scope details');
-        const consultation = new URL(await plan.locator('a').getAttribute('href'));
-        assert.equal(consultation.hostname, 'wa.me', 'Plan consultation uses WhatsApp');
-        const message = consultation.searchParams.get('text');
-        assert(message?.includes(await plan.locator('h3').innerText()), 'Consultation identifies the selected plan');
-        assert(message?.includes(await category.innerText()) && message.includes('نمایشی'), 'Consultation preserves service and demo status');
+        const consultation = new URL(await plan.locator('a').getAttribute('href'), page.url());
+        assert.equal(consultation.origin, new URL(baseURL).origin, 'Plan consultation opens the site contact form');
+        assert.equal(consultation.pathname, new URL(baseURL).pathname, 'Plan consultation preserves the deployment subpath');
+        assert.equal(consultation.hash, '#contact', 'Plan consultation targets the contact form');
+        assert.equal(consultation.searchParams.get('planCategory'), ['instagram', 'website', 'support'][index], 'Consultation preserves the selected pricing category');
+        assert.equal(consultation.searchParams.get('service'), ['instagram', 'website', 'seo'][index], 'Consultation preserves the selected service');
+        assert(consultation.searchParams.get('plan')?.startsWith(['ig-', 'web-', 'care-'][index]), 'Consultation identifies the selected plan');
         prices.push(amount);
       }
       assert(prices.every((amount, planIndex) => planIndex === 0 || amount > prices[planIndex - 1]), 'Increasing plan scope has increasing sample pricing');
@@ -234,13 +236,14 @@ try {
 
     await page.evaluate(() => scrollTo(0, 0));
     if (await toggle.isVisible()) await toggle.click();
-    const servicesLink = page.locator('header a[href$="#services"]:visible');
+    const servicesPath = `${new URL(baseURL).pathname.replace(/\/$/, '')}/services/`;
+    const servicesLink = page.locator(`header a[href="${servicesPath}"]:visible`);
     assert.equal(await servicesLink.count(), 1, 'Services navigation is available');
     await servicesLink.click();
-    assert.equal(new URL(page.url()).hash, '#services', 'Services navigation opens the actual section');
-    if (await toggle.isVisible()) assert.equal(await toggle.getAttribute('aria-expanded'), 'false', 'Selecting a section closes the mobile menu');
-    const servicesPosition = await services.boundingBox();
-    assert(servicesPosition && servicesPosition.y < viewport.height && servicesPosition.y + servicesPosition.height > 0, 'Services section is in view after navigation');
+    await page.waitForURL(url => url.pathname === servicesPath);
+    assert.equal(new URL(page.url()).pathname, servicesPath, 'Services navigation opens the dedicated services page');
+    if (await toggle.isVisible()) assert.equal(await toggle.getAttribute('aria-expanded'), 'false', 'Selecting a page closes the mobile menu');
+    await page.goBack({ waitUntil: 'networkidle' });
 
     await page.evaluate(() => document.activeElement instanceof HTMLElement && document.activeElement.blur());
     if (viewport.name === 'desktop' || viewport.name === 'mobile') {
