@@ -49,11 +49,10 @@ try {
     const services = page.locator('#services');
     const approach = page.locator('#approach');
     const benefits = page.locator('#benefits');
-    const sections = { about, services, approach, benefits };
-    assert.equal(await page.locator('main h2').count(), 4, 'Four section headings beneath the hero');
+    const sections = { about, services, approach, benefits, ...Object.fromEntries(['portfolio', 'pricing', 'testimonials', 'insights', 'contact'].map(id => [id, page.locator(`#${id}`)])) };
     for (const section of Object.values(sections)) {
       await section.waitFor({ state: 'visible' });
-      assert.equal(await section.locator('h2').count(), 1, 'Each section has a descriptive heading');
+      assert.equal(await section.locator('h2:visible').count(), 1, 'Each section has a descriptive visible heading');
       await section.scrollIntoViewIfNeeded();
       for (const image of await section.locator('img').all()) {
         // Decode lazy images even when an inactive accordion panel is collapsed.
@@ -93,7 +92,96 @@ try {
     }
     await benefitButtons.first().focus();
     await page.keyboard.press('Enter');
-    const clippedContent = await page.locator('#about h2, #about p, #services h2, #services p, #services article, #approach h2, #approach p, #benefits h2, #benefits p, #benefits button').evaluateAll(elements => elements.flatMap(element => {
+    assert.match(await sections.portfolio.locator('.portfolio-demo-notice').innerText(), /نمایشی/, 'Portfolio mock status is visible');
+    const portfolioLink = sections.portfolio.locator('a.portfolio-all-link');
+    assert.equal(await portfolioLink.getAttribute('href'), `${new URL(baseURL).pathname.replace(/\/$/, '')}/portfolio/`, 'Gallery link preserves deployment path');
+    const featuredProject = sections.portfolio.locator('.project-open').first();
+    await featuredProject.focus();
+    await page.keyboard.press('Enter');
+    await page.locator('dialog.project-dialog').waitFor({ state: 'visible' });
+    await page.keyboard.press('Escape');
+    await page.locator('dialog.project-dialog').waitFor({ state: 'hidden' });
+    assert(await featuredProject.evaluate(button => document.activeElement === button), 'Featured project modal restores keyboard focus');
+    const pricing = sections.pricing;
+    assert.match(await pricing.locator('.pricing-notice').innerText(), /نمایشی/, 'Pricing clearly identifies sample amounts');
+    const pricingCategories = pricing.locator('.pricing-tabs button');
+    assert.equal(await pricingCategories.count(), 3, 'Three pricing service categories');
+    const categoryPrices = [];
+    for (let index = 0; index < await pricingCategories.count(); index++) {
+      const category = pricingCategories.nth(index);
+      await category.focus();
+      await page.keyboard.press(index % 2 ? 'Space' : 'Enter');
+      assert.equal(await category.getAttribute('aria-pressed'), 'true', 'Keyboard selects pricing category');
+      assert.equal(await pricing.locator('.pricing-tabs button[aria-pressed="true"]').count(), 1, 'One pricing category selected');
+      const plans = pricing.locator('.pricing-card');
+      assert.equal(await plans.count(), 3, 'Each pricing category provides three plans');
+      assert.equal(await pricing.locator('.pricing-recommended').count(), 1, 'One plan is suggested in each category');
+      const prices = [];
+      for (const plan of await plans.all()) {
+        assert.match(await plan.locator('.plan-badges').innerText(), /پلن نمایشی/, 'Every plan carries its own mock label');
+        const amount = Number(await plan.locator('data').getAttribute('value'));
+        assert(Number.isFinite(amount) && amount > 0, 'Plan amount is a positive number');
+        assert.match(await plan.locator('.plan-price').innerText(), /تومان/, 'Plan states its currency');
+        assert.match(await plan.locator('.plan-price small').innerText(), index === 1 ? /پروژه‌ای/ : /ماهانه/, 'Plan states the correct pricing period');
+        assert(await plan.locator('li').count() >= 4, 'Plan includes useful scope details');
+        const consultation = new URL(await plan.locator('a').getAttribute('href'));
+        assert.equal(consultation.hostname, 'wa.me', 'Plan consultation uses WhatsApp');
+        const message = consultation.searchParams.get('text');
+        assert(message?.includes(await plan.locator('h3').innerText()), 'Consultation identifies the selected plan');
+        assert(message?.includes(await category.innerText()) && message.includes('نمایشی'), 'Consultation preserves service and demo status');
+        prices.push(amount);
+      }
+      assert(prices.every((amount, planIndex) => planIndex === 0 || amount > prices[planIndex - 1]), 'Increasing plan scope has increasing sample pricing');
+      categoryPrices.push(prices);
+    }
+    assert(new Set(categoryPrices.map(prices => prices.join(','))).size === 3, 'Switching categories changes pricing content');
+    await pricingCategories.first().click();
+    const articleButtons = sections.insights.locator('.insight-read');
+    assert.equal(await articleButtons.count(), 3, 'Three readable article previews');
+    for (const trigger of await articleButtons.all()) {
+      const title = await trigger.locator('xpath=ancestor::article').locator('h3').innerText();
+      await trigger.focus();
+      await page.keyboard.press('Enter');
+      const dialog = page.locator('dialog.insight-dialog');
+      await dialog.waitFor({ state: 'visible' });
+      assert.equal(await dialog.locator('h2').innerText(), title, 'Preview opens the selected article');
+      await page.keyboard.press('Escape');
+      await dialog.waitFor({ state: 'hidden' });
+      assert(await trigger.evaluate(button => document.activeElement === button), 'Article preview restores keyboard focus');
+    }
+    assert.match(await sections.testimonials.innerText(), /نظر مشتری واقعی نیستند/, 'Demo testimonials clearly identify fictional content');
+    const form = sections.contact.locator('form.contact-form');
+    const urlBeforeForm = page.url();
+    const submit = form.locator('button[type="submit"]');
+    await submit.click();
+    assert.equal(await form.evaluate(element => element.checkValidity()), false, 'Empty request form is blocked by required field validation');
+    assert.equal(await page.locator('.contact-prepared').count(), 0, 'Invalid request creates no WhatsApp message');
+    await form.locator('#contact-name').fill('تست رابط کاربری');
+    await form.locator('#contact-way').fill('invalid-contact');
+    await form.locator('#contact-message').fill('این یک متن آزمایشی برای بررسی فرم است.');
+    await submit.click();
+    assert.equal(await form.locator('#contact-way').evaluate(element => element.validity.valid), false, 'Malformed contact information is rejected');
+    await form.locator('#contact-way').fill('preview@example.com');
+    await form.locator('#contact-service').selectOption({ label: 'طراحی وب‌سایت' });
+    await submit.click();
+    const preparedLink = form.locator('.contact-prepared a');
+    await preparedLink.waitFor({ state: 'visible' });
+    const preparedURL = new URL(await preparedLink.getAttribute('href'));
+    assert.equal(preparedURL.hostname, 'wa.me');
+    for (const expected of ['تست رابط کاربری', 'preview@example.com', 'طراحی وب‌سایت', 'این یک متن آزمایشی']) assert(preparedURL.searchParams.get('text')?.includes(expected), 'Composed message contains submitted information');
+    assert(await preparedLink.evaluate(link => document.activeElement === link), 'Prepared message link receives focus');
+    assert.equal(page.url(), urlBeforeForm, 'Form prepares a message without navigation or sending');
+    await form.locator('#contact-name').fill('');
+    assert.equal(await form.locator('.contact-prepared').count(), 0, 'Editing form clears stale prepared message');
+    await form.locator('#contact-way').fill('');
+    await form.locator('#contact-message').fill('');
+    const faq = sections.contact.locator('details').first();
+    await faq.locator('summary').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await faq.getAttribute('open'), '', 'FAQ opens with keyboard');
+    assert(await faq.locator('p').isVisible(), 'FAQ answer becomes visible');
+    await page.keyboard.press('Enter');
+    const clippedContent = await page.locator('main section h2, main section p:not(.sr-only), #services article, #benefits button, .project-card-title, .pricing-card').evaluateAll(elements => elements.flatMap(element => {
       const rect = element.getBoundingClientRect();
       if (!rect.width || !rect.height) return [];
       return rect.left < -1 || rect.right > innerWidth + 1 || element.scrollWidth > element.clientWidth + 1
@@ -146,7 +234,7 @@ try {
 
     await page.evaluate(() => scrollTo(0, 0));
     if (await toggle.isVisible()) await toggle.click();
-    const servicesLink = page.locator('header a[href="#services"]:visible');
+    const servicesLink = page.locator('header a[href$="#services"]:visible');
     assert.equal(await servicesLink.count(), 1, 'Services navigation is available');
     await servicesLink.click();
     assert.equal(new URL(page.url()).hash, '#services', 'Services navigation opens the actual section');
@@ -166,7 +254,7 @@ try {
     await page.evaluate(() => { document.activeElement instanceof HTMLElement && document.activeElement.blur(); scrollTo(0, 0); });
     await page.screenshot({ path: path.join(output, `${viewport.name}.png`), fullPage: true, animations: 'disabled' });
     assert.deepEqual(failedLocalAssets, [], `${viewport.name}: local deployment assets load successfully`);
-    results.push({ viewport, layout, typography, failedLocalAssets, homePathTested: new URL(baseURL).pathname, whatsappLinks: whatsapp.length, upcomingItems: upcoming.length, menuTested, sectionsTested: Object.keys(sections), serviceCards: 4, benefitPanels: 5, benefitKeyboardTested: true, servicesNavigationTested: true, title: await page.title() });
+    results.push({ viewport, layout, typography, failedLocalAssets, homePathTested: new URL(baseURL).pathname, whatsappLinks: whatsapp.length, upcomingItems: upcoming.length, menuTested, sectionsTested: Object.keys(sections), serviceCards: 4, benefitPanels: 5, benefitKeyboardTested: true, servicesNavigationTested: true, featuredDialogTested: true, pricingCategoriesTested: 3, pricingPlansTested: 9, articleDialogsTested: 3, contactValidationAndCompositionTested: true, faqKeyboardTested: true, title: await page.title() });
     await page.close();
   }
   assert.deepEqual(errors, [], 'No unhandled browser errors');

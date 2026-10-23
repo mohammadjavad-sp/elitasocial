@@ -15,7 +15,7 @@ export function Hero() {
           <a className="pill-button primary-button" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">
             {hero.primaryLabel}<span className="button-circle"><Icon name="arrow" /></span>
           </a>
-          <a className="pill-button secondary-button" href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label="دیدن نمونه‌کارها در اینستاگرام (پنجره جدید)">
+          <a className="pill-button secondary-button" href={sitePath("/portfolio/")}>
             {hero.secondaryLabel}<span className="button-circle"><Icon name="arrow" /></span>
           </a>
         </div>

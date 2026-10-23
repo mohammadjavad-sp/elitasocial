@@ -18,9 +18,9 @@ export const homeContent = {
   navigation: [
     { label: "خانه", href: "/" },
     { label: "خدمات", href: "#services" },
-    { label: "نمونه‌کارها", href: "https://www.instagram.com/elita.nasl/", external: true },
-    { label: "پلن‌ها", upcoming: true },
-    { label: "مجله الیتا", upcoming: true },
+    { label: "نمونه‌کارها", href: "/portfolio/" },
+    { label: "پلن‌ها", href: "#pricing" },
+    { label: "مجله الیتا", href: "#insights" },
   ] satisfies NavigationItem[],
   about: {
     title: ["یک حضور منسجم،", "از پیج تا وب‌سایت"],
@@ -85,3 +85,10 @@ export const homeContent = {
     ],
   },
 };
+
+export function getNavigation(page: "home" | "portfolio" = "home"): NavigationItem[] {
+  return homeContent.navigation.map((item) => ({
+    ...item,
+    href: page === "portfolio" && item.href?.startsWith("#") ? `/${item.href}` : item.href,
+  }));
+}
