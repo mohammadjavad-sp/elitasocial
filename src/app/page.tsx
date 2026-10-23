@@ -5,7 +5,7 @@ import { ApproachSection } from "@/components/approach-section";
 import { BenefitsSection } from "@/components/benefits-section";
 import { FeaturedPortfolioSection } from "@/components/portfolio-preview";
 import { PricingSection } from "@/components/pricing-section";
-import { TestimonialsSection, ContactSection } from "@/components/closing-sections";
+import { ContactSection } from "@/components/closing-sections";
 import { InsightsSection } from "@/components/insights-section";
 import { SiteFooter } from "@/components/site-footer";
 import { getNavigation } from "@/content/home";
@@ -28,7 +28,6 @@ export default async function Home() {
           <BenefitsSection content={settings.home.benefits} />
           <FeaturedPortfolioSection projects={content.portfolio} />
           <PricingSection pricing={content.pricing} />
-          <TestimonialsSection />
           <InsightsSection articles={content.articles} />
           <ContactSection pricing={content.pricing} />
         </div>

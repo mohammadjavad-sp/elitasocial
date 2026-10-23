@@ -1,53 +1,54 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { closingContent } from "@/content/closing";
 import { pricingContent, type PricingContent } from "@/content/pricing";
-import { readServiceSelection, serviceLabels, type SelectedPlan } from "@/lib/service-selection";
+import { readServiceSelection, type SelectedPlan } from "@/lib/service-selection";
+import { consultationServiceLabels, type ConsultationService } from "@/lib/consultations-shared";
+import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
 import { socialAccountLabel, useSiteSettings } from "./site-settings-provider";
 
-export function TestimonialsSection() {
-  const { sections } = useSiteSettings();
-  return (
-    <section className="testimonials-section container" id="testimonials" aria-labelledby="testimonials-title">
-      <div className="section-heading">
-        <h2 id="testimonials-title">{sections.testimonialsTitle}</h2>
-        <p>{sections.testimonialsDescription}</p>
-      </div>
-      <div className="testimonials-grid">
-        {closingContent.testimonials.map(item => (
-          <figure className={`sample-quote sample-quote-${item.theme}`} key={item.category}>
-            <div className="quote-top"><span className="quote-mark" aria-hidden="true">«</span><span className="closing-sample-label">نمونهٔ نمایشی</span></div>
-            <blockquote>{item.text}</blockquote>
-            <figcaption><span className="quote-avatar" aria-hidden="true">{item.initials}</span><span><strong>{item.category}</strong><small>سناریوی فرضی همکاری</small></span></figcaption>
-          </figure>
-        ))}
-      </div>
-    </section>
-  );
+const acceptsConsultations = process.env.NEXT_PUBLIC_CMS_ENABLED === "true";
+
+function newRequestId() {
+  if (typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+  const bytes = window.crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 15) | 64;
+  bytes[8] = (bytes[8] & 63) | 128;
+  const hex = Array.from(bytes, value => value.toString(16).padStart(2, "0")).join("");
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
 export function ContactSection({ pricing = pricingContent }: { pricing?: PricingContent }) {
   const { home: { contact, brand }, sections, faqs } = useSiteSettings();
   const [whatsappHref, setWhatsappHref] = useState("");
-  const [selectedService, setSelectedService] = useState("هنوز مطمئن نیستم");
+  const [selectedService, setSelectedService] = useState<ConsultationService>("undecided");
   const [selectedPlan, setSelectedPlan] = useState<SelectedPlan | null>(null);
-  const preparedLink = useRef<HTMLAnchorElement>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [reference, setReference] = useState("");
+  const submissionId = useRef<string | null>(null);
+  const busy = useRef(false);
+  const feedback = useRef<HTMLDivElement>(null);
+  function clearFeedback() {
+    setWhatsappHref(""); setError(""); setReference(""); submissionId.current = null;
+  }
   useEffect(() => {
     function selectFromUrl() {
+      if (busy.current) return;
       const selection = readServiceSelection(window.location.search, pricing);
-      setSelectedService(selection.service ? serviceLabels[selection.service] : "هنوز مطمئن نیستم");
+      setSelectedService(selection.service ?? "undecided");
       setSelectedPlan(selection.selectedPlan);
-      setWhatsappHref("");
+      clearFeedback();
     }
     selectFromUrl();
     window.addEventListener("popstate", selectFromUrl);
     return () => window.removeEventListener("popstate", selectFromUrl);
   }, [pricing]);
-  useEffect(() => { if (whatsappHref) preparedLink.current?.focus(); }, [whatsappHref]);
-  function prepareMessage(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => { if (reference || error || whatsappHref && !submitting) feedback.current?.focus(); }, [reference, error, whatsappHref, submitting]);
+  async function submitRequest(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (busy.current) return;
     const form = event.currentTarget;
     const fields = new FormData(form);
     const name = String(fields.get("name") ?? "").trim();
@@ -57,7 +58,7 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
     const nameInput = form.elements.namedItem("name") as HTMLInputElement;
     const contactInput = form.elements.namedItem("contact") as HTMLInputElement;
     const messageInput = form.elements.namedItem("message") as HTMLTextAreaElement;
-    const normalizedContact = replyContact.replace(/[۰-۹]/g, digit => String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit))).replace(/[٠-٩]/g, digit => String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)));
+    const normalizedContact = replyContact.includes("@") ? replyContact : replyContact.replace(/[۰-۹]/g, digit => String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit))).replace(/[٠-٩]/g, digit => String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)));
     const digitCount = normalizedContact.replace(/\D/g, "").length;
     const isPhone = /^\+?[\d\s()-]+$/.test(normalizedContact) && digitCount >= 7 && digitCount <= 15;
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(replyContact);
@@ -66,10 +67,33 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
     messageInput.setCustomValidity(message.length >= 10 ? "" : "کمی بیشتر دربارهٔ درخواستت بنویس؛ دست‌کم ۱۰ حرف.");
     if (!form.reportValidity()) return;
     const planContext = selectedPlan ? `\nپلن مورد گفت‌وگو: ${selectedPlan.plan.name} (${selectedPlan.categoryLabel}${selectedPlan.plan.isMock ? "؛ پلن و قیمت نمایشی، نیازمند پیشنهاد نهایی" : ""})` : "";
-    const composed = `سلام، من ${name} هستم.\nموضوع گفتگو: ${service}${planContext}\nراه ارتباطی من: ${replyContact}\n\n${message}`;
+    const composed = `سلام، من ${name} هستم.\nموضوع گفتگو: ${consultationServiceLabels[service as ConsultationService]}${planContext}\nراه ارتباطی من: ${replyContact}\n\n${message}`;
     const destination = new URL(contact.whatsapp);
     destination.searchParams.set("text", composed);
     setWhatsappHref(destination.toString());
+    setError(""); setReference("");
+    if (!acceptsConsultations) return;
+    busy.current = true; setSubmitting(true);
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 20000);
+    try {
+      submissionId.current ??= newRequestId();
+      const response = await fetch(sitePath("/api/cms/consultations"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, contact: normalizedContact, service, message, plan: selectedPlan ? { id: selectedPlan.plan.id, categoryId: selectedPlan.categoryId } : undefined, website: String(fields.get("website") ?? ""), requestId: submissionId.current }),
+        signal: controller.signal,
+      });
+      const result = await response.json().catch(() => null) as { reference?: unknown; message?: unknown } | null;
+      if (!response.ok || typeof result?.reference !== "string" || !result.reference) {
+        throw new Error(typeof result?.message === "string" ? result.message : "ثبت درخواست تأیید نشد. دوباره تلاش کن یا مستقیم از واتساپ پیام بده.");
+      }
+      setReference(result.reference);
+    } catch (caught) {
+      setError(caught instanceof Error && caught.name !== "AbortError" && !(caught instanceof TypeError) ? caught.message : "پاسخ ثبت درخواست دریافت نشد. اطلاعاتت در فرم باقی مانده؛ دوباره تلاش کن یا مستقیم از واتساپ پیام بده.");
+    } finally {
+      window.clearTimeout(timeout); busy.current = false; setSubmitting(false);
+    }
   }
   return (
     <section className="contact-section container" id="contact" aria-labelledby="contact-title">
@@ -85,22 +109,28 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
         </aside>
         <div className="contact-form-panel">
           <h3>{sections.contactFormTitle}</h3>
-          <p>{sections.contactFormDescription}</p>
-          <form className="contact-form" onSubmit={prepareMessage} onChange={event => { setWhatsappHref(""); const field = event.target; if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) field.setCustomValidity(""); }}>
+          <p>{acceptsConsultations ? sections.contactFormDescription : "در این پیش‌نمایش، فرم به ثبت درخواست متصل نیست. متن را آماده کن و خودت در واتساپ ارسال کن."}</p>
+          <form className="contact-form" onSubmit={submitRequest} aria-busy={submitting} onChange={event => { clearFeedback(); const field = event.target; if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) field.setCustomValidity(""); }}>
+            <fieldset className="contact-form-fields" disabled={submitting}>
+            <div hidden aria-hidden="true"><label htmlFor="contact-website">وب‌سایت<input id="contact-website" name="website" tabIndex={-1} autoComplete="off" maxLength={200} /></label></div>
             <div className="contact-form-row">
               <label htmlFor="contact-name">نام شما<input id="contact-name" name="name" autoComplete="name" required minLength={2} maxLength={80} placeholder="نام و نام خانوادگی" /></label>
               <label htmlFor="contact-way">موبایل یا ایمیل<input id="contact-way" name="contact" autoComplete="off" required minLength={5} maxLength={120} dir="ltr" placeholder="09… / name@example.com" /></label>
             </div>
             <label htmlFor="contact-service">خدمت موردنیاز<select id="contact-service" name="service" value={selectedService} onChange={event => {
               const nextService = event.target.value;
-              setSelectedService(nextService);
-              if (selectedPlan && nextService !== serviceLabels[selectedPlan.service]) setSelectedPlan(null);
-            }}><option>هنوز مطمئن نیستم</option>{Object.values(serviceLabels).map(label => <option key={label}>{label}</option>)}<option>چند خدمت در کنار هم</option></select></label>
+              setSelectedService(nextService as ConsultationService);
+              if (selectedPlan && nextService !== selectedPlan.service) setSelectedPlan(null);
+            }}>{Object.entries(consultationServiceLabels).map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
             {selectedPlan && <p className="contact-form-note" role="status"><strong>پلن انتخابی: {selectedPlan.plan.name} / {selectedPlan.categoryLabel}</strong><br />{selectedPlan.plan.isMock ? "این پلن و قیمت آن نمایشی است؛ محدوده و هزینهٔ نهایی پس از مشاوره مشخص می‌شود." : "دربارهٔ محدودهٔ همکاری و نیازهای برندت در ادامه گفتگو می‌کنیم."}</p>}
             <label htmlFor="contact-message">کمی از کسب‌وکارت بگو<textarea id="contact-message" name="message" required minLength={10} maxLength={2000} rows={4} placeholder="چه کاری انجام می‌دی و دوست داری به کجا برسی؟" /></label>
-            <p className="contact-form-note" id="contact-form-note">با ادامه، متن آماده را در واتساپ می‌بینی و خودت ارسال می‌کنی.</p>
-            <button type="submit" className="pill-button" aria-describedby="contact-form-note">ادامهٔ گفتگو در واتساپ<span className="button-circle"><Icon name="arrow" /></span></button>
-            {whatsappHref && <div className="contact-prepared"><p role="status">پیامت آماده‌ست؛ برای بررسی و ارسال، واتساپ را باز کن.</p><a ref={preparedLink} href={whatsappHref} target="_blank" rel="noopener noreferrer">باز کردن واتساپ با متن آماده<Icon name="arrow" /></a></div>}
+            <p className="contact-form-note" id="contact-form-note">{acceptsConsultations ? "نام، راه ارتباطی و متن درخواستت فقط برای پیگیری همین مشاوره ذخیره می‌شود." : "این فرم اطلاعات را در سایت ذخیره نمی‌کند؛ ارسال پیام را خودت در واتساپ انجام می‌دهی."}</p>
+            <button type="submit" className="pill-button" disabled={submitting || Boolean(reference)} aria-describedby="contact-form-note">{submitting ? "در حال ثبت درخواست…" : reference ? "درخواست ثبت شد" : acceptsConsultations ? "ثبت درخواست مشاوره" : "آماده‌کردن پیام واتساپ"}<span className="button-circle"><Icon name="arrow" /></span></button>
+            </fieldset>
+            {(reference || error || whatsappHref && !submitting) && <div ref={feedback} tabIndex={-1} className={`contact-prepared${error ? " contact-request-error" : ""}`}>
+              {reference ? <p role="status"><strong>درخواست مشاوره‌ات ثبت شد.</strong><br />کد پیگیری: <bdi dir="ltr">{reference}</bdi><br />این کد را نگه دار؛ برای هماهنگی از راه ارتباطی‌ای که نوشتی با تو تماس می‌گیریم.</p> : error ? <p role="alert">{error}</p> : <p role="status">متن آماده است. هنوز پیامی ارسال نشده؛ برای ارسال، واتساپ را باز کن.</p>}
+              {whatsappHref && <><p>{acceptsConsultations ? "اگر دوست داری، می‌توانی جداگانه در واتساپ هم گفتگو را ادامه بدهی." : "اطلاعاتی در سایت ثبت نشده است."}</p><a href={whatsappHref} target="_blank" rel="noopener noreferrer">باز کردن واتساپ با متن آماده<Icon name="arrow" /></a></>}
+            </div>}
             <noscript><p className="contact-form-note">برای گفتگو، از لینک مستقیم واتساپ در کنار فرم استفاده کن.</p></noscript>
           </form>
         </div>

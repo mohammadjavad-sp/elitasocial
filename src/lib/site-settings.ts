@@ -17,8 +17,6 @@ export type SiteSettings = {
   };
   seo: { title: string; description: string };
   sections: {
-    testimonialsTitle: string;
-    testimonialsDescription: string;
     portfolioTitle: string;
     portfolioDescription: string;
     portfolioActionLabel: string;
@@ -61,8 +59,6 @@ export function getDefaultSiteSettings(): SiteSettings {
       description: "با الهه طاهری در الیتا سوشال، از مدیریت اینستاگرام تا طراحی وب‌سایت همراه برند شما هستیم. برای مشاوره و شروع همکاری در ارتباط باشید.",
     },
     sections: {
-      testimonialsTitle: "بازخوردهای نمایشی",
-      testimonialsDescription: "تصویری از نیازهای متفاوت برندها؛ متن‌های این بخش نمونه‌اند و نظر مشتری واقعی نیستند.",
       portfolioTitle: "هر برند، یک دنیای دیدنی",
       portfolioDescription: "از ویترین یک فروشگاه تا قصهٔ یک پیج؛ چند ایده برای آنچه می‌توانیم با هم بسازیم.",
       portfolioActionLabel: "همهٔ نمونه‌ها",
@@ -77,7 +73,7 @@ export function getDefaultSiteSettings(): SiteSettings {
       contactInfoTitle: "مستقیم در ارتباط باشیم",
       contactInfoDescription: "من الهه طاهری‌ام. دربارهٔ برندت و چیزی که می‌خوای بسازی، برام بنویس.",
       contactFormTitle: "برندت به چی نیاز داره؟",
-      contactFormDescription: "اطلاعات را بنویس تا پیامت برای ادامهٔ گفتگو در واتساپ آماده شود.",
+      contactFormDescription: "درخواستت را بنویس؛ برای هماهنگی مشاوره از راه ارتباطی‌ای که وارد می‌کنی با تو تماس می‌گیریم.",
       faqTitle: "قبل از شروع، شاید سؤال تو هم باشه",
       faqDescription: "چند نکته دربارهٔ مسیر همکاری",
     },
@@ -99,6 +95,9 @@ export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
     return saved !== undefined && typeof saved === typeof template ? saved : structuredClone(template);
   };
   const settings = fillDefaults(getDefaultSiteSettings(), value) as SiteSettings;
+  if (settings.sections.contactFormDescription === "اطلاعات را بنویس تا پیامت برای ادامهٔ گفتگو در واتساپ آماده شود.") {
+    settings.sections.contactFormDescription = getDefaultSiteSettings().sections.contactFormDescription;
+  }
   settings.home.navigation = structuredClone(homeContent.navigation);
   settings.home.services.items = structuredClone(homeContent.services.items);
   settings.home.benefits.items = settings.home.benefits.items.map((item, index) => {

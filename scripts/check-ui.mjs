@@ -49,7 +49,7 @@ try {
     const services = page.locator('#services');
     const approach = page.locator('#approach');
     const benefits = page.locator('#benefits');
-    const sections = { about, services, approach, benefits, ...Object.fromEntries(['portfolio', 'pricing', 'testimonials', 'insights', 'contact'].map(id => [id, page.locator(`#${id}`)])) };
+    const sections = { about, services, approach, benefits, ...Object.fromEntries(['portfolio', 'pricing', 'insights', 'contact'].map(id => [id, page.locator(`#${id}`)])) };
     for (const section of Object.values(sections)) {
       await section.waitFor({ state: 'visible' });
       assert.equal(await section.locator('h2:visible').count(), 1, 'Each section has a descriptive visible heading');
@@ -163,7 +163,6 @@ try {
       const homeResponse = await page.goto(baseURL, { waitUntil: 'networkidle' });
       assert.equal(homeResponse?.status(), 200, 'Homepage loads after visiting an article');
     }
-    assert.match(await sections.testimonials.innerText(), /نظر مشتری واقعی نیستند/, 'Demo testimonials clearly identify fictional content');
     const form = sections.contact.locator('form.contact-form');
     const urlBeforeForm = page.url();
     const submit = form.locator('button[type="submit"]');
@@ -177,16 +176,21 @@ try {
     assert.equal(await form.locator('#contact-way').evaluate(element => element.validity.valid), false, 'Malformed contact information is rejected');
     await form.locator('#contact-way').fill('preview@example.com');
     await form.locator('#contact-service').selectOption({ label: 'طراحی وب‌سایت' });
+    // Keep this visual check read-only on the live Node form: only the static
+    // preview prepares a WhatsApp message without storing a real consultation.
+    if ((await submit.innerText()).includes('واتساپ')) {
     await submit.click();
     const preparedLink = form.locator('.contact-prepared a');
     await preparedLink.waitFor({ state: 'visible' });
     const preparedURL = new URL(await preparedLink.getAttribute('href'));
     assert.equal(preparedURL.hostname, 'wa.me');
     for (const expected of ['تست رابط کاربری', 'preview@example.com', 'طراحی وب‌سایت', 'این یک متن آزمایشی']) assert(preparedURL.searchParams.get('text')?.includes(expected), 'Composed message contains submitted information');
-    assert(await preparedLink.evaluate(link => document.activeElement === link), 'Prepared message link receives focus');
+    assert(await form.locator('.contact-prepared').evaluate(element => document.activeElement === element), 'Prepared message feedback receives focus');
     assert.equal(page.url(), urlBeforeForm, 'Form prepares a message without navigation or sending');
     await form.locator('#contact-name').fill('');
     assert.equal(await form.locator('.contact-prepared').count(), 0, 'Editing form clears stale prepared message');
+    }
+    await form.locator('#contact-name').fill('');
     await form.locator('#contact-way').fill('');
     await form.locator('#contact-message').fill('');
     const faq = sections.contact.locator('details').first();

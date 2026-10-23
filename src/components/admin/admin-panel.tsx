@@ -6,11 +6,12 @@ import { publicRecordPath, recordTitle } from "../../lib/cms-editor-fields";
 import { sitePath } from "../../lib/site-path";
 import { RecordEditor, type CmsRequest } from "./record-editor";
 import { SiteSettingsEditor } from "./site-settings-editor";
+import { ConsultationsPanel } from "./consultations-panel";
 import { useSiteSettings } from "../site-settings-provider";
 
-type Tab = "dashboard" | CmsCollection | "media" | "settings" | "account";
-type Stats = { counts: Record<CmsCollection | "media", number> };
-const tabLabels: Record<Tab, string> = { dashboard: "پیشخوان", ...cmsCollectionLabels, media: "رسانه‌ها", settings: "تنظیمات سایت", account: "حساب کاربری" };
+type Tab = "dashboard" | CmsCollection | "consultations" | "media" | "settings" | "account";
+type Stats = { counts: Record<CmsCollection | "media" | "consultations" | "newConsultations", number> };
+const tabLabels: Record<Tab, string> = { dashboard: "پیشخوان", consultations: "درخواست‌های مشاوره", ...cmsCollectionLabels, media: "رسانه‌ها", settings: "تنظیمات سایت", account: "حساب کاربری" };
 const number = new Intl.NumberFormat("fa-IR");
 function message(error: unknown) { return error instanceof Error ? error.message : "ارتباط انجام نشد. دوباره تلاش کن."; }
 function date(value: string) { const valueDate = new Date(value); return Number.isNaN(valueDate.valueOf()) ? "—" : new Intl.DateTimeFormat("fa-IR", { dateStyle: "medium" }).format(valueDate); }
@@ -57,13 +58,13 @@ function DeleteDialog({ title, description, busy, error, onCancel, onConfirm }: 
   return <dialog ref={dialog} className="admin-delete-dialog" aria-labelledby="admin-delete-title" aria-describedby="admin-delete-description" onCancel={(event) => { event.preventDefault(); if (!busy) onCancel(); }}><h2 id="admin-delete-title">{title}</h2><p id="admin-delete-description">{description}</p>{error && <p className="admin-error" role="alert">{error}</p>}<div className="admin-actions"><button className="admin-button admin-secondary" autoFocus disabled={busy} onClick={onCancel}>انصراف</button><button className="admin-button admin-danger" disabled={busy} onClick={onConfirm}>{busy ? "در حال حذف…" : "بله، حذف شود"}</button></div></dialog>;
 }
 
-function Dashboard({ request, onSelect }: { request: CmsRequest; onSelect: (tab: Tab) => void }) {
+function Dashboard({ request, onSelect, onNewCount }: { request: CmsRequest; onSelect: (tab: Tab) => void; onNewCount: (count: number) => void }) {
   const [stats, setStats] = useState<Stats | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const load = useCallback(async () => { setLoading(true); setError(""); try { setStats(await request<Stats>("stats")); } catch (caught) { setError(message(caught)); } finally { setLoading(false); } }, [request]);
+  const load = useCallback(async () => { setLoading(true); setError(""); try { const next = await request<Stats>("stats"); setStats(next); onNewCount(next.counts.newConsultations); } catch (caught) { setError(message(caught)); } finally { setLoading(false); } }, [request, onNewCount]);
   useEffect(() => { void load(); }, [load]);
-  return <><div className="admin-section-heading"><div><h2>محتوای الیتا، همین‌جا</h2><p className="admin-help">پیش‌نویس آماده کن، محتوای تأییدشده را منتشر کن و اطلاعات سایت را به‌روز نگه دار.</p></div><button className="admin-button admin-secondary" disabled={loading} onClick={load}>{loading ? "در حال دریافت…" : "به‌روزرسانی آمار"}</button></div>{error && <p className="admin-error" role="alert">{error}</p>}<div className="admin-stats">{[...cmsCollections, "media" as const].map((collection) => <button key={collection} onClick={() => onSelect(collection)}><span>{tabLabels[collection]}</span><strong>{stats ? number.format(stats.counts[collection]) : loading ? "…" : "—"}</strong><small>رفتن به {tabLabels[collection]}</small></button>)}</div><section className="admin-guidance"><h3>از کجا شروع کنم؟</h3><p>محتوای نمایشی را با اطلاعات واقعی جایگزین کن. تا زمانی که متن و تصاویر تأیید نشده‌اند، وضعیت را «پیش‌نویس» نگه دار. انتشار، محتوا را در سایت عمومی قابل نمایش می‌کند.</p><div className="admin-actions"><button className="admin-button" onClick={() => onSelect("articles")}>مدیریت مقاله‌ها</button><button className="admin-button admin-secondary" onClick={() => onSelect("media")}>بارگذاری تصاویر</button></div></section></>;
+  return <><div className="admin-section-heading"><div><h2>محتوای الیتا، همین‌جا</h2><p className="admin-help">درخواست‌های مشاوره را پیگیری کن، محتوا منتشر کن و اطلاعات سایت را به‌روز نگه دار.</p></div><button className="admin-button admin-secondary" disabled={loading} onClick={load}>{loading ? "در حال دریافت…" : "به‌روزرسانی آمار"}</button></div>{error && <p className="admin-error" role="alert">{error}</p>}<div className="admin-stats">{["consultations" as const, ...cmsCollections, "media" as const].map((collection) => <button key={collection} onClick={() => onSelect(collection)}><span>{tabLabels[collection]}</span><strong>{stats ? number.format(stats.counts[collection]) : loading ? "…" : "—"}</strong><small>{collection === "consultations" && stats ? `${number.format(stats.counts.newConsultations)} درخواست جدید؛ مشاهده و پیگیری` : `رفتن به ${tabLabels[collection]}`}</small></button>)}</div><section className="admin-guidance"><h3>از کجا شروع کنم؟</h3><p>درخواست‌های جدید را باز کن و پس از تماس، وضعیت پیگیری و یادداشت خصوصی را ذخیره کن. محتوای نمایشی سایت را هم به‌مرور با اطلاعات واقعی جایگزین کن.</p><div className="admin-actions"><button className="admin-button" onClick={() => onSelect("consultations")}>پیگیری درخواست‌های مشاوره</button><button className="admin-button admin-secondary" onClick={() => onSelect("articles")}>مدیریت مقاله‌ها</button></div></section></>;
 }
 
 function Collection({ collection, request, onDirtyChange }: { collection: CmsCollection; request: CmsRequest; onDirtyChange: (dirty: boolean) => void }) {
@@ -137,6 +138,7 @@ export function AdminPanel() {
   const [dirty, setDirty] = useState(false);
   const [logoutBusy, setLogoutBusy] = useState(false);
   const [logoutError, setLogoutError] = useState("");
+  const [newConsultations, setNewConsultations] = useState(0);
   const heading = useRef<HTMLHeadingElement>(null);
   const enabled = process.env.NEXT_PUBLIC_CMS_ENABLED === "true";
   const request = useCallback<CmsRequest>(<T,>(path: string, options?: RequestInit) => send<T>(path, options, session?.csrfToken), [session?.csrfToken]);
@@ -150,6 +152,7 @@ export function AdminPanel() {
   useEffect(() => { if (enabled) void checkSession(); else setLoading(false); }, [enabled, checkSession]);
   useEffect(() => { if (session && !loading) heading.current?.focus(); }, [tab, session, loading]);
   const dirtyChange = useCallback((value: boolean) => setDirty(value), []);
+  const newCountChange = useCallback((value: number) => setNewConsultations(value), []);
   function selectTab(next: Tab) { if (next === tab) return; if (dirty && !window.confirm("تغییرات فرم ذخیره نشده‌اند. بدون ذخیره به بخش دیگری می‌روی؟")) return; setDirty(false); setTab(next); }
   async function logout() {
     if (dirty && !window.confirm("تغییرات ذخیره نشده‌اند. بدون ذخیره از حساب خارج می‌شوی؟")) return;
@@ -160,5 +163,5 @@ export function AdminPanel() {
   if (loading) return <Notice title="در حال بررسی ورود"><p role="status">چند لحظه صبر کن…</p></Notice>;
   if (connectionError && !session) return <Notice title="ارتباط با پنل برقرار نشد" retry={checkSession}><p role="alert">{connectionError}</p></Notice>;
   if (!session) return <Login onLogin={(value) => { setSession(value); setTab("dashboard"); }} setupRequired={setupRequired} initialError="" />;
-  return <div className="admin-shell"><a className="skip-link" href="#admin-content">رفتن به محتوای پنل</a><aside className="admin-sidebar"><AdminLogo /><nav aria-label="بخش‌های پنل مدیریت">{(Object.entries(tabLabels) as [Tab, string][]).map(([key, label]) => <button key={key} aria-current={tab === key ? "page" : undefined} onClick={() => selectTab(key)}><span>{label}</span>{tab === key && <span className="admin-nav-dot" aria-hidden="true" />}</button>)}</nav><div className="admin-sidebar-bottom"><p>{session.user.name}</p><a href={sitePath("/")} target="_blank" rel="noreferrer">دیدن سایت</a><button className="admin-link-button" disabled={logoutBusy} onClick={logout}>{logoutBusy ? "در حال خروج…" : "خروج از حساب"}</button>{logoutError && <p className="admin-error" role="alert">{logoutError}</p>}</div></aside><div className="admin-workspace"><header className="admin-topbar"><div><span>پنل مدیریت</span><h1 ref={heading} tabIndex={-1}>{tabLabels[tab]}</h1></div><a href={sitePath("/")} target="_blank" rel="noreferrer">باز کردن سایت</a></header><main className="admin-content" id="admin-content">{tab === "dashboard" ? <Dashboard request={request} onSelect={selectTab} /> : tab === "media" ? <MediaLibrary request={request} /> : tab === "account" ? <Account session={session} request={request} /> : tab === "settings" ? <SiteSettingsEditor request={request} onDirtyChange={dirtyChange} /> : <Collection key={tab} collection={tab} request={request} onDirtyChange={dirtyChange} />}</main></div></div>;
+  return <div className="admin-shell"><a className="skip-link" href="#admin-content">رفتن به محتوای پنل</a><aside className="admin-sidebar"><AdminLogo /><nav aria-label="بخش‌های پنل مدیریت">{(Object.entries(tabLabels) as [Tab, string][]).map(([key, label]) => <button key={key} aria-current={tab === key ? "page" : undefined} onClick={() => selectTab(key)}><span>{label}</span>{key === "consultations" && newConsultations > 0 ? <span className="admin-nav-count" aria-label={`${number.format(newConsultations)} درخواست جدید`}>{number.format(newConsultations)}</span> : tab === key && <span className="admin-nav-dot" aria-hidden="true" />}</button>)}</nav><div className="admin-sidebar-bottom"><p>{session.user.name}</p><a href={sitePath("/")} target="_blank" rel="noreferrer">دیدن سایت</a><button className="admin-link-button" disabled={logoutBusy} onClick={logout}>{logoutBusy ? "در حال خروج…" : "خروج از حساب"}</button>{logoutError && <p className="admin-error" role="alert">{logoutError}</p>}</div></aside><div className="admin-workspace"><header className="admin-topbar"><div><span>پنل مدیریت</span><h1 ref={heading} tabIndex={-1}>{tabLabels[tab]}</h1></div><a href={sitePath("/")} target="_blank" rel="noreferrer">باز کردن سایت</a></header><main className="admin-content" id="admin-content">{tab === "dashboard" ? <Dashboard request={request} onSelect={selectTab} onNewCount={newCountChange} /> : tab === "consultations" ? <ConsultationsPanel request={request} onDirtyChange={dirtyChange} onNewCount={newCountChange} /> : tab === "media" ? <MediaLibrary request={request} /> : tab === "account" ? <Account session={session} request={request} /> : tab === "settings" ? <SiteSettingsEditor request={request} onDirtyChange={dirtyChange} /> : <Collection key={tab} collection={tab} request={request} onDirtyChange={dirtyChange} />}</main></div></div>;
 }

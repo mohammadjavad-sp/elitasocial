@@ -5,6 +5,7 @@ import { CmsError } from "./errors";
 import { deleteMedia, maxUploadBytes, serveMedia, uploadMedia } from "./media";
 import { collection, object, revision, status, text, validateRecord } from "./validation";
 import { readSiteSettings, saveSiteSettings } from "./site-settings";
+import { deleteConsultation, listConsultations, submitConsultation, updateConsultation } from "./consultations";
 
 const privateHeaders = { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "same-origin" };
 function responseHeaders(additions?: HeadersInit) {
@@ -58,6 +59,7 @@ export async function handleCmsRequest(request: Request, context: RouteContext):
     const [resource, second, third] = segments;
     if (method === "GET" && resource === "files" && segments.length === 2) return serveMedia(second);
     if (method !== "GET") assertOrigin(request);
+    if (method === "POST" && resource === "consultations" && segments.length === 1) return json(submitConsultation(await body(request, 16_000), request), 201);
     if (method === "POST" && resource === "login" && segments.length === 1) {
       const payload = await body(request, 16_000);
       const email = text(payload.email, "ایمیل", 254).toLowerCase();
@@ -83,10 +85,19 @@ export async function handleCmsRequest(request: Request, context: RouteContext):
       const payload = await body(request, 160_000);
       return json(saveSiteSettings(payload.data, revision(payload.revision)));
     }
+    if (resource === "consultations" && segments.length === 1 && method === "GET") return json(listConsultations(new URL(request.url).searchParams));
+    if (resource === "consultations" && segments.length === 2 && method === "PUT") return json(updateConsultation(text(second, "شناسه", 100), await body(request, 24_000)));
+    if (resource === "consultations" && segments.length === 2 && method === "DELETE") {
+      const payload = await body(request, 1000);
+      deleteConsultation(text(second, "شناسه", 100), revision(payload.revision));
+      return empty();
+    }
     if (resource === "stats" && method === "GET" && segments.length === 1) {
-      const counts = { articles: 0, services: 0, portfolio: 0, plans: 0, media: 0 };
+      const counts = { articles: 0, services: 0, portfolio: 0, plans: 0, media: 0, consultations: 0, newConsultations: 0 };
       for (const row of getDatabase().prepare("SELECT collection,COUNT(*) AS total FROM cms_records GROUP BY collection").all()) counts[collection(row.collection)] = Number(row.total);
       counts.media = Number(getDatabase().prepare("SELECT COUNT(*) AS total FROM cms_media").get()!.total);
+      counts.consultations = Number(getDatabase().prepare("SELECT COUNT(*) AS total FROM cms_consultations").get()!.total);
+      counts.newConsultations = Number(getDatabase().prepare("SELECT COUNT(*) AS total FROM cms_consultations WHERE status='new'").get()!.total);
       return json({ counts });
     }
     if (resource === "records" && (segments.length === 2 || segments.length === 3)) {
