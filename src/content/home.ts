@@ -20,7 +20,7 @@ export const homeContent = {
     { label: "خدمات", href: "/services/" },
     { label: "نمونه‌کارها", href: "/portfolio/" },
     { label: "پلن‌ها", href: "#pricing" },
-    { label: "مجله الیتا", href: "#insights" },
+    { label: "مجله الیتا", href: "/blog/" },
   ] satisfies NavigationItem[],
   about: {
     title: ["یک حضور منسجم،", "از پیج تا وب‌سایت"],
@@ -86,7 +86,7 @@ export const homeContent = {
   },
 };
 
-export function getNavigation(page: "home" | "portfolio" | "services" = "home"): NavigationItem[] {
+export function getNavigation(page: "home" | "portfolio" | "services" | "blog" = "home"): NavigationItem[] {
   return homeContent.navigation.map((item) => ({
     ...item,
     href: page !== "home" && item.href?.startsWith("#") ? `/${item.href}` : item.href,

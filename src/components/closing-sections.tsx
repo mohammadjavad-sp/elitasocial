@@ -1,10 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { closingContent } from "@/content/closing";
 import { homeContent } from "@/content/home";
-import { sitePath } from "@/lib/site-path";
 import { readServiceSelection, serviceLabels, type SelectedPlan } from "@/lib/service-selection";
 import { Icon } from "./icons";
 
@@ -24,41 +22,6 @@ export function TestimonialsSection() {
           </figure>
         ))}
       </div>
-    </section>
-  );
-}
-
-export function InsightsSection() {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const [selected, setSelected] = useState(closingContent.articles[0]);
-  return (
-    <section className="insights-section container" id="insights" aria-labelledby="insights-title">
-      <div className="section-heading">
-        <h2 id="insights-title"><span>چند دقیقه برای</span><span>حضور بهترِ برندت</span></h2>
-        <p>یادداشت‌های کوتاه دربارهٔ محتوا، طراحی و ارتباط با مخاطب. نسخهٔ نمایشی مجلهٔ الیتا.</p>
-        <span className="section-spark insights-spark" aria-hidden="true"><Icon name="sparkle" /></span>
-      </div>
-      <div className="insights-grid">
-        {closingContent.articles.map(article => (
-          <article className="insight-card" key={article.id}>
-            <div className="insight-image"><Image src={sitePath(article.image)} alt={article.alt} fill sizes="(min-width: 1050px) 380px, (min-width: 700px) 45vw, 90vw" /><span>یادداشت نمونه</span></div>
-            <div className="insight-copy">
-              <div className="insight-meta"><span>{article.category}</span><span>{article.duration}</span></div>
-              <h3>{article.title}</h3>
-              <p>{article.intro}</p>
-              <button type="button" className="insight-read" aria-haspopup="dialog" aria-label={`خواندن یادداشت: ${article.title}`} onClick={() => { setSelected(article); dialog.current?.showModal(); }}>خواندن یادداشت<span className="button-circle"><Icon name="arrow" /></span></button>
-            </div>
-          </article>
-        ))}
-      </div>
-      <dialog ref={dialog} className="insight-dialog" aria-labelledby="insight-dialog-title">
-        <div className="insight-dialog-top"><span className="closing-sample-label">یادداشت نمونه</span><button className="insight-dialog-close" type="button" aria-label="بستن یادداشت" onClick={() => dialog.current?.close()}><Icon name="close" /></button></div>
-        <p className="insight-dialog-category">{selected.category} / {selected.duration}</p>
-        <h2 id="insight-dialog-title">{selected.title}</h2>
-        <p className="insight-dialog-intro">{selected.intro}</p>
-        {selected.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
-        <a className="pill-button" href={homeContent.contact.whatsapp} target="_blank" rel="noopener noreferrer">دربارهٔ برندم صحبت کنیم<span className="button-circle"><Icon name="arrow" /></span></a>
-      </dialog>
     </section>
   );
 }

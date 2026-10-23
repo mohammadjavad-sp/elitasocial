@@ -5,8 +5,9 @@ import type { NavigationItem } from "@/content/home";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
 
-type ActivePage = "home" | "portfolio" | "services";
+type ActivePage = "home" | "portfolio" | "services" | "blog";
 type Props = { navigation: NavigationItem[]; whatsapp: string; activePage?: ActivePage };
+const activePaths: Record<ActivePage, string> = { home: "/", portfolio: "/portfolio/", services: "/services/", blog: "/blog/" };
 
 function NavigationLinks({ items, onNavigate, activePage }: { items: NavigationItem[]; onNavigate?: () => void; activePage: ActivePage }) {
   return items.map((item) => item.upcoming ? (
@@ -14,7 +15,7 @@ function NavigationLinks({ items, onNavigate, activePage }: { items: NavigationI
       <span aria-disabled="true">{item.label}</span><span className="coming-soon">به‌زودی</span>
     </span>
   ) : (
-    <a key={item.label} href={sitePath(item.href ?? "/")} onClick={onNavigate} aria-current={(activePage === "home" && item.href === "/") || (activePage === "portfolio" && item.href === "/portfolio/") || (activePage === "services" && item.href === "/services/") ? "page" : undefined}
+    <a key={item.label} href={sitePath(item.href ?? "/")} onClick={onNavigate} aria-current={item.href === activePaths[activePage] ? "page" : undefined}
       {...(item.external ? { target: "_blank", rel: "noopener noreferrer", "aria-label": `${item.label} در اینستاگرام (پنجره جدید)` } : {})}>
       {item.label}
     </a>

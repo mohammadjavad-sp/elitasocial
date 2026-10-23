@@ -58,7 +58,9 @@ try {
         // Decode lazy images even when an inactive accordion panel is collapsed.
         await image.evaluate(async img => { img.loading = 'eager'; await img.decode(); });
         assert(await image.evaluate(img => img.complete && img.naturalWidth > 0), `${viewport.name}: section image loads`);
-        assert((await image.getAttribute('alt'))?.trim(), 'Content image has meaningful alternative text');
+        const hasDescription = Boolean((await image.getAttribute('alt'))?.trim());
+        const isDecorativeLinkImage = await image.evaluate(img => img.getAttribute('alt') === '' && Boolean(img.closest('a[aria-hidden="true"]')));
+        assert(hasDescription || isDecorativeLinkImage, 'Content image has meaningful alternative text or is explicitly decorative');
       }
     }
     assert.equal(await services.locator('article').count(), 4, 'Four offered services');
@@ -138,18 +140,28 @@ try {
     }
     assert(new Set(categoryPrices.map(prices => prices.join(','))).size === 3, 'Switching categories changes pricing content');
     await pricingCategories.first().click();
-    const articleButtons = sections.insights.locator('.insight-read');
-    assert.equal(await articleButtons.count(), 3, 'Three readable article previews');
-    for (const trigger of await articleButtons.all()) {
+    assert.equal(await page.locator('#insights .article-card-read').count(), 3, 'Three linked homepage articles');
+    const blogPath = `${new URL(baseURL).pathname.replace(/\/$/, '')}/blog/`;
+    const visibleBlogLinks = page.locator('a[href*="/blog/"]:visible');
+    assert(await visibleBlogLinks.count() > 0, 'Visible magazine navigation is available');
+    for (const href of await visibleBlogLinks.evaluateAll(links => links.map(link => link.getAttribute('href')))) {
+      const destination = new URL(href, page.url());
+      assert.equal(destination.origin, new URL(baseURL).origin, 'Magazine links stay on the deployed site');
+      assert(destination.pathname.startsWith(blogPath), 'Magazine links preserve the deployment prefix');
+    }
+    for (let articleIndex = 0; articleIndex < 3; articleIndex++) {
+      const trigger = page.locator('#insights .article-card-read').nth(articleIndex);
       const title = await trigger.locator('xpath=ancestor::article').locator('h3').innerText();
+      const destination = new URL(await trigger.getAttribute('href'), page.url());
+      assert(destination.pathname.startsWith(blogPath), 'Article link preserves the deployment prefix');
       await trigger.focus();
-      await page.keyboard.press('Enter');
-      const dialog = page.locator('dialog.insight-dialog');
-      await dialog.waitFor({ state: 'visible' });
-      assert.equal(await dialog.locator('h2').innerText(), title, 'Preview opens the selected article');
-      await page.keyboard.press('Escape');
-      await dialog.waitFor({ state: 'hidden' });
-      assert(await trigger.evaluate(button => document.activeElement === button), 'Article preview restores keyboard focus');
+      await Promise.all([
+        page.waitForURL(url => url.pathname === destination.pathname, { waitUntil: 'networkidle' }),
+        page.keyboard.press('Enter'),
+      ]);
+      assert.equal(await page.locator('h1').innerText(), title, 'Keyboard opens the selected standalone article');
+      const homeResponse = await page.goto(baseURL, { waitUntil: 'networkidle' });
+      assert.equal(homeResponse?.status(), 200, 'Homepage loads after visiting an article');
     }
     assert.match(await sections.testimonials.innerText(), /نظر مشتری واقعی نیستند/, 'Demo testimonials clearly identify fictional content');
     const form = sections.contact.locator('form.contact-form');
@@ -257,7 +269,7 @@ try {
     await page.evaluate(() => { document.activeElement instanceof HTMLElement && document.activeElement.blur(); scrollTo(0, 0); });
     await page.screenshot({ path: path.join(output, `${viewport.name}.png`), fullPage: true, animations: 'disabled' });
     assert.deepEqual(failedLocalAssets, [], `${viewport.name}: local deployment assets load successfully`);
-    results.push({ viewport, layout, typography, failedLocalAssets, homePathTested: new URL(baseURL).pathname, whatsappLinks: whatsapp.length, upcomingItems: upcoming.length, menuTested, sectionsTested: Object.keys(sections), serviceCards: 4, benefitPanels: 5, benefitKeyboardTested: true, servicesNavigationTested: true, featuredDialogTested: true, pricingCategoriesTested: 3, pricingPlansTested: 9, articleDialogsTested: 3, contactValidationAndCompositionTested: true, faqKeyboardTested: true, title: await page.title() });
+    results.push({ viewport, layout, typography, failedLocalAssets, homePathTested: new URL(baseURL).pathname, whatsappLinks: whatsapp.length, upcomingItems: upcoming.length, menuTested, sectionsTested: Object.keys(sections), serviceCards: 4, benefitPanels: 5, benefitKeyboardTested: true, servicesNavigationTested: true, featuredDialogTested: true, pricingCategoriesTested: 3, pricingPlansTested: 9, articlePagesTested: 3, contactValidationAndCompositionTested: true, faqKeyboardTested: true, title: await page.title() });
     await page.close();
   }
   assert.deepEqual(errors, [], 'No unhandled browser errors');

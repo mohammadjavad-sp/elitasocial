@@ -13,28 +13,6 @@
 .sample-quote figcaption small { display: block; font-size: 10px; color: var(--muted); margin-top: 5px; }
 .insights-spark { right: 5%; top: 45px; }
 .insights-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
-.insight-card { min-width: 0; background: #fff; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; }
-.insight-image { position: relative; aspect-ratio: 1.5; background: #e7dff3; overflow: hidden; }
-.insight-image img { object-fit: cover; object-position: center 45%; }
-.insight-image > span { position: absolute; bottom: 12px; right: 12px; padding: 4px 10px; color: #493563; background: #ffffffec; border-radius: 4px; font-size: 10px; }
-.insight-copy { padding: 20px 22px 15px; display: flex; flex-direction: column; flex: 1; }
-.insight-meta { display: flex; flex-wrap: wrap; gap: 5px 16px; font-size: 10px; color: #74687f; }
-.insight-copy h3 { font-size: 17px; line-height: 2; margin: 12px 0 8px; letter-spacing: -.4px; }
-.insight-copy > p { color: var(--muted); font-size: 12px; line-height: 2.25; margin: 0 0 16px; }
-.insight-read { display: inline-flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; padding: 3px 0; margin-top: auto; border: 0; border-top: 1px solid #eee8f4; background: transparent; color: var(--purple-dark); font-size: 12px; font-weight: 600; text-align: right; }
-.insight-read .button-circle { width: 30px; height: 30px; background: #f0eafb; }
-.insight-read:hover { color: var(--purple); }
-.insight-dialog { width: min(740px, calc(100% - 32px)); max-height: calc(100svh - 50px); padding: 28px 36px 36px; color: var(--ink); border: 1px solid #dbd0ee; border-radius: 12px; background: #fbf9ff; }
-.insight-dialog::backdrop { background: #211333ad; backdrop-filter: blur(4px); }
-html:has(.insight-dialog[open]) { overflow: hidden; }
-.insight-dialog-top { display: flex; align-items: center; justify-content: space-between; }
-.insight-dialog-close { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #d9ccea; border-radius: 50%; color: var(--purple-dark); background: white; }
-.insight-dialog-close:hover { background: var(--lavender); }
-.insight-dialog .insight-dialog-category { font-size: 11px; color: var(--purple-dark); margin-top: 20px; }
-.insight-dialog h2 { font-size: 27px; line-height: 1.9; margin: 10px 0 20px; }
-.insight-dialog > p { font-size: 14px; line-height: 2.35; color: #5b5069; }
-.insight-dialog .insight-dialog-intro { font-size: 16px; font-weight: 550; color: #332440; }
-.insight-dialog > .pill-button { margin-top: 15px; }
 .contact-grid { display: grid; grid-template-columns: .85fr 1.3fr; gap: 30px; align-items: stretch; }
 .contact-info { padding: 37px 32px 25px; background: var(--purple); color: #fff; border-radius: 6px; position: relative; overflow: hidden; isolation: isolate; }
 .contact-info::after { content: ""; position: absolute; left: -135px; bottom: -155px; width: 330px; aspect-ratio: 1; border: 45px solid #ffffff08; border-radius: 50%; z-index: -1; pointer-events: none; }
@@ -105,9 +83,6 @@ html:has(.insight-dialog[open]) { overflow: hidden; }
   .sample-quote { padding: 18px; }
   .sample-quote blockquote { font-size: 12px; }
   .insights-grid { gap: 16px; }
-  .insight-copy { padding: 17px; }
-  .insight-copy h3 { font-size: 15px; }
-  .insight-meta { font-size: 9px; }
   .contact-grid, .contact-faq { grid-template-columns: .9fr 1.2fr; gap: 20px; }
   .contact-info, .contact-form-panel { padding: 27px 22px; }
   .contact-form-row { grid-template-columns: 1fr; }
@@ -118,10 +93,6 @@ html:has(.insight-dialog[open]) { overflow: hidden; }
   .sample-quote { padding: 24px; }
   .sample-quote blockquote { font-size: 13px; margin-block: 20px; }
   .insights-spark { right: -5px; top: 30px; }
-  .insight-image { aspect-ratio: 1.65; }
-  .insight-copy { padding: 22px; }
-  .insight-copy h3 { font-size: 18px; }
-  .insight-meta { font-size: 10px; }
   .contact-grid, .contact-faq { grid-template-columns: 1fr; }
   .contact-info { padding: 30px 25px; }
   .contact-info > p { max-width: none; }
@@ -132,10 +103,6 @@ html:has(.insight-dialog[open]) { overflow: hidden; }
   .contact-faq h3 { font-size: 22px; }
   .contact-faq h3 br { display: none; }
   .contact-faq-list summary { font-size: 12px; }
-  .insight-dialog { padding: 18px 22px 28px; }
-  .insight-dialog h2 { font-size: 23px; }
-  .insight-dialog > p { font-size: 13px; }
-  .insight-dialog .insight-dialog-intro { font-size: 14px; }
   .footer-cta-band { padding: 45px 0; }
   .footer-cta-band h2 { font-size: 29px; }
   .footer-cta-band p { font-size: 12px; }

@@ -5,7 +5,8 @@ import { ApproachSection } from "@/components/approach-section";
 import { BenefitsSection } from "@/components/benefits-section";
 import { FeaturedPortfolioSection } from "@/components/portfolio-preview";
 import { PricingSection } from "@/components/pricing-section";
-import { TestimonialsSection, InsightsSection, ContactSection } from "@/components/closing-sections";
+import { TestimonialsSection, ContactSection } from "@/components/closing-sections";
+import { InsightsSection } from "@/components/insights-section";
 import { SiteFooter } from "@/components/site-footer";
 import { homeContent, getNavigation } from "@/content/home";
 
