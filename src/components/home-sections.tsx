@@ -1,0 +1,55 @@
+import Image from "next/image";
+import { homeContent } from "@/content/home";
+import { Icon } from "./icons";
+import { ServiceArt } from "./service-art";
+
+export function AboutSection() {
+  const { about } = homeContent;
+  return (
+    <section id="about" className="about-section container" aria-labelledby="about-title">
+      <div className="about-main-image">
+        <div className="about-photo-frame"><Image {...about.image} sizes="(min-width: 1050px) 380px, (min-width: 600px) 44vw, 80vw" /></div>
+        <span className="about-photo-caption"><strong>{about.caption}</strong><span>{about.captionDetail}</span></span>
+        <span className="section-spark about-spark" aria-hidden="true"><Icon name="sparkle" /></span>
+      </div>
+      <div className="about-copy">
+        <div className="about-seal" aria-hidden="true">
+          <span>هر برند،</span><Icon name="arrow" /><span>قصهٔ خودش را دارد</span>
+        </div>
+        <h2 id="about-title">{about.title.map(line => <span key={line}>{line}</span>)}</h2>
+        <p>{about.description}</p>
+        <p>{about.detail}</p>
+        <a className="pill-button about-action" href="#services">{about.actionLabel}<span className="button-circle"><Icon name="arrow" /></span></a>
+      </div>
+      <div className="about-secondary-image">
+        <div className="about-orbits" aria-hidden="true"><span /><span /><span /><i /></div>
+        <div className="about-small-frame"><Image {...about.secondaryImage} sizes="(min-width: 1050px) 245px, (min-width: 600px) 25vw, 38vw" /></div>
+      </div>
+    </section>
+  );
+}
+
+export function ServicesSection() {
+  const { services, contact } = homeContent;
+  return (
+    <section id="services" className="services-section container" aria-labelledby="services-title">
+      <div className="services-heading">
+        <span className="section-spark services-spark-start" aria-hidden="true"><Icon name="sparkle" /></span>
+        <h2 id="services-title">{services.title.map(line => <span key={line}>{line}</span>)}</h2>
+        <p>{services.description}</p>
+        <span className="section-spark services-spark-end" aria-hidden="true"><Icon name="sparkle" /></span>
+      </div>
+      <div className="services-grid">
+        {services.items.map(service => (
+          <article key={service.id} className={`offering-card offering-${service.theme}`}>
+            <h3>{service.title}</h3>
+            <ServiceArt type={service.id} />
+            <p>{service.description}</p>
+            <a href={`${contact.whatsapp}?text=${encodeURIComponent(`سلام، ${service.label}`)}`} target="_blank" rel="noopener noreferrer" aria-label={`مشاوره دربارهٔ ${service.title} در واتساپ (پنجره جدید)`}>شروع گفتگو<Icon name="arrow" /></a>
+          </article>
+        ))}
+      </div>
+      <a className="pill-button services-action" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">{services.actionLabel}<span className="button-circle"><Icon name="arrow" /></span></a>
+    </section>
+  );
+}
