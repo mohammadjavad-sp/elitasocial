@@ -19,9 +19,16 @@ try {
     { name: 'narrow', width: 320, height: 844 },
   ]) {
     const page = await browser.newPage({ viewport, reducedMotion: 'reduce' });
+    const failedLocalAssets = [];
     page.on('pageerror', error => errors.push(`${viewport.name}: ${error.message}`));
+    page.on('response', response => {
+      if (new URL(response.url()).origin === new URL(baseURL).origin && response.status() >= 400) {
+        failedLocalAssets.push({ url: response.url(), status: response.status(), type: response.request().resourceType() });
+      }
+    });
     const response = await page.goto(baseURL, { waitUntil: 'networkidle' });
     assert.equal(response?.status(), 200, `${viewport.name}: page should load`);
+    assert.equal(await page.locator('header a.brand').getAttribute('href'), new URL(baseURL).pathname, 'Brand home link preserves the deployment subpath');
     await page.evaluate(() => document.fonts.ready);
     const typography = await page.evaluate(() => {
       const style = getComputedStyle(document.body);
@@ -158,7 +165,8 @@ try {
     }
     await page.evaluate(() => { document.activeElement instanceof HTMLElement && document.activeElement.blur(); scrollTo(0, 0); });
     await page.screenshot({ path: path.join(output, `${viewport.name}.png`), fullPage: true, animations: 'disabled' });
-    results.push({ viewport, layout, typography, whatsappLinks: whatsapp.length, upcomingItems: upcoming.length, menuTested, sectionsTested: Object.keys(sections), serviceCards: 4, benefitPanels: 5, benefitKeyboardTested: true, servicesNavigationTested: true, title: await page.title() });
+    assert.deepEqual(failedLocalAssets, [], `${viewport.name}: local deployment assets load successfully`);
+    results.push({ viewport, layout, typography, failedLocalAssets, homePathTested: new URL(baseURL).pathname, whatsappLinks: whatsapp.length, upcomingItems: upcoming.length, menuTested, sectionsTested: Object.keys(sections), serviceCards: 4, benefitPanels: 5, benefitKeyboardTested: true, servicesNavigationTested: true, title: await page.title() });
     await page.close();
   }
   assert.deepEqual(errors, [], 'No unhandled browser errors');

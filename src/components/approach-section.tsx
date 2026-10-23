@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { homeContent } from "@/content/home";
 import { Icon } from "./icons";
+import { sitePath } from "@/lib/site-path";
 
 export function ApproachSection() {
   const { approach, contact } = homeContent;
@@ -13,7 +14,7 @@ export function ApproachSection() {
       </div>
       <div className="approach-grid">
         <article className="approach-feature">
-          <Image {...approach.image} sizes="(min-width: 1050px) 750px, 100vw" className="approach-image" />
+          <Image {...approach.image} src={sitePath(approach.image.src)} sizes="(min-width: 1050px) 750px, 100vw" className="approach-image" />
           <div className="approach-image-shade" aria-hidden="true" />
           <div className="approach-feature-copy">
             <p className="approach-feature-label">{approach.featureLabel}</p>

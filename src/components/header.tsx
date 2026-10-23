@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { NavigationItem } from "@/content/home";
 import { Icon } from "./icons";
+import { sitePath } from "@/lib/site-path";
 
 type Props = { navigation: NavigationItem[]; whatsapp: string };
 
@@ -12,7 +13,7 @@ function NavigationLinks({ items, onNavigate }: { items: NavigationItem[]; onNav
       <span aria-disabled="true">{item.label}</span><span className="coming-soon">به‌زودی</span>
     </span>
   ) : (
-    <a key={item.label} href={item.href} onClick={onNavigate} aria-current={item.href === "/" ? "page" : undefined}
+    <a key={item.label} href={sitePath(item.href ?? "/")} onClick={onNavigate} aria-current={item.href === "/" ? "page" : undefined}
       {...(item.external ? { target: "_blank", rel: "noopener noreferrer", "aria-label": `${item.label} در اینستاگرام (پنجره جدید)` } : {})}>
       {item.label}
     </a>
@@ -47,7 +48,7 @@ export function Header({ navigation, whatsapp }: Props) {
   return (
     <header className="site-header">
       <div className="header-inner container">
-        <a className="brand" href="/" aria-label="الیتا سوشال، خانه">
+        <a className="brand" href={sitePath("/")} aria-label="الیتا سوشال، خانه">
           <span className="brand-symbol"><Icon name="sparkle" /></span>
           <span className="brand-words"><span className="brand-persian">الیتا سوشال</span><span className="brand-latin" lang="en" dir="ltr">ELITA SOCIAL</span></span>
         </a>

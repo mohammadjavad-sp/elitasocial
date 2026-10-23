@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Icon } from "./icons";
+import { sitePath } from "@/lib/site-path";
 
 type BenefitsContent = {
   title: readonly string[];
@@ -36,7 +37,7 @@ export function BenefitsSection({ content }: { content: BenefitsContent }) {
           return (
             <article key={item.id} className={`benefit-panel${active ? " is-active" : ""}`}>
               <Image
-                src={item.image.src}
+                src={sitePath(item.image.src)}
                 alt={item.image.alt}
                 fill
                 className="benefit-photo"

@@ -2,13 +2,14 @@ import Image from "next/image";
 import { homeContent } from "@/content/home";
 import { Icon } from "./icons";
 import { ServiceArt } from "./service-art";
+import { sitePath } from "@/lib/site-path";
 
 export function AboutSection() {
   const { about } = homeContent;
   return (
     <section id="about" className="about-section container" aria-labelledby="about-title">
       <div className="about-main-image">
-        <div className="about-photo-frame"><Image {...about.image} sizes="(min-width: 1050px) 380px, (min-width: 600px) 44vw, 80vw" /></div>
+        <div className="about-photo-frame"><Image {...about.image} src={sitePath(about.image.src)} sizes="(min-width: 1050px) 380px, (min-width: 600px) 44vw, 80vw" /></div>
         <span className="about-photo-caption"><strong>{about.caption}</strong><span>{about.captionDetail}</span></span>
         <span className="section-spark about-spark" aria-hidden="true"><Icon name="sparkle" /></span>
       </div>
@@ -23,7 +24,7 @@ export function AboutSection() {
       </div>
       <div className="about-secondary-image">
         <div className="about-orbits" aria-hidden="true"><span /><span /><span /><i /></div>
-        <div className="about-small-frame"><Image {...about.secondaryImage} sizes="(min-width: 1050px) 245px, (min-width: 600px) 25vw, 38vw" /></div>
+        <div className="about-small-frame"><Image {...about.secondaryImage} src={sitePath(about.secondaryImage.src)} sizes="(min-width: 1050px) 245px, (min-width: 600px) 25vw, 38vw" /></div>
       </div>
     </section>
   );

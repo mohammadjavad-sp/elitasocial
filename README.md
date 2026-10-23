@@ -51,6 +51,8 @@ npm run check:ui
 
 ## اجرای نسخهٔ سرور
 
+برای انتشار نسخهٔ ایستا روی GitHub Pages، [راهنمای انتشار](docs/deployment.md) را ببینید. انتشار با push روی `main` انجام می‌شود و تنظیم Node.js معمول پروژه همچنان قابل استفاده است.
+
 ```sh
 npm ci
 npm run build
