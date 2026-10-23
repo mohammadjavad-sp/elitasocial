@@ -7,13 +7,21 @@ export type DemoPlan = {
   period: string;
   features: string[];
   recommended?: boolean;
-  isMock: true;
+  isMock: boolean;
 };
 
-export const pricingContent = {
+export type PricingCategoryId = "instagram" | "website" | "support";
+export type PricingContent = {
+  title: string[];
+  description: string;
+  notice: string;
+  categories: { id: PricingCategoryId; label: string; plans: DemoPlan[] }[];
+};
+
+export const pricingContent: PricingContent = {
   title: ["یک همکاری،", "متناسب با نیازِ برندت"],
   description: "از همراهی با پیج تا طراحی سایت؛ مسیر مناسب را بر اساس نیاز کسب‌وکارت انتخاب کن.",
-  notice: "پلن‌ها و قیمت‌ها نمایشی‌اند و برای سفارش واقعی معتبر نیستند. برای دریافت پیشنهاد همکاری، مشاوره بگیر.",
+  notice: "پلن‌های دارای نشان «نمایشی» و قیمت آن‌ها برای سفارش واقعی معتبر نیستند. برای دریافت پیشنهاد همکاری، مشاوره بگیر.",
   categories: [
     { id: "instagram", label: "مدیریت اینستاگرام", plans: [
       { id: "ig-start", name: "شروع منظم", description: "برای شروع یک حضور منسجم", price: 4900000, currency: "تومان", period: "ماهانه", features: ["تقویم محتوای ماهانه", "۸ محتوای پست و ریلز", "طراحی قالب استوری", "هماهنگی و بازبینی محتوا"], isMock: true },

@@ -3,6 +3,7 @@ import { homeContent } from "@/content/home";
 import { Icon } from "./icons";
 import { ServiceArt } from "./service-art";
 import { sitePath } from "@/lib/site-path";
+import { services as starterServices, type ServiceDetail } from "@/content/services";
 
 export function AboutSection() {
   const { about } = homeContent;
@@ -30,7 +31,7 @@ export function AboutSection() {
   );
 }
 
-export function ServicesSection() {
+export function ServicesSection({ items = starterServices }: { items?: ServiceDetail[] }) {
   const { services } = homeContent;
   return (
     <section id="services" className="services-section container" aria-labelledby="services-title">
@@ -41,15 +42,16 @@ export function ServicesSection() {
         <span className="section-spark services-spark-end" aria-hidden="true"><Icon name="sparkle" /></span>
       </div>
       <div className="services-grid">
-        {services.items.map(service => (
-          <article key={service.id} className={`offering-card offering-${service.theme}`}>
+        {items.map(service => (
+          <article key={service.slug} className={`offering-card offering-${service.theme}`}>
             <h3>{service.title}</h3>
-            <ServiceArt type={service.id} />
-            <p>{service.description}</p>
-            <a href={sitePath(`/services/${service.id}/`)} aria-label={`جزئیات ${service.title}`}>بیشتر دربارهٔ این خدمت<Icon name="arrow" /></a>
+            <ServiceArt type={service.slug} />
+            <p>{service.intro}</p>
+            <a href={sitePath(`/services/${service.slug}/`)} aria-label={`جزئیات ${service.title}`}>بیشتر دربارهٔ این خدمت<Icon name="arrow" /></a>
           </article>
         ))}
       </div>
+      {items.length === 0 && <p className="demo-notice">جزئیات خدمات به‌زودی منتشر می‌شود؛ برای راهنمایی با ما گفتگو کن.</p>}
       <a className="pill-button services-action" href={sitePath("/services/")}>{services.actionLabel}<span className="button-circle"><Icon name="arrow" /></span></a>
     </section>
   );

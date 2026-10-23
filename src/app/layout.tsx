@@ -8,6 +8,7 @@ import "./closing.css";
 import "./services.css";
 import "./magazine.css";
 import "./article.css";
+import "./admin.css";
 
 const estedad = localFont({ src: "../../public/fonts/Estedad-Variable.woff2", variable: "--font-estedad", display: "swap", weight: "100 900" });
 

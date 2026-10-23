@@ -19,6 +19,8 @@ export type PortfolioProject = {
   caption: string;
   description: string;
   deliverables: string[];
+  isMock?: boolean;
+  image?: { src: string; alt: string };
 };
 
 export const portfolioProjects: PortfolioProject[] = [
@@ -35,5 +37,5 @@ export const portfolioProjects: PortfolioProject[] = [
 export const portfolioDemoNotice = "این طرح‌ها نمایشی‌اند و برای معرفی سبک طراحی ساخته شده‌اند؛ پروژهٔ واقعی مشتریان الیتا سوشال نیستند.";
 
 export function projectConsultationUrl(project: PortfolioProject) {
-  return "https://wa.me/989338234473?text=" + encodeURIComponent(`سلام، دربارهٔ خدمات مشابه طرح نمایشی «${project.title}» مشاوره می‌خواهم.`);
+  return "https://wa.me/989338234473?text=" + encodeURIComponent(`سلام، دربارهٔ خدمات مشابه ${project.isMock !== false ? "طرح نمایشی" : "پروژهٔ"} «${project.title}» مشاوره می‌خواهم.`);
 }

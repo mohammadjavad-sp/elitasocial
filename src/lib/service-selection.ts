@@ -1,4 +1,4 @@
-import { pricingContent, type DemoPlan } from "@/content/pricing";
+import { pricingContent, type DemoPlan, type PricingContent } from "@/content/pricing";
 import { sitePath } from "@/lib/site-path";
 
 export const serviceLabels = {
@@ -28,13 +28,13 @@ export function planContactHref(categoryId: string, planId: string) {
 }
 
 /** Only known service and plan values can become visible form context. */
-export function readServiceSelection(search: string) {
+export function readServiceSelection(search: string, pricing: PricingContent = pricingContent) {
   const params = new URLSearchParams(search);
   const requestedService = params.get("service");
   const service = requestedService && Object.hasOwn(serviceLabels, requestedService) ? requestedService as ServiceId : null;
-  const category = pricingContent.categories.find(item => item.id === params.get("planCategory"));
+  const category = pricing.categories.find(item => item.id === params.get("planCategory"));
   let selectedPlan: SelectedPlan | null = null;
-  for (const item of pricingContent.categories) {
+  for (const item of pricing.categories) {
     const plan = item.plans.find(candidate => candidate.id === params.get("plan"));
     const planService = categoryServices[item.id];
     if (plan && (!service || service === planService) && (!category || category.id === item.id)) {

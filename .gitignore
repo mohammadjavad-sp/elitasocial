@@ -4,6 +4,9 @@ out/
 .env*
 !.env.example
 *.tsbuildinfo
+.data/
+backups/
+.next-cms/
 playwright-report/
 test-results/
 .agents/

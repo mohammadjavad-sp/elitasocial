@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { closingContent } from "@/content/closing";
 import { homeContent } from "@/content/home";
+import { pricingContent, type PricingContent } from "@/content/pricing";
 import { readServiceSelection, serviceLabels, type SelectedPlan } from "@/lib/service-selection";
 import { Icon } from "./icons";
 
@@ -26,14 +27,14 @@ export function TestimonialsSection() {
   );
 }
 
-export function ContactSection() {
+export function ContactSection({ pricing = pricingContent }: { pricing?: PricingContent }) {
   const [whatsappHref, setWhatsappHref] = useState("");
   const [selectedService, setSelectedService] = useState("هنوز مطمئن نیستم");
   const [selectedPlan, setSelectedPlan] = useState<SelectedPlan | null>(null);
   const preparedLink = useRef<HTMLAnchorElement>(null);
   useEffect(() => {
     function selectFromUrl() {
-      const selection = readServiceSelection(window.location.search);
+      const selection = readServiceSelection(window.location.search, pricing);
       setSelectedService(selection.service ? serviceLabels[selection.service] : "هنوز مطمئن نیستم");
       setSelectedPlan(selection.selectedPlan);
       setWhatsappHref("");
@@ -41,7 +42,7 @@ export function ContactSection() {
     selectFromUrl();
     window.addEventListener("popstate", selectFromUrl);
     return () => window.removeEventListener("popstate", selectFromUrl);
-  }, []);
+  }, [pricing]);
   useEffect(() => { if (whatsappHref) preparedLink.current?.focus(); }, [whatsappHref]);
   function prepareMessage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -62,7 +63,7 @@ export function ContactSection() {
     contactInput.setCustomValidity(isPhone || isEmail ? "" : "شماره موبایل یا ایمیل معتبر بنویس.");
     messageInput.setCustomValidity(message.length >= 10 ? "" : "کمی بیشتر دربارهٔ درخواستت بنویس؛ دست‌کم ۱۰ حرف.");
     if (!form.reportValidity()) return;
-    const planContext = selectedPlan ? `\nپلن مورد گفت‌وگو: ${selectedPlan.plan.name} (${selectedPlan.categoryLabel}؛ پلن و قیمت نمایشی، نیازمند پیشنهاد نهایی)` : "";
+    const planContext = selectedPlan ? `\nپلن مورد گفت‌وگو: ${selectedPlan.plan.name} (${selectedPlan.categoryLabel}${selectedPlan.plan.isMock ? "؛ پلن و قیمت نمایشی، نیازمند پیشنهاد نهایی" : ""})` : "";
     const composed = `سلام، من ${name} هستم.\nموضوع گفتگو: ${service}${planContext}\nراه ارتباطی من: ${contact}\n\n${message}`;
     setWhatsappHref(`${homeContent.contact.whatsapp}?text=${encodeURIComponent(composed)}`);
   }
@@ -92,7 +93,7 @@ export function ContactSection() {
               setSelectedService(nextService);
               if (selectedPlan && nextService !== serviceLabels[selectedPlan.service]) setSelectedPlan(null);
             }}><option>هنوز مطمئن نیستم</option>{Object.values(serviceLabels).map(label => <option key={label}>{label}</option>)}<option>چند خدمت در کنار هم</option></select></label>
-            {selectedPlan && <p className="contact-form-note" role="status"><strong>پلن انتخابی: {selectedPlan.plan.name} / {selectedPlan.categoryLabel}</strong><br />این پلن و قیمت آن نمایشی است؛ محدوده و هزینهٔ نهایی پس از مشاوره مشخص می‌شود.</p>}
+            {selectedPlan && <p className="contact-form-note" role="status"><strong>پلن انتخابی: {selectedPlan.plan.name} / {selectedPlan.categoryLabel}</strong><br />{selectedPlan.plan.isMock ? "این پلن و قیمت آن نمایشی است؛ محدوده و هزینهٔ نهایی پس از مشاوره مشخص می‌شود." : "دربارهٔ محدودهٔ همکاری و نیازهای برندت در ادامه گفتگو می‌کنیم."}</p>}
             <label htmlFor="contact-message">کمی از کسب‌وکارت بگو<textarea id="contact-message" name="message" required minLength={10} maxLength={2000} rows={4} placeholder="چه کاری انجام می‌دی و دوست داری به کجا برسی؟" /></label>
             <p className="contact-form-note" id="contact-form-note">با ادامه، متن آماده را در واتساپ می‌بینی و خودت ارسال می‌کنی.</p>
             <button type="submit" className="pill-button" aria-describedby="contact-form-note">ادامهٔ گفتگو در واتساپ<span className="button-circle"><Icon name="arrow" /></span></button>

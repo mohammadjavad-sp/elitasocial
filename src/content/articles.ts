@@ -31,7 +31,7 @@ export type Article = {
   sections: ArticleSection[];
   takeaway: string;
   featured?: boolean;
-  isMock: true;
+  isMock: boolean;
 };
 
 export const articles: Article[] = [
@@ -414,16 +414,16 @@ export const articles: Article[] = [
   },
 ];
 
-export function getArticle(slug: string): Article | undefined {
-  return articles.find((article) => article.slug === slug);
+export function getArticle(slug: string, source: Article[] = articles): Article | undefined {
+  return source.find((article) => article.slug === slug);
 }
 
 export function getArticleCategory(id: string) {
   return articleCategories.find((category) => category.id === id);
 }
 
-export function getRelatedArticles(article: Article, limit = 3): Article[] {
-  return articles
+export function getRelatedArticles(article: Article, limit = 3, source: Article[] = articles): Article[] {
+  return source
     .filter((candidate) => candidate.slug !== article.slug)
     .sort((a, b) => Number(b.category === article.category) - Number(a.category === article.category))
     .slice(0, Math.max(0, limit));

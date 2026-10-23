@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { articleCategories, articles, getArticleCategory, type ArticleCategoryId } from "@/content/articles";
+import { articleCategories, articles as starterArticles, getArticleCategory, type Article, type ArticleCategoryId } from "@/content/articles";
 import { ArticleCard } from "./article-card";
 
 const pageSize = 6;
@@ -16,7 +16,7 @@ function validCategory(value: string | null): value is ArticleCategoryId {
   return articleCategories.some((item) => item.id === value);
 }
 
-export function MagazineGallery({ category }: { category?: ArticleCategoryId }) {
+export function MagazineGallery({ category, articles = starterArticles }: { category?: ArticleCategoryId; articles?: Article[] }) {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>(category ?? "all");
   const [sort, setSort] = useState<ArticleSort>("newest");
@@ -49,7 +49,7 @@ export function MagazineGallery({ category }: { category?: ArticleCategoryId }) 
       return terms.every((term) => searchable.includes(term));
     });
     return sort === "shortest" ? [...result].sort((first, second) => first.readingMinutes - second.readingMinutes) : result;
-  }, [activeCategory, query, sort]);
+  }, [activeCategory, articles, query, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filteredArticles.length / pageSize));
   const currentPage = Math.min(page, totalPages);
@@ -90,7 +90,7 @@ export function MagazineGallery({ category }: { category?: ArticleCategoryId }) 
       {!category && <div className="magazine-filters" role="group" aria-label="موضوع مقاله‌ها"><button type="button" aria-pressed={activeCategory === "all"} onClick={() => { setActiveCategory("all"); setPage(1); }}>همهٔ موضوع‌ها</button>{articleCategories.map((item) => <button key={item.id} type="button" aria-pressed={activeCategory === item.id} onClick={() => { setActiveCategory(item.id); setPage(1); }}>{item.label}</button>)}</div>}
       <p ref={resultsCount} tabIndex={-1} className="magazine-results-count" role="status" aria-live="polite" aria-atomic="true">{filteredArticles.length.toLocaleString("fa-IR")} مقاله{query.trim() ? ` برای «${query.trim()}»` : ""}{totalPages > 1 ? `؛ صفحهٔ ${currentPage.toLocaleString("fa-IR")} از ${totalPages.toLocaleString("fa-IR")}` : ""}</p>
       <div id="magazine-results" className="magazine-results">
-        {visibleArticles.length > 0 ? <div className="magazine-article-grid">{visibleArticles.map((article) => <ArticleCard key={article.slug} article={article} />)}</div> : <div className="magazine-empty"><h3>مقاله‌ای با این جست‌وجو پیدا نشد</h3><p>عبارت کوتاه‌تری بنویسید یا فیلترها را پاک کنید تا نوشته‌های بیشتری ببینید.</p><button type="button" onClick={clearFilters}>پاک کردن جست‌وجو و فیلترها</button></div>}
+        {visibleArticles.length > 0 ? <div className="magazine-article-grid">{visibleArticles.map((article) => <ArticleCard key={article.slug} article={article} />)}</div> : <div className="magazine-empty"><h3>{articles.length === 0 ? "نوشته‌های تازه در راه‌اند" : "مقاله‌ای با این جست‌وجو پیدا نشد"}</h3><p>{articles.length === 0 ? "هنوز مقاله‌ای در مجله منتشر نشده است؛ برای خواندن نوشته‌های تازه دوباره سر بزنید." : "عبارت کوتاه‌تری بنویسید یا فیلترها را پاک کنید تا نوشته‌های بیشتری ببینید."}</p>{articles.length > 0 && <button type="button" onClick={clearFilters}>پاک کردن جست‌وجو و فیلترها</button>}</div>}
       </div>
       {totalPages > 1 && <nav className="magazine-pagination" aria-label="صفحه‌بندی مقاله‌ها"><button type="button" disabled={currentPage === 1} onClick={() => changePage(currentPage - 1)}>قبلی</button>{Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => <button key={pageNumber} type="button" aria-current={pageNumber === currentPage ? "page" : undefined} aria-label={`صفحهٔ ${pageNumber.toLocaleString("fa-IR")}`} onClick={() => changePage(pageNumber)}>{pageNumber.toLocaleString("fa-IR")}</button>)}<button type="button" disabled={currentPage === totalPages} onClick={() => changePage(currentPage + 1)}>بعدی</button></nav>}
     </div>

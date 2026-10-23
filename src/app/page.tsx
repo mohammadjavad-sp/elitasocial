@@ -9,8 +9,10 @@ import { TestimonialsSection, ContactSection } from "@/components/closing-sectio
 import { InsightsSection } from "@/components/insights-section";
 import { SiteFooter } from "@/components/site-footer";
 import { homeContent, getNavigation } from "@/content/home";
+import { getCmsContent } from "@/server/content";
 
-export default function Home() {
+export default async function Home() {
+  const content = await getCmsContent();
   return (
     <div className="home-shell">
       <a className="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
@@ -20,14 +22,14 @@ export default function Home() {
         <Hero />
         <div className="home-continuation">
           <AboutSection />
-          <ServicesSection />
+          <ServicesSection items={content.services} />
           <ApproachSection />
           <BenefitsSection content={homeContent.benefits} />
-          <FeaturedPortfolioSection />
-          <PricingSection />
+          <FeaturedPortfolioSection projects={content.portfolio} />
+          <PricingSection pricing={content.pricing} />
           <TestimonialsSection />
-          <InsightsSection />
-          <ContactSection />
+          <InsightsSection articles={content.articles} />
+          <ContactSection pricing={content.pricing} />
         </div>
       </main>
       <SiteFooter />

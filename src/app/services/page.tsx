@@ -5,15 +5,16 @@ import { Icon } from "@/components/icons";
 import { ServiceArt } from "@/components/service-art";
 import { SiteFooter } from "@/components/site-footer";
 import { getNavigation, homeContent } from "@/content/home";
-import { services } from "@/content/services";
 import { sitePath } from "@/lib/site-path";
+import { getCmsContent } from "@/server/content";
 
 export const metadata: Metadata = {
   title: "خدمات دیجیتال مارکتینگ | الیتا سوشال",
   description: "مدیریت اینستاگرام، طراحی وب‌سایت، تولید محتوا و سئو؛ با خدمات الیتا سوشال، خروجی‌ها و مراحل همکاری آشنا شوید.",
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const { services } = await getCmsContent();
   return (
     <div className="home-shell service-shell">
       <a className="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
@@ -41,6 +42,7 @@ export default function ServicesPage() {
               <div className="service-catalog-body"><h3><a href={sitePath(`/services/${service.slug}/`)}>{service.title}</a></h3><p>{service.intro}</p><a className="service-text-link" href={sitePath(`/services/${service.slug}/`)}>خروجی‌ها و مراحل همکاری<Icon name="arrow" /></a></div>
             </article>)}
           </div>
+          {services.length === 0 && <p className="demo-notice">جزئیات خدمات به‌زودی منتشر می‌شود؛ برای راهنمایی دربارهٔ نیاز برندت با ما گفتگو کن.</p>}
         </section>
 
         <section className="service-overview-process container" aria-labelledby="service-overview-process-title">

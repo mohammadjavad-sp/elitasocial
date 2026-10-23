@@ -6,22 +6,22 @@ import { ArticleCard } from "@/components/article-card";
 import { Header } from "@/components/header";
 import { Icon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
-import { articles, getArticle, getArticleCategory, getRelatedArticles } from "@/content/articles";
+import { articles as starterArticles, getArticle, getArticleCategory, getRelatedArticles } from "@/content/articles";
 import { getNavigation, homeContent } from "@/content/home";
 import { serviceContactHref } from "@/lib/service-selection";
 import { sitePath } from "@/lib/site-path";
+import { getCmsContent } from "@/server/content";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
-
 export function generateStaticParams() {
-  return articles.map(({ slug }) => ({ slug }));
+  return process.env.DEPLOY_TARGET === "github-pages" ? starterArticles.map(({ slug }) => ({ slug })) : [];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const { articles } = await getCmsContent();
+  const article = getArticle(slug, articles);
   if (!article) return { title: "مقاله پیدا نشد | الیتا سوشال" };
   return {
     title: `${article.title} | مجلهٔ الیتا`,
@@ -32,11 +32,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const { articles } = await getCmsContent();
+  const article = getArticle(slug, articles);
   if (!article) notFound();
   const category = getArticleCategory(article.category);
   if (!category) notFound();
-  const related = getRelatedArticles(article, 3);
+  const related = getRelatedArticles(article, 3, articles);
   const articleIndex = articles.findIndex((item) => item.slug === article.slug);
   const previous = articles[articleIndex - 1];
   const next = articles[articleIndex + 1];
@@ -61,7 +62,7 @@ export default async function ArticlePage({ params }: PageProps) {
               <h1 id="article-title">{article.title}</h1>
               <p className="article-intro">{article.excerpt}</p>
               <div className="article-byline"><span>{article.author}</span><span>{readingMinutes} دقیقه مطالعه</span></div>
-              <p className="article-draft-notice"><Icon name="sparkle" /><span><strong>پیش‌نویس نمایشی</strong> این مقاله برای پیش‌نمایش مجله آماده شده و پیش از انتشار نهایی بازبینی می‌شود.</span></p>
+              {article.isMock && <p className="article-draft-notice"><Icon name="sparkle" /><span><strong>پیش‌نویس نمایشی</strong> این مقاله برای پیش‌نمایش مجله آماده شده و پیش از انتشار نهایی بازبینی می‌شود.</span></p>}
             </div>
             <figure className="article-cover"><Image src={sitePath(article.image.src)} alt={article.image.alt} fill sizes="(max-width: 599px) 100vw, 90vw" priority /></figure>
           </header>
