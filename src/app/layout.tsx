@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { getSiteSettings } from "@/server/settings";
 import { SiteSettingsProvider } from "@/components/site-settings-provider";
+import { SitePreloader } from "@/components/site-preloader";
 import "./globals.css";
 import "./sections.css";
 import "./portfolio.css";
@@ -11,6 +12,7 @@ import "./services.css";
 import "./magazine.css";
 import "./article.css";
 import "./admin.css";
+import "./preloader.css";
 
 const estedad = localFont({ src: "../../public/fonts/Estedad-Variable.woff2", variable: "--font-estedad", display: "swap", weight: "100 900" });
 
@@ -29,5 +31,5 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1, them
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getSiteSettings();
-  return <html lang="fa" dir="rtl"><body className={estedad.variable}><SiteSettingsProvider settings={settings}>{children}</SiteSettingsProvider></body></html>;
+  return <html lang="fa" dir="rtl"><body className={estedad.variable}><SiteSettingsProvider settings={settings}><SitePreloader />{children}</SiteSettingsProvider></body></html>;
 }
