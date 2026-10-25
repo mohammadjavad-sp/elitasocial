@@ -6,9 +6,9 @@ import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
 import { useSiteSettings } from "./site-settings-provider";
 
-type ActivePage = "home" | "portfolio" | "services" | "blog";
+type ActivePage = "home" | "portfolio" | "services" | "blog" | "pricing";
 type Props = { navigation: NavigationItem[]; whatsapp?: string; activePage?: ActivePage };
-const activePaths: Record<ActivePage, string> = { home: "/", portfolio: "/portfolio/", services: "/services/", blog: "/blog/" };
+const activePaths: Record<ActivePage, string> = { home: "/", portfolio: "/portfolio/", services: "/services/", blog: "/blog/", pricing: "/pricing/" };
 
 function NavigationLinks({ items, onNavigate, activePage }: { items: NavigationItem[]; onNavigate?: () => void; activePage: ActivePage }) {
   return items.map((item) => item.upcoming ? (

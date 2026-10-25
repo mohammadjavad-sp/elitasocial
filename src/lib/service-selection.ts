@@ -19,7 +19,7 @@ export function serviceContactHref(service: ServiceId) {
 }
 
 export function servicePricingHref(category: PlanCategoryId) {
-  return sitePath(`/?planCategory=${category}#pricing`);
+  return sitePath(`/pricing/?planCategory=${category}#pricing`);
 }
 
 export function planContactHref(categoryId: string, planId: string) {

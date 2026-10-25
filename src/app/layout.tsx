@@ -15,6 +15,7 @@ import "./admin.css";
 import "./preloader.css";
 import "./atmosphere.css";
 import "./hero-ornament.css";
+import "./pricing-page.css";
 
 const estedad = localFont({ src: "../../public/fonts/Estedad-Variable.woff2", variable: "--font-estedad", display: "swap", weight: "100 900" });
 

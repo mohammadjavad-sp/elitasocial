@@ -3,18 +3,19 @@
 import { useEffect, useState } from "react";
 import { pricingContent, type DemoPlan, type PricingContent } from "@/content/pricing";
 import { planContactHref, readServiceSelection } from "@/lib/service-selection";
+import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
 import { useSiteSettings } from "./site-settings-provider";
 
 const priceFormatter = new Intl.NumberFormat("fa-IR");
 
-export function PricingSection({ pricing = pricingContent }: { pricing?: PricingContent }) {
+export function PricingSection({ pricing = pricingContent, variant = "home" }: { pricing?: PricingContent; variant?: "home" | "page" }) {
   const { sections } = useSiteSettings();
   const [categoryId, setCategoryId] = useState("instagram");
   useEffect(() => {
     function selectFromUrl() {
       const { categoryId: requestedCategory } = readServiceSelection(window.location.search, pricing);
-      if (requestedCategory) setCategoryId(requestedCategory);
+      setCategoryId(requestedCategory ?? "instagram");
     }
     selectFromUrl();
     window.addEventListener("popstate", selectFromUrl);
@@ -22,11 +23,23 @@ export function PricingSection({ pricing = pricingContent }: { pricing?: Pricing
   }, [pricing]);
   const category = pricing.categories.find(item => item.id === categoryId) ?? pricing.categories[0];
   const plans: DemoPlan[] = category.plans;
+
+  function selectCategory(id: string) {
+    setCategoryId(id);
+    if (variant !== "page") return;
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("planCategory", id);
+    url.searchParams.delete("plan");
+    url.searchParams.delete("service");
+    if (url.href !== window.location.href) window.history.pushState(null, "", url);
+  }
+
   return (
-    <section id="pricing" className="pricing-section container" aria-labelledby="pricing-title">
-      <div className="section-heading"><h2 id="pricing-title">{sections.pricingTitle.map((line, index) => <span key={index}>{line}</span>)}</h2><p>{sections.pricingDescription}</p></div>
+    <section id="pricing" className={`pricing-section container${variant === "page" ? " pricing-section-page" : ""}`} aria-labelledby="pricing-title">
+      {variant === "page" ? <h2 id="pricing-title" className="sr-only">مقایسهٔ پلن‌های همکاری</h2> : <div className="section-heading"><h2 id="pricing-title">{sections.pricingTitle.map((line, index) => <span key={index}>{line}</span>)}</h2><p>{sections.pricingDescription}</p></div>}
       <div className="pricing-tabs" role="group" aria-label="نوع خدمات پلن‌ها">
-        {pricing.categories.map(item => <button key={item.id} type="button" aria-pressed={category.id === item.id} aria-controls="pricing-plans" onClick={() => setCategoryId(item.id)}>{item.label}</button>)}
+        {pricing.categories.map(item => <button key={item.id} type="button" aria-pressed={category.id === item.id} aria-controls="pricing-plans" onClick={() => selectCategory(item.id)}>{item.label}</button>)}
       </div>
       {pricing.categories.some(item => item.plans.some(plan => plan.isMock)) && <p className="demo-notice pricing-notice"><Icon name="sparkle" />{pricing.notice}</p>}
       <p className="sr-only" role="status">پلن‌های {category.label} نمایش داده می‌شوند.</p>
@@ -41,6 +54,7 @@ export function PricingSection({ pricing = pricingContent }: { pricing?: Pricing
       </div>
       {plans.length === 0 && <p className="demo-notice">برای این خدمت هنوز پلنی منتشر نشده؛ برای پیشنهاد همکاری با ما گفتگو کن.</p>}
       <p className="pricing-footnote">{sections.pricingFootnote}</p>
+      {variant === "home" && <a className="pill-button secondary-button services-action" href={sitePath("/pricing/")}>همهٔ پلن‌ها و جزئیات همکاری<span className="button-circle"><Icon name="arrow" /></span></a>}
     </section>
   );
 }
