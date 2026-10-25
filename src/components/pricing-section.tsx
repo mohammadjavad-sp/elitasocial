@@ -24,14 +24,14 @@ export function PricingSection({ pricing = pricingContent }: { pricing?: Pricing
   const plans: DemoPlan[] = category.plans;
   return (
     <section id="pricing" className="pricing-section container" aria-labelledby="pricing-title">
-      <div className="section-heading"><h2 id="pricing-title">{sections.pricingTitle.map((line, index) => <span key={index} data-reveal="line" data-reveal-order={index}>{line}</span>)}</h2><p>{sections.pricingDescription}</p></div>
+      <div className="section-heading"><h2 id="pricing-title">{sections.pricingTitle.map((line, index) => <span key={index}>{line}</span>)}</h2><p>{sections.pricingDescription}</p></div>
       <div className="pricing-tabs" role="group" aria-label="نوع خدمات پلن‌ها">
         {pricing.categories.map(item => <button key={item.id} type="button" aria-pressed={category.id === item.id} aria-controls="pricing-plans" onClick={() => setCategoryId(item.id)}>{item.label}</button>)}
       </div>
       {pricing.categories.some(item => item.plans.some(plan => plan.isMock)) && <p className="demo-notice pricing-notice"><Icon name="sparkle" />{pricing.notice}</p>}
       <p className="sr-only" role="status">پلن‌های {category.label} نمایش داده می‌شوند.</p>
       <div id="pricing-plans" className="pricing-grid" role="region" aria-label={`پلن‌های ${category.label}`}>
-        {plans.map((plan, index) => <article key={plan.id} className={`pricing-card${plan.recommended ? " pricing-recommended" : ""}`} data-reveal="rise" data-reveal-order={index}>
+        {plans.map(plan => <article key={plan.id} className={`pricing-card${plan.recommended ? " pricing-recommended" : ""}`}>
           <div className="plan-badges">{plan.isMock && <span>پلن نمایشی</span>}{plan.recommended && <span className="plan-recommended-label">پیشنهادی</span>}</div>
           <h3>{plan.name}</h3><p className="plan-description">{plan.description}</p>
           <div className="plan-price"><data value={plan.price}>{priceFormatter.format(plan.price)}</data><span>{plan.currency}<small>{plan.period}</small></span></div>

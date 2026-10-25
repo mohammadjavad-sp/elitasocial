@@ -12,7 +12,6 @@
     "typecheck": "tsc --noEmit",
     "check:ui": "node scripts/check-ui.mjs",
     "check:portfolio": "node scripts/check-portfolio.mjs",
-    "check:motion": "node scripts/check-motion.mjs",
     "cms:init": "node --conditions=react-server --import tsx scripts/cms-init.ts",
     "cms:backup": "node --conditions=react-server --import tsx scripts/cms-backup.ts",
     "cms:migrate": "node --conditions=react-server --import tsx scripts/cms-migrate.ts"

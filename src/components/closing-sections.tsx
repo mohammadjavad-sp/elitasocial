@@ -97,9 +97,9 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
   }
   return (
     <section className="contact-section container" id="contact" aria-labelledby="contact-title">
-      <div className="section-heading"><h2 id="contact-title">{sections.contactTitle.map((line, index) => <span key={index} data-reveal="line" data-reveal-order={index}>{line}</span>)}</h2><p>{sections.contactDescription}</p></div>
+      <div className="section-heading"><h2 id="contact-title">{sections.contactTitle.map((line, index) => <span key={index}>{line}</span>)}</h2><p>{sections.contactDescription}</p></div>
       <div className="contact-grid">
-        <aside className="contact-info" aria-labelledby="contact-info-title" data-reveal="rise">
+        <aside className="contact-info" aria-labelledby="contact-info-title">
           <h3 id="contact-info-title">{sections.contactInfoTitle}</h3>
           <p>{sections.contactInfoDescription}</p>
           <a className="contact-channel" href={contact.phone}><span className="contact-channel-icon"><Icon name="phone" /></span><span><small>تماس با {brand.name}</small><strong dir="ltr">{contact.phoneLabel}</strong></span></a>
@@ -107,7 +107,7 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
           <a className="contact-channel" href={contact.telegram} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><Icon name="telegram" /></span><span><small>تلگرام</small><strong dir="ltr">{socialAccountLabel(contact.telegram)}</strong></span></a>
           <a className="contact-whatsapp" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">شروع گفتگو در واتساپ<Icon name="arrow" /></a>
         </aside>
-        <div className="contact-form-panel" data-reveal="rise" data-reveal-order={1}>
+        <div className="contact-form-panel">
           <h3>{sections.contactFormTitle}</h3>
           <p>{acceptsConsultations ? sections.contactFormDescription : "در این پیش‌نمایش، فرم به ثبت درخواست متصل نیست. متن را آماده کن و خودت در واتساپ ارسال کن."}</p>
           <form className="contact-form" onSubmit={submitRequest} aria-busy={submitting} onChange={event => { clearFeedback(); const field = event.target; if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) field.setCustomValidity(""); }}>
@@ -135,7 +135,7 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
           </form>
         </div>
       </div>
-      <div className="contact-faq" aria-labelledby="faq-title" data-reveal="rise"><div><h3 id="faq-title">{sections.faqTitle}</h3><p>{sections.faqDescription}</p></div><div className="contact-faq-list">{faqs.map((faq, index) => <details key={`${index}-${faq.question}`}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div></div>
+      <div className="contact-faq" aria-labelledby="faq-title"><div><h3 id="faq-title">{sections.faqTitle}</h3><p>{sections.faqDescription}</p></div><div className="contact-faq-list">{faqs.map((faq, index) => <details key={`${index}-${faq.question}`}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div></div>
     </section>
   );
 }

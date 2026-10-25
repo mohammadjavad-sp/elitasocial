@@ -11,13 +11,11 @@ import { SiteFooter } from "@/components/site-footer";
 import { getNavigation } from "@/content/home";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
-import { ScrollMotion } from "@/components/scroll-motion";
 
 export default async function Home() {
   const [content, settings] = await Promise.all([getCmsContent(), getSiteSettings()]);
   return (
-    <div className="home-shell" data-motion-root>
-      <ScrollMotion />
+    <div className="home-shell">
       <a className="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
       <div className="ambient-orb" aria-hidden="true" />
       <Header navigation={getNavigation()} />

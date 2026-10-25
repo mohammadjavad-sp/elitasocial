@@ -9,7 +9,6 @@ await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const results = [];
 const errors = [];
-const canonicalPath = value => value.replace(/\/+$/, '') || '/';
 
 try {
   for (const viewport of [
@@ -157,7 +156,7 @@ try {
       assert(destination.pathname.startsWith(blogPath), 'Article link preserves the deployment prefix');
       await trigger.focus();
       await Promise.all([
-        page.waitForURL(url => canonicalPath(url.pathname) === canonicalPath(destination.pathname), { waitUntil: 'networkidle' }),
+        page.waitForURL(url => url.pathname === destination.pathname, { waitUntil: 'networkidle' }),
         page.keyboard.press('Enter'),
       ]);
       assert.equal(await page.locator('h1').innerText(), title, 'Keyboard opens the selected standalone article');
@@ -257,8 +256,8 @@ try {
     const servicesLink = page.locator(`header a[href="${servicesPath}"]:visible`);
     assert.equal(await servicesLink.count(), 1, 'Services navigation is available');
     await servicesLink.click();
-    await page.waitForURL(url => canonicalPath(url.pathname) === canonicalPath(servicesPath));
-    assert.equal(canonicalPath(new URL(page.url()).pathname), canonicalPath(servicesPath), 'Services navigation opens the dedicated services page');
+    await page.waitForURL(url => url.pathname === servicesPath);
+    assert.equal(new URL(page.url()).pathname, servicesPath, 'Services navigation opens the dedicated services page');
     if (await toggle.isVisible()) assert.equal(await toggle.getAttribute('aria-expanded'), 'false', 'Selecting a page closes the mobile menu');
     await page.goBack({ waitUntil: 'networkidle' });
 
