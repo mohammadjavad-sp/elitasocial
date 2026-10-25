@@ -3,6 +3,7 @@ import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
 import { AmbientShapes } from "./ambient-shapes";
 import { BrandLogo } from "./brand-logo";
+import { MotionEnhancements } from "./motion-enhancements";
 
 export async function SiteFooter() {
   const { home: { contact, brand }, footer } = await getSiteSettings();
@@ -19,6 +20,7 @@ export async function SiteFooter() {
       </div>
       <div className="footer-bottom container"><span>{brand.name}؛ {brand.owner}</span><span>{footer.bottomNote}</span><a href="#main-content">بازگشت به ابتدای صفحه</a></div>
     </footer>
+    <MotionEnhancements />
     </>
   );
 }

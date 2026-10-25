@@ -19,7 +19,7 @@ function MotifDrawing({ motif }: { motif: Motif }) {
   }
 }
 
-/** Static decorations sit in the page gutters and never receive pointer or keyboard input. */
+/** Gutter decorations never receive input; selected SVGs can use gentle CSS motion. */
 export function AmbientShapes() {
   return <div className="site-ornaments" aria-hidden="true">
     <svg width="0" height="0" focusable="false" style={{ position: "absolute", width: 0, height: 0 }}>

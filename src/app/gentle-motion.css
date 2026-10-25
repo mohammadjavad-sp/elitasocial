@@ -1,0 +1,105 @@
+/* Small composited accents: no reveals, moving backgrounds or layout animation. */
+@media (prefers-reduced-motion: no-preference) {
+  .home-shell [data-elita-motion] {
+    --elita-rise: -5px;
+    --elita-turn: 8deg;
+    animation-duration: 8s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-play-state: paused;
+  }
+
+  .home-shell [data-elita-motion="active"] { animation-play-state: running; }
+
+  .hero-ribbon-mark[data-elita-motion] {
+    --elita-rise: -6px;
+    --elita-turn: 4deg;
+    animation-name: elita-float-turn;
+    animation-duration: 7s;
+  }
+  .instagram-card[data-elita-motion] {
+    --elita-rise: -4px;
+    animation-name: elita-float;
+    animation-duration: 8.6s;
+  }
+  .ambient-orb[data-elita-motion] {
+    --elita-rise: -5px;
+    animation-name: elita-float;
+    animation-duration: 9.4s;
+  }
+  .little-star > svg[data-elita-motion] {
+    --elita-turn: 13deg;
+    animation-name: elita-turn;
+    animation-duration: 9s;
+  }
+  .portfolio-hero-preview[data-elita-motion] {
+    animation-name: elita-float;
+    animation-duration: 8.2s;
+  }
+  .editorial-hero-seal > svg[data-elita-motion] {
+    --elita-turn: 16deg;
+    animation-name: elita-turn;
+    animation-duration: 10s;
+  }
+  .magazine-hero-note[data-elita-motion] {
+    --elita-rise: -4px;
+    animation-name: elita-float;
+    animation-duration: 8.8s;
+  }
+  .magazine-hero-bookmark > svg[data-elita-motion] {
+    --elita-turn: 9deg;
+    animation-name: elita-turn;
+    animation-duration: 9s;
+  }
+  .pricing-visual-orbit > span[data-elita-motion] {
+    --elita-rise: -6px;
+    animation-name: elita-float;
+    animation-duration: 7.8s;
+  }
+  .about-spark > svg[data-elita-motion] {
+    --elita-rise: -4px;
+    animation-name: elita-float-turn;
+    animation-duration: 9.5s;
+  }
+  .services-spark-end > svg[data-elita-motion] {
+    --elita-rise: -3px;
+    --elita-turn: -10deg;
+    animation-name: elita-float-turn;
+    animation-duration: 10.6s;
+  }
+  .site-ornament > svg[data-elita-motion] {
+    --elita-rise: -6px;
+    --elita-turn: 7deg;
+    animation-name: elita-float-turn;
+    animation-duration: 11s;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .site-ornament-4 > svg[data-elita-motion] { animation-duration: 12.5s; --elita-turn: -6deg; }
+  .site-ornament-7 > svg[data-elita-motion] { animation-duration: 10.8s; --elita-rise: -5px; }
+  .site-ornament-10 > svg[data-elita-motion] { animation-duration: 13s; --elita-turn: -8deg; }
+
+  @keyframes elita-float {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 var(--elita-rise); }
+  }
+  @keyframes elita-turn {
+    0%, 100% { rotate: 0deg; }
+    50% { rotate: var(--elita-turn); }
+  }
+  @keyframes elita-float-turn {
+    0%, 100% { translate: 0 0; rotate: 0deg; }
+    50% { translate: 0 var(--elita-rise); rotate: var(--elita-turn); }
+  }
+
+  @media (max-width: 599px) {
+    .hero-ribbon-mark[data-elita-motion] { --elita-rise: -4px; --elita-turn: 3deg; }
+    .instagram-card[data-elita-motion] { animation: none; }
+    .portfolio-hero-preview[data-elita-motion], .magazine-hero-note[data-elita-motion] { --elita-rise: -3px; }
+    .site-ornament > svg[data-elita-motion] { --elita-rise: -4px; --elita-turn: 5deg; }
+  }
+}
+
+@media print {
+  .home-shell [data-elita-motion] { animation: none !important; }
+}

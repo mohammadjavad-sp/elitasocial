@@ -1,0 +1,79 @@
+/* Small responses to an action; content stays still until someone interacts. */
+@media (prefers-reduced-motion: no-preference) {
+  .home-shell {
+    --interaction-ease: cubic-bezier(.22, .68, .2, 1);
+  }
+
+  .home-shell :is(.pill-button, .project-open, .menu-toggle, .pricing-tabs button, .portfolio-filters button, .magazine-filters > button, .magazine-pagination > button) {
+    transition: transform 180ms var(--interaction-ease), scale 110ms var(--interaction-ease), background-color 180ms ease, border-color 180ms ease;
+  }
+
+  .home-shell :is(.pill-button, .menu-toggle, .pricing-tabs button, .portfolio-filters button, .magazine-filters > button, .magazine-pagination > button):not(:disabled):active {
+    scale: .98;
+  }
+
+  .home-shell .project-open:active {
+    scale: .992;
+  }
+
+  .home-shell :is(.button-circle, .project-card-arrow) > svg,
+  .home-shell :is(.article-card-read, .portfolio-all-link, .service-text-link, .offering-card > a) > svg {
+    transition: translate 200ms var(--interaction-ease);
+  }
+
+  .home-shell :is(.offering-card, .service-catalog-card, .service-related-card, .pricing-card) {
+    transition: translate 240ms var(--interaction-ease);
+  }
+
+  .home-shell :is(.article-card-image, .magazine-featured-image) > img,
+  .home-shell .project-open .project-art > :is(img, .art-browser, .art-phone, .art-editorial-stack) {
+    transition: scale 380ms var(--interaction-ease);
+  }
+
+  .home-shell :is(.contact-faq-list, .service-faq-list, .pricing-questions-list) summary > span:last-child,
+  .home-shell .article-toc-mobile summary > span:last-child {
+    transition: transform 180ms var(--interaction-ease);
+  }
+
+  /* Keyboard feedback follows focus without changing layout or focus rings. */
+  .home-shell :is(.offering-card, .service-catalog-card, .pricing-card):focus-within,
+  .home-shell .service-related-card:focus-visible {
+    translate: 0 -2px;
+  }
+
+  .home-shell .pill-button:focus-visible .button-circle > svg,
+  .home-shell .project-open:focus-visible .project-card-arrow > svg,
+  .home-shell :is(.article-card-read, .portfolio-all-link, .service-text-link, .offering-card > a):focus-visible > svg {
+    translate: -2px 0;
+  }
+
+  .home-shell .article-card:focus-within .article-card-image > img,
+  .home-shell .magazine-featured:focus-within .magazine-featured-image > img,
+  .home-shell .project-open:focus-visible .project-art > :is(img, .art-browser, .art-phone, .art-editorial-stack) {
+    scale: 1.025;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .home-shell :is(.offering-card, .service-catalog-card, .service-related-card, .pricing-card):hover {
+    translate: 0 -2px;
+  }
+
+  .home-shell .pill-button:not(:disabled):hover .button-circle > svg,
+  .home-shell .project-open:hover .project-card-arrow > svg,
+  .home-shell :is(.article-card-read, .portfolio-all-link, .service-text-link, .offering-card > a):hover > svg {
+    translate: -2px 0;
+  }
+
+  .home-shell .article-card:hover .article-card-image > img,
+  .home-shell .magazine-featured:hover .magazine-featured-image > img,
+  .home-shell .project-open:hover .project-art > :is(img, .art-browser, .art-phone, .art-editorial-stack) {
+    scale: 1.025;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .home-shell .pill-button:hover {
+    transform: none;
+  }
+}
