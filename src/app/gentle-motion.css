@@ -1,9 +1,10 @@
 /* Small composited accents: no reveals, moving backgrounds or layout animation. */
 @media (prefers-reduced-motion: no-preference) {
   .home-shell [data-elita-motion] {
-    --elita-rise: -5px;
-    --elita-turn: 8deg;
-    animation-duration: 8s;
+    --elita-rise: -8px;
+    --elita-turn: 14deg;
+    --elita-slide: 3px;
+    animation-duration: 4.6s;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
     animation-play-state: paused;
@@ -12,72 +13,122 @@
   .home-shell [data-elita-motion="active"] { animation-play-state: running; }
 
   .hero-ribbon-mark[data-elita-motion] {
-    --elita-rise: -6px;
-    --elita-turn: 4deg;
+    --elita-rise: -10px;
+    --elita-turn: 8deg;
     animation-name: elita-float-turn;
-    animation-duration: 7s;
+    animation-duration: 3.6s;
   }
   .instagram-card[data-elita-motion] {
-    --elita-rise: -4px;
     animation-name: elita-float;
-    animation-duration: 8.6s;
+    animation-duration: 4.2s;
+  }
+  .website-card[data-elita-motion] {
+    --elita-rise: -7px;
+    --elita-slide: -3px;
+    animation-name: elita-float-side;
+    animation-duration: 4.8s;
   }
   .ambient-orb[data-elita-motion] {
-    --elita-rise: -5px;
+    --elita-rise: -9px;
     animation-name: elita-float;
-    animation-duration: 9.4s;
+    animation-duration: 4.7s;
+  }
+  .visual-dot[data-elita-motion] {
+    animation-name: elita-float;
+    animation-duration: 3.2s;
   }
   .little-star > svg[data-elita-motion] {
-    --elita-turn: 13deg;
+    --elita-turn: 20deg;
     animation-name: elita-turn;
-    animation-duration: 9s;
+    animation-duration: 4.4s;
   }
   .portfolio-hero-preview[data-elita-motion] {
     animation-name: elita-float;
-    animation-duration: 8.2s;
+    animation-duration: 4.1s;
   }
-  .editorial-hero-seal > svg[data-elita-motion] {
-    --elita-turn: 16deg;
+  .editorial-hero-seal[data-elita-motion] {
+    --elita-turn: -10deg;
     animation-name: elita-turn;
-    animation-duration: 10s;
+    animation-duration: 4.8s;
   }
   .magazine-hero-note[data-elita-motion] {
-    --elita-rise: -4px;
+    --elita-rise: -7px;
     animation-name: elita-float;
-    animation-duration: 8.8s;
+    animation-duration: 4.4s;
   }
-  .magazine-hero-bookmark > svg[data-elita-motion] {
-    --elita-turn: 9deg;
+  .magazine-hero-bookmark[data-elita-motion] {
+    --elita-turn: 8deg;
     animation-name: elita-turn;
-    animation-duration: 9s;
+    animation-duration: 3.8s;
+    transform-origin: top center;
   }
   .pricing-visual-orbit > span[data-elita-motion] {
-    --elita-rise: -6px;
+    --elita-rise: -10px;
     animation-name: elita-float;
-    animation-duration: 7.8s;
+    animation-duration: 3.9s;
+  }
+  .pricing-visual-card-back[data-elita-motion] {
+    --elita-turn: 2deg;
+    animation-name: elita-turn;
+    animation-duration: 5.4s;
+  }
+  .pricing-visual-tag > svg[data-elita-motion] {
+    --elita-turn: 20deg;
+    animation-name: elita-turn;
+    animation-duration: 4.2s;
+  }
+  .about-orbits > i[data-elita-motion] {
+    --elita-rise: -7px;
+    animation-name: elita-float-side;
+    animation-duration: 4s;
+  }
+  .about-seal > svg[data-elita-motion] {
+    --elita-turn: -18deg;
+    animation-name: elita-turn;
+    animation-duration: 4.4s;
   }
   .about-spark > svg[data-elita-motion] {
-    --elita-rise: -4px;
+    --elita-rise: -7px;
     animation-name: elita-float-turn;
-    animation-duration: 9.5s;
+    animation-duration: 4.8s;
+  }
+  .services-spark-start > svg[data-elita-motion] {
+    --elita-turn: -16deg;
+    animation-name: elita-float-turn;
+    animation-duration: 4.6s;
   }
   .services-spark-end > svg[data-elita-motion] {
-    --elita-rise: -3px;
-    --elita-turn: -10deg;
+    --elita-rise: -7px;
+    --elita-turn: -16deg;
     animation-name: elita-float-turn;
-    animation-duration: 10.6s;
+    animation-duration: 5.3s;
+  }
+  .approach-spark > svg[data-elita-motion] {
+    --elita-rise: -9px;
+    --elita-turn: 18deg;
+    animation-name: elita-float-turn;
+    animation-duration: 4.1s;
+  }
+  .insights-spark > svg[data-elita-motion] {
+    --elita-turn: 20deg;
+    animation-name: elita-float-turn;
+    animation-duration: 5s;
+  }
+  .service-visual-note > svg[data-elita-motion] {
+    --elita-rise: -6px;
+    --elita-turn: 16deg;
+    animation-name: elita-float-turn;
+    animation-duration: 4.7s;
   }
   .site-ornament > svg[data-elita-motion] {
-    --elita-rise: -6px;
-    --elita-turn: 7deg;
     animation-name: elita-float-turn;
-    animation-duration: 11s;
+    animation-duration: 4.8s;
     transform-box: fill-box;
     transform-origin: center;
   }
-  .site-ornament-4 > svg[data-elita-motion] { animation-duration: 12.5s; --elita-turn: -6deg; }
-  .site-ornament-7 > svg[data-elita-motion] { animation-duration: 10.8s; --elita-rise: -5px; }
-  .site-ornament-10 > svg[data-elita-motion] { animation-duration: 13s; --elita-turn: -8deg; }
+  .site-ornament:nth-child(3n + 1) > svg[data-elita-motion] { animation-duration: 4.4s; --elita-rise: -8px; --elita-turn: 14deg; }
+  .site-ornament:nth-child(3n + 2) > svg[data-elita-motion] { animation-duration: 5.2s; --elita-rise: -9px; --elita-turn: -12deg; }
+  .site-ornament:nth-child(3n) > svg[data-elita-motion] { animation-duration: 5.8s; --elita-rise: -7px; --elita-turn: 18deg; }
 
   @keyframes elita-float {
     0%, 100% { translate: 0 0; }
@@ -87,16 +138,30 @@
     0%, 100% { rotate: 0deg; }
     50% { rotate: var(--elita-turn); }
   }
+  @keyframes elita-float-side {
+    0%, 100% { translate: 0 0; }
+    50% { translate: var(--elita-slide) var(--elita-rise); }
+  }
   @keyframes elita-float-turn {
     0%, 100% { translate: 0 0; rotate: 0deg; }
     50% { translate: 0 var(--elita-rise); rotate: var(--elita-turn); }
   }
 
   @media (max-width: 599px) {
-    .hero-ribbon-mark[data-elita-motion] { --elita-rise: -4px; --elita-turn: 3deg; }
-    .instagram-card[data-elita-motion] { animation: none; }
-    .portfolio-hero-preview[data-elita-motion], .magazine-hero-note[data-elita-motion] { --elita-rise: -3px; }
-    .site-ornament > svg[data-elita-motion] { --elita-rise: -4px; --elita-turn: 5deg; }
+    .hero-ribbon-mark[data-elita-motion] { --elita-rise: -7px; --elita-turn: 6deg; }
+    .instagram-card[data-elita-motion], .website-card[data-elita-motion] { --elita-rise: -5px; --elita-slide: -2px; }
+    .ambient-orb[data-elita-motion], .visual-dot[data-elita-motion],
+    .pricing-visual-orbit > span[data-elita-motion] { --elita-rise: -6px; }
+    .portfolio-hero-preview[data-elita-motion], .magazine-hero-note[data-elita-motion] { --elita-rise: -5px; }
+    .editorial-hero-seal[data-elita-motion] { --elita-turn: -7deg; }
+    .magazine-hero-bookmark[data-elita-motion] { --elita-turn: 6deg; }
+    .about-orbits > i[data-elita-motion] { --elita-rise: -6px; --elita-slide: 2px; }
+    .about-spark > svg[data-elita-motion], .services-spark-start > svg[data-elita-motion],
+    .services-spark-end > svg[data-elita-motion], .approach-spark > svg[data-elita-motion],
+    .insights-spark > svg[data-elita-motion] { --elita-rise: -6px; --elita-turn: 12deg; }
+    .little-star > svg[data-elita-motion], .pricing-visual-tag > svg[data-elita-motion],
+    .service-visual-note > svg[data-elita-motion] { --elita-turn: 14deg; }
+    .site-ornament:nth-child(n) > svg[data-elita-motion] { --elita-rise: -6px; --elita-turn: 10deg; }
   }
 }
 
