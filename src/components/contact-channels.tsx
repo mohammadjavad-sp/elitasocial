@@ -1,9 +1,8 @@
 import type { SiteSettings } from "@/lib/site-settings";
-import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
 
 type Contact = SiteSettings["home"]["contact"];
-export type ContactChannel = "whatsapp" | "phone" | "telegram" | "instagram" | "bale" | "eitaa";
+export type ContactChannel = "whatsapp" | "phone" | "telegram" | "instagram" | "bale" | "eitaa" | "rubika" | "email";
 
 const channels: { id: ContactChannel; name: string; action: string }[] = [
   { id: "whatsapp", name: "واتساپ", action: "گفتگو در واتساپ" },
@@ -12,13 +11,16 @@ const channels: { id: ContactChannel; name: string; action: string }[] = [
   { id: "instagram", name: "اینستاگرام", action: "ارتباط در اینستاگرام" },
   { id: "bale", name: "بله", action: "گفتگو در بله" },
   { id: "eitaa", name: "ایتا", action: "گفتگو در ایتا" },
+  { id: "rubika", name: "روبیکا", action: "گفتگو در روبیکا" },
+  { id: "email", name: "جیمیل", action: "ارسال ایمیل" },
 ];
 
 export function ContactIcon({ channel }: { channel: ContactChannel }) {
-  if (channel === "bale" || channel === "eitaa") {
-    return <img className="contact-network-image" src={sitePath(`/images/${channel}.png`)} alt="" aria-hidden="true" width={24} height={24} decoding="async" />;
-  }
   return <Icon name={channel} />;
+}
+
+export function contactEmailHref(address: string) {
+  return `mailto:${encodeURIComponent(address).replace(/%40/gi, "@")}`;
 }
 
 type Props = {
@@ -35,11 +37,16 @@ type Props = {
 export function ContactChannels({ contact, includeWhatsapp = true, className = "", tone = "default", compact = false, label = "انتخاب راه ارتباط", onNavigate }: Props) {
   return <div className={`contact-channels contact-channels-${tone}${compact ? " contact-channels-compact" : ""} ${className}`.trim()} role="group" aria-label={label}>
     {channels.filter(channel => includeWhatsapp || channel.id !== "whatsapp").map(channel => {
-      const external = channel.id !== "phone";
-      const accessibleName = external ? `${channel.action} (پنجرهٔ جدید)` : `${channel.action}، ${contact.phoneLabel}`;
-      return <a className={`contact-channel-link channel-${channel.id}`} key={channel.id} href={contact[channel.id]} aria-label={accessibleName} title={accessibleName}
+      const contents = <><span className="contact-link-icon"><ContactIcon channel={channel.id} /></span><span className="contact-channel-name">{channel.name}{channel.id === "rubika" && !contact.rubika && <small>لینک به‌زودی</small>}</span></>;
+      if (channel.id === "rubika" && !contact.rubika) {
+        return <span className="contact-channel-link channel-rubika contact-channel-pending" key={channel.id} title="روبیکا؛ لینک به‌زودی">{contents}</span>;
+      }
+      const external = channel.id !== "phone" && channel.id !== "email";
+      const accessibleName = external ? `${channel.action} (پنجرهٔ جدید)` : channel.id === "email" ? `${channel.action} به ${contact.email}` : `${channel.action}، ${contact.phoneLabel}`;
+      const href = channel.id === "email" ? contactEmailHref(contact.email) : contact[channel.id];
+      return <a className={`contact-channel-link channel-${channel.id}`} key={channel.id} href={href} aria-label={accessibleName} title={accessibleName}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} onClick={onNavigate}>
-        <span className="contact-link-icon"><ContactIcon channel={channel.id} /></span><span>{channel.name}</span>
+        {contents}
       </a>;
     })}
   </div>;

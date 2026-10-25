@@ -110,7 +110,7 @@ export function SitePreloader() {
           <span className="preloader-satellite preloader-satellite-three"><Icon name="sparkle" /></span>
           <div className="preloader-gem">
             <svg className="preloader-spark" viewBox="0 0 24 24" fill="currentColor">
-              <defs><linearGradient id="preloader-sparkle-gradient" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#b59aff" /><stop offset=".42" stopColor="#865cf5" /><stop offset=".72" stopColor="#582be8" /><stop offset="1" stopColor="#4420bb" /></linearGradient></defs>
+              <defs><linearGradient id="preloader-sparkle-gradient" x1="0" y1="0" x2="1" y2="1"><stop stopColor="var(--color-tertiary)" /><stop offset=".42" stopColor="var(--color-secondary)" /><stop offset=".72" stopColor="var(--color-primary)" /><stop offset="1" stopColor="var(--primary-hover)" /></linearGradient></defs>
               <path d="m12 2 2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2Z" />
             </svg>
             <span className="preloader-gem-glint" />

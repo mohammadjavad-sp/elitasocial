@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-type IconName = "arrow" | "instagram" | "website" | "phone" | "sparkle" | "menu" | "close" | "telegram" | "whatsapp";
+type IconName = "arrow" | "instagram" | "website" | "phone" | "sparkle" | "menu" | "close" | "telegram" | "whatsapp" | "bale" | "eitaa" | "rubika" | "email";
 export function Icon({ name, ...props }: SVGProps<SVGSVGElement> & { name: IconName }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
@@ -13,6 +13,10 @@ export function Icon({ name, ...props }: SVGProps<SVGSVGElement> & { name: IconN
       {name === "close" && <><path d="m6 6 12 12M18 6 6 18" /></>}
       {name === "telegram" && <><path d="m21 3-4 18-6-6-4 3 1-7L21 3ZM8 11l9-5-6 9" /><path d="m3 10 18-7" /></>}
       {name === "whatsapp" && <><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.5L3 21l1.7-4.8A8.5 8.5 0 1 1 20.5 11.7Z" /><path d="m8 7 2 3-1 1a8 8 0 0 0 4 4l1-1 3 2c-.6 1.6-2 1.7-3.5 1-3-1.3-5.3-3.6-6.5-6.5C6.3 9 6.5 7.8 8 7Z" strokeWidth="1.3" /></>}
+      {name === "bale" && <><path d="M21 11.5A9 9 0 0 1 8 19.6L3 21l1.4-5A9 9 0 1 1 21 11.5Z" /><path d="m7.5 11.5 3 3 6-6" strokeWidth="2.2" /></>}
+      {name === "eitaa" && <><path d="M20.5 12A8.5 8.5 0 0 1 8 19.5L3 21l1.5-5A8.5 8.5 0 1 1 20.5 12Z" /><path d="M16.5 8.6c-1.4-2.2-5-2.1-7 .2-1.7 2-1.5 5.2.5 6.6 2.1 1.5 4.7.4 5.7-1.5M7.5 13.2l9-4.6M8.5 17l9-4.7" /></>}
+      {name === "rubika" && <><path d="m12 2 9 5v10l-9 5-9-5V7l9-5Z" /><path d="m12 7 4.5 2.5v5L12 17l-4.5-2.5v-5L12 7ZM3 7l4.5 2.5m9 0L21 7m-9-5v5m0 10v5m-9-5 4.5-2.5m9 0L21 17M7.5 9.5l4.5 2.6 4.5-2.6M12 12.1V17" /></>}
+      {name === "email" && <><rect x="2.5" y="4.5" width="19" height="15" rx="3" /><path d="m3.5 6 7 5.4a2.5 2.5 0 0 0 3 0L20.5 6" /></>}
     </svg>
   );
 }

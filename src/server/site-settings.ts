@@ -17,7 +17,8 @@ function imageSource(value: unknown, field: string): string {
 }
 
 function contactValue(value: unknown, key: string, field: string): string {
-  const supplied = text(value, field, 220);
+  const supplied = text(value, field, 220, key === "rubika" ? 0 : 1);
+  if (key === "rubika" && supplied === "") return "";
   const result = key === "instagram" ? supplied.replace(/^https:\/\/instagram\.com\//, "https://www.instagram.com/") : supplied;
   const patterns: Record<string, RegExp> = {
     phone: /^tel:\+[1-9]\d{7,14}$/,
@@ -26,6 +27,8 @@ function contactValue(value: unknown, key: string, field: string): string {
     telegram: /^https:\/\/t\.me\/[A-Za-z0-9_]{1,100}\/?$/,
     bale: /^https:\/\/ble\.ir\/[A-Za-z0-9_]{1,100}\/?$/,
     eitaa: /^https:\/\/eitaa\.com\/[A-Za-z0-9_]{1,100}\/?$/,
+    rubika: /^https:\/\/rubika\.ir\/[A-Za-z0-9_]{1,100}\/?$/,
+    email: /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/,
   };
   if (!patterns[key].test(result)) return fail(field);
   return result;
@@ -43,7 +46,7 @@ function cleanValue(value: unknown, template: unknown, path: string): unknown {
     });
   }
   if (typeof template === "string") {
-    if (path.startsWith("home.contact.") && ["phone", "whatsapp", "instagram", "telegram", "bale", "eitaa"].includes(key)) return contactValue(value, key, path);
+    if (path.startsWith("home.contact.") && ["phone", "whatsapp", "instagram", "telegram", "bale", "eitaa", "rubika", "email"].includes(key)) return contactValue(value, key, path);
     if (key === "src") return imageSource(value, path);
     const required = /(?:title|label|name|owner|eyebrow|caption|alt)$/i.test(key) || path.startsWith("seo.");
     const maximum = key === "alt" ? 350 : /(?:title|label|name|owner|eyebrow|caption)$/i.test(key) ? 500 : 5000;

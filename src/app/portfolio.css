@@ -5,14 +5,14 @@
 .portfolio-all-link { display: inline-flex; flex-shrink: 0; gap: 14px; color: var(--purple); font-size: 13px; font-weight: 650; align-items: center; min-height: 44px; text-underline-offset: 6px; }
 .portfolio-all-link:hover { text-decoration: underline; }
 .portfolio-all-link svg { width: 20px; height: 20px; }
-.portfolio-demo-notice { display: flex; align-items: start; gap: 11px; color: #625475; background: #eee8f7; border-inline-start: 3px solid #b39aca; padding: 13px 17px; margin: 0 0 28px; font-size: 12px; line-height: 2; }
+.portfolio-demo-notice { display: flex; align-items: start; gap: 11px; color: var(--muted); background: var(--color-quaternary); border-inline-start: 3px solid var(--muted); padding: 13px 17px; margin: 0 0 28px; font-size: 12px; line-height: 2; }
 .portfolio-demo-notice svg { width: 17px; height: 17px; margin-top: 4px; }
 .portfolio-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px 23px; }
 .portfolio-card { min-width: 0; background: white; border-radius: 5px; }
 .project-open { display: block; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; text-align: start; border-radius: inherit; height: 100%; }
 .project-card-body { display: block; padding: 20px 21px 17px; }
 .project-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 9px; color: var(--muted); font-size: 10px; line-height: 1.8; }
-.project-demo { display: inline-block; padding: 2px 8px; background: #f0edf4; border: 1px solid #e6deef; border-radius: 3px; color: #665674; font-size: 10px; font-weight: 500; white-space: nowrap; }
+.project-demo { display: inline-block; padding: 2px 8px; background: var(--color-quaternary); border: 1px solid var(--line); border-radius: 3px; color: var(--muted); font-size: 10px; font-weight: 500; white-space: nowrap; }
 .project-card-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 16px; font-weight: 750; line-height: 1.9; margin-top: 12px; }
 .project-card-arrow { width: 29px; height: 29px; display: grid; place-items: center; flex-shrink: 0; border-radius: 50%; background: var(--lavender); color: var(--purple); transition: color 180ms, background 180ms; }
 .project-card-arrow svg { width: 16px; height: 16px; }
@@ -105,22 +105,22 @@
 .portfolio-page-title { display: flex; align-items: center; justify-content: space-between; gap: 35px; padding-block: 27px 43px; }
 .portfolio-page-title h1 { font-size: clamp(33px, 4.1vw, 58px); line-height: 1.8; letter-spacing: -1.9px; }
 .portfolio-page-title p { color: var(--muted); font-size: 14px; line-height: 2.4; margin: 18px 0 0; }
-.portfolio-heading-mark { display: flex; align-items: center; flex-direction: column; justify-content: center; width: 165px; aspect-ratio: 1; border-radius: 50%; border: 1px solid #c5b4e4; color: var(--purple); transform: rotate(-12deg); margin-inline-end: 8%; flex-shrink: 0; }
+.portfolio-heading-mark { display: flex; align-items: center; flex-direction: column; justify-content: center; width: 165px; aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--line); color: var(--purple); transform: rotate(-12deg); margin-inline-end: 8%; flex-shrink: 0; }
 .portfolio-heading-mark svg { width: 39px; height: 39px; stroke-width: 1; }
 .portfolio-heading-mark span { font-size: 13px; text-align: center; line-height: 2; padding-top: 10px; }
 .portfolio-page-gallery { padding-block: 8px 80px; }
 .portfolio-filters { display: flex; flex-wrap: wrap; gap: 9px; padding-bottom: 12px; }
-.portfolio-filters button { border-radius: 30px; border: 1px solid #ddd5ec; color: #5c516c; font-size: 12px; line-height: 1.7; min-height: 44px; padding: 9px 18px; background: transparent; transition: color 160ms, background 160ms, border-color 160ms; }
+.portfolio-filters button { border-radius: 30px; border: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.7; min-height: 44px; padding: 9px 18px; background: transparent; transition: color 160ms, background 160ms, border-color 160ms; }
 .portfolio-filters button[aria-pressed="true"] { background: var(--purple); color: white; border-color: var(--purple); }
-.portfolio-filters button:hover:not([aria-pressed="true"]) { background: var(--lavender); border-color: #baa3e2; }
+.portfolio-filters button:hover:not([aria-pressed="true"]) { background: var(--lavender); border-color: var(--color-secondary); }
 .portfolio-count { color: var(--muted); font-size: 12px; margin: 8px 0 22px; }
-.portfolio-invitation { display: flex; gap: 30px; justify-content: space-between; align-items: center; background: #e9e2f9; padding: 35px 40px; margin-bottom: 80px; border-radius: 4px; }
+.portfolio-invitation { display: flex; gap: 30px; justify-content: space-between; align-items: center; background: var(--color-quaternary); padding: 35px 40px; margin-bottom: 80px; border-radius: 4px; }
 .portfolio-invitation h2 { font-size: 27px; letter-spacing: -.8px; margin: 0 0 10px; line-height: 1.9; }
-.portfolio-invitation p { font-size: 13px; color: #635575; line-height: 2.1; margin: 0; max-width: 570px; }
+.portfolio-invitation p { font-size: 13px; color: var(--muted); line-height: 2.1; margin: 0; max-width: 570px; }
 .portfolio-invitation .pill-button { flex-shrink: 0; }
-.project-dialog { border: 0; border-radius: 8px; padding: 0; width: min(850px, calc(100% - 40px)); max-height: calc(100svh - 48px); overflow-y: auto; overscroll-behavior: contain; background: #fdfcff; color: var(--ink); }
+.project-dialog { border: 0; border-radius: 8px; padding: 0; width: min(850px, calc(100% - 40px)); max-height: calc(100svh - 48px); overflow-y: auto; overscroll-behavior: contain; background: var(--surface-soft); color: var(--ink); }
 .project-dialog[open] { display: grid; grid-template-columns: .9fr 1.1fr; }
-.project-dialog::backdrop { background: #171126a6; backdrop-filter: blur(5px); }
+.project-dialog::backdrop { background: rgb(var(--color-primary-rgb) / 0.651); backdrop-filter: blur(5px); }
 .project-dialog > .project-art { aspect-ratio: auto; min-height: 480px; border-radius: 0; }
 .project-dialog .art-browser { width: 88%; }
 .project-dialog .art-browser-hero strong { font-size: 18px; }
@@ -131,10 +131,10 @@
 .project-dialog h2 { font-size: 23px; font-weight: 750; line-height: 1.8; letter-spacing: -.6px; margin: 15px 0; }
 .project-dialog p { color: var(--muted); font-size: 12px; line-height: 2.3; }
 .project-dialog h3 { font-size: 13px; margin: 24px 0 10px; }
-.project-dialog ul { padding-inline-start: 18px; font-size: 12px; color: #625574; line-height: 2.4; }
-.project-dialog .project-dialog-notice { padding: 12px; background: #eee8f7; font-size: 10px; line-height: 2; margin: 24px 0 20px; }
+.project-dialog ul { padding-inline-start: 18px; font-size: 12px; color: var(--muted); line-height: 2.4; }
+.project-dialog .project-dialog-notice { padding: 12px; background: var(--color-quaternary); font-size: 10px; line-height: 2; margin: 24px 0 20px; }
 .project-dialog .pill-button { font-size: 11px; }
-.project-close { position: absolute; inset-inline-end: 10px; top: 10px; background: white; color: var(--ink); border: 1px solid #ded5e8; width: 44px; height: 44px; display: grid; place-items: center; z-index: 2; border-radius: 50%; }
+.project-close { position: absolute; inset-inline-end: 10px; top: 10px; background: white; color: var(--ink); border: 1px solid var(--line); width: 44px; height: 44px; display: grid; place-items: center; z-index: 2; border-radius: 50%; }
 .project-close svg { width: 19px; height: 19px; }
 @media (max-width: 1049px) {
   .portfolio-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
