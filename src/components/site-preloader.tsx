@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Icon } from "./icons";
 import { useSiteSettings } from "./site-settings-provider";
@@ -15,7 +15,6 @@ export function SitePreloader() {
   const localPath = basePath && pathname.startsWith(`${basePath}/`) ? pathname.slice(basePath.length) : pathname;
   const isAdmin = /^\/admin(?:\/|$)/.test(localPath);
   const [phase, setPhase] = useState<Phase>("loading");
-  const dismiss = useRef<() => void>(() => {});
 
   useEffect(() => {
     if (isAdmin) return;
@@ -33,7 +32,6 @@ export function SitePreloader() {
       finished = true;
       timers.forEach(clearTimeout);
       cleanup.splice(0).forEach(remove => remove());
-      dismiss.current = () => {};
       setPhase("hidden");
     };
     const leave = () => {
@@ -42,19 +40,16 @@ export function SitePreloader() {
       setPhase("leaving");
       later(hide, 440);
     };
-    dismiss.current = leave;
 
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
     if (motion.matches || window.location.hash || navigation?.type === "back_forward" || document.visibilityState === "hidden") {
       hide();
-      return () => { disposed = true; dismiss.current = () => {}; };
+      return () => { disposed = true; };
     }
 
     // Follow deliberate navigation immediately; never swallow the original action.
-    const onPointer = (event: PointerEvent) => {
-      if (!(event.target instanceof Element) || !event.target.closest(".preloader-skip")) hide();
-    };
+    const onPointer = () => { hide(); };
     const onKey = (event: KeyboardEvent) => {
       if (!["Shift", "Control", "Alt", "Meta"].includes(event.key)) hide();
     };
@@ -98,7 +93,6 @@ export function SitePreloader() {
       disposed = true;
       timers.forEach(clearTimeout);
       cleanup.forEach(remove => remove());
-      dismiss.current = () => {};
     };
   }, [isAdmin]);
 
@@ -129,7 +123,6 @@ export function SitePreloader() {
         <div className="preloader-wordmark"><strong>{brand.name}</strong><span dir="ltr" lang="en">{brand.latinName}</span></div>
         <p className="preloader-caption" role="status">یک جرقه تا شروع…</p>
         <div className="preloader-indicator" aria-hidden="true"><span /><span /><span /></div>
-        <button className="preloader-skip" type="button" disabled={phase === "leaving"} onClick={() => dismiss.current()}>ورود به سایت<Icon name="arrow" /></button>
       </div>
     </div>
     <noscript><style>{".site-preloader{display:none!important}"}</style></noscript>

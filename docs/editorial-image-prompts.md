@@ -42,13 +42,13 @@ Color palette: creamy white paper, warm pale stone tabletop, lavender and dusty 
 Constraints: no people, faces, brands, logos, readable letters or numbers, watermark, fabricated statistics, floating symbols; editorial photographic still life, not an illustration or website screenshot.
 ```
 
-## Supplied logo
+## Supplied logo — initial restoration
 
 - File: `public/images/elita-social-logo.webp`
 - Site icon: `src/app/icon.png`, derived from the final logo at 512 × 512 px with transparent padding; replaces the earlier generic star icon.
 - Edit target supplied by the user: `C:/Users/Mohamad Javad/Downloads/IMG_7115.PNG` (171 × 109 px, transparent).
 - Generated source: `C:/Users/Mohamad Javad/.codex/generated_images/01a17225-0847-7ac3-92b2-d6edec544ff6/exec-a5894d86-92c2-49f0-ad60-6d4214289107.png`.
-- Output: 1200 × 767 px, lossless WebP with transparent alpha, 58982 bytes.
+- Initial output: 1200 × 767 px, lossless WebP with transparent alpha, 58982 bytes. The thinner version below is now used on the website under a new filename.
 - The existing custom serif ligature wordmark and spaced SOCIAL were preserved rather than redesigned. Sharp removed faint alpha speckles using a 128 threshold, lightly smoothed the remaining contours with a 5 px median and 0.8 px blur, trimmed the empty bounds, resized, and added 8 px of transparent breathing room. All eight meaningful connected components were retained: connected wordmark, i-dot, and the six SOCIAL letters.
 - Foreground colors were restored from the supplied source, rather than retaining generated color variation: the main wordmark is `#694F8E` (source dominant RGB 105, 79, 142), and SOCIAL is `#B692C2` (source alpha-weighted RGB approximately 182, 146, 194).
 - Exact edit prompt:
@@ -62,4 +62,16 @@ Constraints: preserve the exact supplied design and identity: every existing let
 ```
 
 All final assets were visually checked. The logo preserves genuine alpha, while the editorial photographs are opaque. The original files in the generated-images directory were left in place.
+
+## Supplied logo — thinner weight, current version
+
+- Final file: `public/images/elita-social-logo-thin.webp`, 1200 × 767 px, 61134 bytes, lossless WebP with genuine alpha. The dimensions used in the header, footer and administration remain the same.
+- The existing high-resolution logo was the edit target; the original `IMG_7115.PNG` was supplied as the identity reference. Built-in `image_gen.imagegen` was used.
+- Generated source: `C:/Users/Mohamad Javad/.codex/generated_images/01a16917-a81a-7c42-b89d-9633bcc42bd9/exec-1f56ac36-9419-425d-a376-57272a4f395f.png`.
+- Postprocessing retained the eight meaningful connected components, removed faint alpha noise, lightly smoothed contours and restored the original two flat colors. Transparent margins and the canvas size were preserved. The site icon `src/app/icon.png` was regenerated from this version. The shared logo uses the new filename to refresh cached image variants.
+- Exact edit prompt:
+
+```text
+Edit target: image 1, the current high-resolution elita SOCIAL transparent logo. Image 2 is the user's original small logo, an identity reference. Make a subtle, precise typography weight correction to image 1: the user says its strokes became too thick and bulky. Reduce the thickness of the purple elita wordmark strokes by around 18–22%, especially the l/i/t upright stems and heavy curved strokes of e and a, so it feels more delicate, minimal and elegant. Keep recognizable exact custom serif letter shapes and ligatures, their positions, spacing, overall word width and height, and original composition. Keep the letters fully formed; do not turn it into an outline. Keep the six uppercase SOCIAL letters below and their tracking/position; make their stroke weight slightly more delicate too, about 10%. Preserve the existing two flat colors exactly: elita #694F8E and SOCIAL #B692C2. Do not change colors, invent a new font, redraw the identity, shift the baseline, change overall proportions or add elements. Clean crisp smooth anti-aliased edges, approximately 1200 pixels wide, close-fitting canvas retaining a small transparent breathing room. Genuine transparent alpha background, no checkerboard, no rectangle, no shadows. This is a careful thinner-weight version of the same provided logo, not a redesign.
+```
 
