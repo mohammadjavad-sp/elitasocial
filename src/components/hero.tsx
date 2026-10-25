@@ -28,7 +28,9 @@ export async function Hero() {
       </div>
       <div className="hero-visual">
         <div className="portrait-halo" aria-hidden="true"><div /><div /><div /></div>
-        <div className="portrait-frame">
+        <div className="portrait-frame hero-portrait-stack">
+          <span className="hero-paper hero-paper-pink" aria-hidden="true" />
+          <span className="hero-paper hero-paper-lilac" aria-hidden="true" />
           <Image className="hero-portrait" src={sitePath(hero.portrait.src)} alt={hero.portrait.alt}
             width={hero.portrait.width} height={hero.portrait.height} sizes="(max-width: 599px) 80vw, (max-width: 1049px) 420px, 480px" preload />
         </div>

@@ -24,10 +24,10 @@ export function BenefitsSection({ content }: { content: BenefitsContent }) {
   return (
     <section id="benefits" className="benefits-section container" aria-labelledby="benefits-title">
       <div className="section-heading">
-        <h2 id="benefits-title">{content.title.map(line => <span key={line}>{line}</span>)}</h2>
+        <h2 id="benefits-title">{content.title.map((line, index) => <span key={line} data-reveal="line" data-reveal-order={index}>{line}</span>)}</h2>
         <p>{content.description}</p>
       </div>
-      <div className="benefits-grid">
+      <div className="benefits-grid" data-reveal="rise">
         {content.items.map(item => {
           const active = item.id === activeId;
           const triggerId = `benefit-toggle-${item.id}`;

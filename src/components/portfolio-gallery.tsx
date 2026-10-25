@@ -55,7 +55,7 @@ export function PortfolioGallery({ featured = false, projects: source = starterP
   return <>
     {!featured && <div className="portfolio-filters" role="group" aria-label="فیلتر نمونه‌کارها بر اساس خدمت">{portfolioCategories.map((item) => <button key={item.id} type="button" aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.label}</button>)}</div>}
     {!featured && <p className="portfolio-count" role="status" aria-live="polite">{projects.length.toLocaleString("fa-IR")} نمونه‌کار{category === "all" ? " در همهٔ دسته‌ها" : ` در دستهٔ ${portfolioCategories.find((item) => item.id === category)?.label}`}</p>}
-    <div className="portfolio-grid">{projects.map((project) => <article className="portfolio-card" key={project.id}>
+    <div className="portfolio-grid">{projects.map((project, index) => <article className="portfolio-card" key={project.id} data-reveal={featured ? "tilt" : undefined} data-reveal-order={featured ? index : undefined}>
       <button className="project-open" type="button" aria-haspopup="dialog" aria-label={`جزئیات ${project.isMock !== false ? "طرح نمایشی" : "پروژهٔ"} ${project.title}`} onClick={(event) => { trigger.current = event.currentTarget; setSelected(project); }}>
         <ProjectArtwork project={project} />
         <span className="project-card-body"><span className="project-card-meta"><span>{project.discipline}</span>{project.isMock !== false && <span className="project-demo">نمایشی</span>}</span><span className="project-card-title">{project.title}<span className="project-card-arrow"><Icon name="arrow" /></span></span><span className="project-card-caption">{project.caption}</span><span className="project-detail-label">دیدن جزئیات {project.isMock !== false ? "طرح" : "پروژه"}</span></span>
