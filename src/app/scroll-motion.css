@@ -40,22 +40,22 @@
   .hero-paper-lilac { rotate: 2.5deg; translate: 6px 3px; scale: 1; }
 }
 
-/* Native timelines do not need a scroll handler, RAF loop, or a downloaded animation library.
-   The controller grants "full" only on capable desktops; the default remains a static page. */
-@media (min-width: 1050px) and (prefers-reduced-motion: no-preference) {
+/* Native timelines stay on the compositor. Mobile keeps the two hero sheets and
+   one restrained photo drift; minimal and reduced-motion modes remain static. */
+@media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) and (animation-range: entry 0% exit 100%) {
-    [data-motion-level="full"] .hero-visual {
+    :is([data-motion-level="full"], [data-motion-level="subtle"]) .hero-visual {
       view-timeline-name: --elita-hero;
       view-timeline-axis: block;
     }
 
-    [data-motion-level="full"] .hero-paper {
+    :is([data-motion-level="full"], [data-motion-level="subtle"]) .hero-paper {
       animation: elita-paper-settle 1s linear both;
       animation-timeline: --elita-hero;
       animation-range: exit 0% exit 100%;
     }
 
-    [data-motion-level="full"] .about-photo-frame {
+    :is([data-motion-level="full"], [data-motion-level="subtle"]) .about-photo-frame {
       view-timeline-name: --elita-about-photo;
       view-timeline-axis: block;
     }
@@ -65,11 +65,16 @@
       view-timeline-axis: block;
     }
 
-    [data-motion-level="full"] .about-photo-frame img {
+    :is([data-motion-level="full"], [data-motion-level="subtle"]) .about-photo-frame img {
       scale: 1.08;
       animation: elita-photo-drift 1s linear both;
       animation-timeline: --elita-about-photo;
       animation-range: entry 0% exit 100%;
+    }
+
+    [data-motion-level="subtle"] .about-photo-frame img {
+      scale: 1.07;
+      animation-name: elita-photo-drift-subtle;
     }
 
     [data-motion-level="full"] .about-small-frame img {
@@ -112,6 +117,11 @@
 @keyframes elita-photo-drift {
   from { translate: 0 16px; }
   to { translate: 0 -16px; }
+}
+
+@keyframes elita-photo-drift-subtle {
+  from { translate: 0 6px; }
+  to { translate: 0 -6px; }
 }
 
 @keyframes elita-detail-drift {

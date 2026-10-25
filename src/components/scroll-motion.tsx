@@ -15,9 +15,9 @@ export function ScrollMotion() {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const desktop = window.matchMedia("(min-width: 1050px)");
     const device = navigator as DeviceHints;
-    const lightDevice = Boolean(device.connection?.saveData)
-      || Boolean(device.deviceMemory && device.deviceMemory <= 4)
-      || Boolean(device.hardwareConcurrency && device.hardwareConcurrency <= 4);
+    // CPU thread counts do not describe the GPU's ability to animate a transform.
+    const minimalMotion = Boolean(device.connection?.saveData)
+      || Boolean(device.deviceMemory && device.deviceMemory <= 2);
     const previousLevel = root.dataset.motionLevel;
     const pending = new Set<HTMLElement>();
     const active = new Map<HTMLElement, Animation>();
@@ -25,7 +25,7 @@ export function ScrollMotion() {
     let disposed = false;
 
     function updateLevel() {
-      root!.dataset.motionLevel = preference.matches ? "off" : desktop.matches && !lightDevice ? "full" : "subtle";
+      root!.dataset.motionLevel = preference.matches ? "off" : minimalMotion ? "minimal" : desktop.matches ? "full" : "subtle";
     }
     function settle(element: HTMLElement) {
       pending.delete(element);
@@ -78,20 +78,20 @@ export function ScrollMotion() {
           const focused = document.activeElement;
           // Fast scrolling and keyboard navigation should reveal useful content immediately.
           if (bounds.bottom <= 0 || bounds.top < window.innerHeight * .08
-            || focused instanceof Element && element.contains(focused) || active.size >= 6) continue;
-          const light = lightDevice || !desktop.matches;
+            || focused instanceof Element && element.contains(focused) || active.size >= (minimalMotion ? 3 : 6)) continue;
+          const light = !desktop.matches;
           const variant = element.dataset.reveal;
           const order = Math.max(0, Math.min(3, Number(element.dataset.revealOrder) || 0));
-          const distance = variant === "line" ? (light ? 8 : 16) : (light ? 14 : 30);
-          const rotation = variant === "tilt" && !light ? (order % 2 ? -1.8 : 1.8) : 0;
-          const scale = variant === "image" ? (light ? .99 : .965) : variant === "tilt" ? .985 : 1;
+          const distance = minimalMotion ? 12 : variant === "line" ? (light ? 18 : 26) : (light ? 28 : 44);
+          const rotation = variant === "tilt" && !minimalMotion ? (order % 2 ? -1 : 1) * (light ? 1.1 : 2.4) : 0;
+          const scale = minimalMotion ? 1 : variant === "image" ? (light ? .98 : .96) : variant === "tilt" ? .975 : 1;
           try {
             const animation = element.animate([
               { opacity: variant === "line" ? .18 : .08, translate: `0 ${distance}px`, rotate: `${rotation}deg`, scale },
               { opacity: 1, translate: "0 0", rotate: "0deg", scale: 1 },
             ], {
-              duration: light ? 420 : variant === "image" ? 820 : 680,
-              delay: order * (light ? 35 : 65),
+              duration: minimalMotion ? 500 : variant === "line" ? (light ? 640 : 760) : variant === "image" ? (light ? 900 : 1000) : (light ? 780 : 900),
+              delay: order * (light ? 50 : 80),
               easing: "cubic-bezier(.2,.75,.25,1)",
               fill: "both",
             });
@@ -107,7 +107,8 @@ export function ScrollMotion() {
           } catch { /* Animation support is optional; original content stays visible. */ }
         }
         if (pending.size === 0) observer?.disconnect();
-      }, { threshold: 0, rootMargin: "0px 0px 36px 0px" });
+      // Start after content actually enters the viewport, including very slow scrolling.
+      }, { threshold: .06, rootMargin: "0px 0px -64px 0px" });
 
       for (const element of root.querySelectorAll<HTMLElement>("[data-reveal]")) {
         if (element.closest("dialog") || element.getBoundingClientRect().top < window.innerHeight) continue;
