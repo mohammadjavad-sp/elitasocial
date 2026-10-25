@@ -76,7 +76,7 @@ export function SitePreloader() {
       motion.removeEventListener("change", onMotion);
     });
 
-    const image = document.querySelector<HTMLImageElement>(".hero-portrait, .service-overview-hero img, .magazine-featured-image img");
+    const image = document.querySelector<HTMLImageElement>(".hero-portrait, .service-overview-hero img, .editorial-hero-photo img, .magazine-featured-image img");
     const imageReady = !image || image.complete ? Promise.resolve() : new Promise<void>(resolve => {
       const ready = () => { remove(); resolve(); };
       const remove = () => { image.removeEventListener("load", ready); image.removeEventListener("error", ready); };

@@ -1,6 +1,7 @@
 import { homeContent } from "@/content/home";
 import { closingContent } from "@/content/closing";
 import { pricingContent } from "@/content/pricing";
+import { normalizeBrandText } from "./brand-text";
 
 export type SiteSettings = {
   home: typeof homeContent;
@@ -55,8 +56,8 @@ export function getDefaultSiteSettings(): SiteSettings {
       bottomNote: "محتوای نمونهٔ سایت در حال تکمیل است.",
     },
     seo: {
-      title: "الیتا سوشال | مدیریت اینستاگرام و طراحی سایت با الهه طاهری",
-      description: "با الهه طاهری در الیتا سوشال، از مدیریت اینستاگرام تا طراحی وب‌سایت همراه برند شما هستیم. برای مشاوره و شروع همکاری در ارتباط باشید.",
+      title: "الیتا سوشیال | مدیریت اینستاگرام و طراحی سایت با الهه طاهری",
+      description: "با الهه طاهری در الیتا سوشیال، از مدیریت اینستاگرام تا طراحی وب‌سایت همراه برند شما هستیم. برای مشاوره و شروع همکاری در ارتباط باشید.",
     },
     sections: {
       portfolioTitle: "هر برند، یک دنیای دیدنی",
@@ -94,7 +95,7 @@ export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
     }
     return saved !== undefined && typeof saved === typeof template ? saved : structuredClone(template);
   };
-  const settings = fillDefaults(getDefaultSiteSettings(), value) as SiteSettings;
+  const settings = normalizeBrandText(fillDefaults(getDefaultSiteSettings(), value) as SiteSettings);
   if (settings.sections.contactFormDescription === "اطلاعات را بنویس تا پیامت برای ادامهٔ گفتگو در واتساپ آماده شود.") {
     settings.sections.contactFormDescription = getDefaultSiteSettings().sections.contactFormDescription;
   }

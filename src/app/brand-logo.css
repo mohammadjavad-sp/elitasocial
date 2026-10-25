@@ -1,0 +1,11 @@
+.brand-logo { display: block; width: 112px; height: auto; aspect-ratio: 1200 / 767; object-fit: contain; flex-shrink: 0; }
+.site-header .brand { min-height: 74px; }
+.footer-brand-column .brand { width: fit-content; }
+.footer-brand-column .brand-logo { width: 124px; }
+.admin-brand .brand-logo { width: 110px; }
+
+@media (max-width: 599px) {
+  .site-header .brand { min-height: 64px; }
+  .site-header .brand-logo { width: 94px; }
+  .footer-brand-column .brand-logo { width: 112px; }
+}

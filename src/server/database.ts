@@ -4,6 +4,7 @@ import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import type { CmsCollection, CmsMedia, CmsRecord, CmsStatus } from "@/lib/cms-shared";
+import { normalizeBrandSpelling, normalizeBrandText } from "@/lib/brand-text";
 import { CmsError } from "./errors";
 
 const globalDatabase = globalThis as typeof globalThis & { elitaCmsDatabase?: DatabaseSync };
@@ -87,7 +88,7 @@ export function getDatabase(): DatabaseSync {
 }
 
 function asRecord(row: Record<string, unknown>): CmsRecord {
-  return { id: String(row.id), collection: row.collection as CmsCollection, status: row.status as CmsStatus, data: JSON.parse(String(row.data)), revision: Number(row.revision), createdAt: String(row.created_at), updatedAt: String(row.updated_at) };
+  return { id: String(row.id), collection: row.collection as CmsCollection, status: row.status as CmsStatus, data: normalizeBrandText(JSON.parse(String(row.data))), revision: Number(row.revision), createdAt: String(row.created_at), updatedAt: String(row.updated_at) };
 }
 
 export function listRecords(collection: CmsCollection, publishedOnly = false): CmsRecord[] {
@@ -148,7 +149,7 @@ export function ensureSeed(seed: { collection: CmsCollection; data: Record<strin
 }
 
 export function mediaFromRow(row: Record<string, unknown>): CmsMedia {
-  return { id: String(row.id), url: String(row.url), alt: String(row.alt), filename: String(row.filename), mimeType: String(row.mime_type), size: Number(row.size), createdAt: String(row.created_at) };
+  return { id: String(row.id), url: String(row.url), alt: normalizeBrandSpelling(String(row.alt)), filename: String(row.filename), mimeType: String(row.mime_type), size: Number(row.size), createdAt: String(row.created_at) };
 }
 
 export function listMedia(): CmsMedia[] { return getDatabase().prepare("SELECT * FROM cms_media ORDER BY created_at DESC,id").all().map(mediaFromRow); }

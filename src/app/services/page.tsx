@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { home: { brand } } = await getSiteSettings();
   return {
     title: `خدمات دیجیتال مارکتینگ | ${brand.name}`,
-    description: "مدیریت اینستاگرام، طراحی وب‌سایت، تولید محتوا و سئو؛ با خدمات الیتا سوشال، خروجی‌ها و مراحل همکاری آشنا شوید.",
+    description: "مدیریت اینستاگرام، طراحی وب‌سایت، تولید محتوا و سئو؛ با خدمات الیتا سوشیال، خروجی‌ها و مراحل همکاری آشنا شوید.",
   };
 }
 

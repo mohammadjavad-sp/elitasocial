@@ -34,7 +34,7 @@ export const portfolioProjects: PortfolioProject[] = [
   { id: "wellness", title: "مجموعهٔ محتوای سبک زندگی", category: "content", discipline: "طراحی محتوای آموزشی", theme: "wellness", brand: "آهسته", headline: "جا برای یک عادت خوب", caption: "مجموعه‌ای خوانا برای رساندن یک پیام در هر محتوا.", description: "یک مجموعهٔ نمایشی از محتوای سبک زندگی با تمرکز بر خوانایی و روایت تصویری ساده. محتوای این کانسپت پیشنهاد پزشکی یا تخصصی سلامت نیست.", deliverables: ["ساختار محتوای اسلایدی", "طراحی قالب‌های آموزشی یکپارچه", "متن کوتاه و دعوت به مشارکت"] },
 ];
 
-export const portfolioDemoNotice = "این طرح‌ها نمایشی‌اند و برای معرفی سبک طراحی ساخته شده‌اند؛ پروژهٔ واقعی مشتریان الیتا سوشال نیستند.";
+export const portfolioDemoNotice = "این طرح‌ها نمایشی‌اند و برای معرفی سبک طراحی ساخته شده‌اند؛ پروژهٔ واقعی مشتریان الیتا سوشیال نیستند.";
 
 export function projectConsultationUrl(project: PortfolioProject, whatsapp: string) {
   const url = new URL(whatsapp);

@@ -5,6 +5,7 @@ import type { NavigationItem } from "@/content/home";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
 import { useSiteSettings } from "./site-settings-provider";
+import { BrandLogo } from "./brand-logo";
 
 type ActivePage = "home" | "portfolio" | "services" | "blog" | "pricing";
 type Props = { navigation: NavigationItem[]; whatsapp?: string; activePage?: ActivePage };
@@ -53,8 +54,7 @@ export function Header({ navigation, activePage = "home" }: Props) {
     <header className="site-header">
       <div className="header-inner container">
         <a className="brand" href={sitePath("/")} aria-label={`${brand.name}، خانه`}>
-          <span className="brand-symbol"><Icon name="sparkle" /></span>
-          <span className="brand-words"><span className="brand-persian">{brand.name}</span><span className="brand-latin" lang="en" dir="ltr">{brand.latinName}</span></span>
+          <BrandLogo name={brand.name} priority />
         </a>
         <nav className="desktop-nav" aria-label="منوی اصلی"><NavigationLinks items={navigation} activePage={activePage} /></nav>
         <a className="header-cta pill-button" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">

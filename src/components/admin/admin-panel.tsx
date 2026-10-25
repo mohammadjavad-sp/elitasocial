@@ -8,6 +8,7 @@ import { RecordEditor, type CmsRequest } from "./record-editor";
 import { SiteSettingsEditor } from "./site-settings-editor";
 import { ConsultationsPanel } from "./consultations-panel";
 import { useSiteSettings } from "../site-settings-provider";
+import { BrandLogo } from "../brand-logo";
 
 type Tab = "dashboard" | CmsCollection | "consultations" | "media" | "settings" | "account";
 type Stats = { counts: Record<CmsCollection | "media" | "consultations" | "newConsultations", number> };
@@ -35,7 +36,7 @@ async function send<T>(path: string, options?: RequestInit, csrfToken?: string):
   return response.status === 204 ? undefined as T : response.json() as Promise<T>;
 }
 
-function AdminLogo() { const { home } = useSiteSettings(); return <a className="admin-brand" href={sitePath("/")}><strong>{home.brand.name}</strong><span>مدیریت محتوای سایت</span></a>; }
+function AdminLogo() { const { home } = useSiteSettings(); return <a className="admin-brand" href={sitePath("/")} aria-label={`${home.brand.name}، خانه`}><BrandLogo name={home.brand.name} /><span>مدیریت محتوای سایت</span></a>; }
 
 function Notice({ title, children, retry }: { title: string; children: ReactNode; retry?: () => void }) {
   return <main className="admin-access"><section className="admin-access-card"><AdminLogo /><h1>{title}</h1><div className="admin-access-copy">{children}</div>{retry && <button className="admin-button" onClick={retry}>تلاش دوباره</button>}<a className="admin-text-link" href={sitePath("/")}>بازگشت به سایت</a></section></main>;

@@ -207,7 +207,7 @@ try {
         : [];
     }));
     assert.deepEqual(clippedContent, [], `${viewport.name}: section content is not clipped`);
-    const portrait = page.getByAltText('الهه طاهری، بنیان‌گذار الیتا سوشال', { exact: true });
+    const portrait = page.getByAltText('الهه طاهری، بنیان‌گذار الیتا سوشیال', { exact: true });
     await portrait.first().waitFor({ state: 'visible' });
     assert(await portrait.first().evaluate(img => img.complete && img.naturalWidth > 0), 'Real portrait should load');
     const whatsapp = await page.locator('a[href*="wa.me/"]').evaluateAll(links => links.map(link => link.getAttribute('href')));
