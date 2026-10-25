@@ -51,7 +51,7 @@ export async function ServicesSection({ items = starterServices }: { items?: Ser
           </article>
         ))}
       </div>
-      {items.length === 0 && <p className="demo-notice">جزئیات خدمات به‌زودی منتشر می‌شود؛ برای راهنمایی با ما گفتگو کن.</p>}
+      {items.length === 0 && <p className="demo-notice">برای انتخاب خدمات متناسب با نیاز برندت با ما گفتگو کن.</p>}
       <a className="pill-button services-action" href={sitePath("/services/")}>{services.actionLabel}<span className="button-circle"><Icon name="arrow" /></span></a>
     </section>
   );

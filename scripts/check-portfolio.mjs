@@ -32,7 +32,7 @@ try {
     assert.equal(await page.locator('h1').count(), 1);
     assert.equal(await page.locator('header .brand').getAttribute('href'), homeURL.pathname, 'Home URL retains deployment subpath');
     assert.equal(await page.locator('header nav a[aria-current="page"]').first().getAttribute('href'), portfolioURL.pathname, 'Portfolio navigation identifies current route');
-    assert.match(await page.locator('.portfolio-demo-notice').first().innerText(), /نمایشی/);
+    assert.equal(await page.locator('.portfolio-demo-notice, .project-demo, .art-demo-label').count(), 0, 'Portfolio omits temporary content labels');
     const cards = page.locator('.portfolio-card');
     const total = await cards.count();
     assert.equal(total, 8, 'Complete initial demo portfolio');
@@ -51,7 +51,7 @@ try {
       assert(count > 0 && count < total, 'Service filter changes the visible results');
       filteredTotal += count;
       assert((await page.locator('.portfolio-count').innerText()).includes(label), 'Live count announces active category');
-      assert.equal(await cards.locator('.project-demo').count(), count, 'Every concept is labelled as demo');
+      assert.equal(await cards.locator('.project-demo, .art-demo-label').count(), 0, 'Project cards omit temporary content labels');
       const trigger = cards.first().locator('.project-open');
       const title = await cards.first().locator('.project-card-title').innerText();
       await trigger.focus();
@@ -60,7 +60,8 @@ try {
       await dialog.waitFor({ state: 'visible' });
       assert((await dialog.locator('h2').innerText()).trim().length > 0, 'Dialog has a project name');
       assert(title.includes(await dialog.locator('h2').innerText()), 'Dialog describes selected project');
-      assert.match(await dialog.locator('#project-dialog-notice').innerText(), /نمایشی/);
+      assert.equal(await dialog.locator('#project-dialog-notice, .project-demo, .art-demo-label').count(), 0, 'Project dialog omits temporary content labels');
+      assert.doesNotMatch(await dialog.locator('#project-dialog-description').innerText(), /نمایشی|ساختگی|فرضی/, 'Project description uses neutral design details');
       const consultation = new URL(await dialog.locator('a[href*="wa.me"]').getAttribute('href'));
       assert.equal(consultation.hostname, 'wa.me');
       assert(consultation.searchParams.get('text')?.includes(await dialog.locator('h2').innerText()), 'Consultation includes selected concept, without sending a message');

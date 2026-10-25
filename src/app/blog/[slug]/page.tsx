@@ -63,7 +63,6 @@ export default async function ArticlePage({ params }: PageProps) {
               <h1 id="article-title">{article.title}</h1>
               <p className="article-intro">{article.excerpt}</p>
               <div className="article-byline"><span>{article.author}</span><span>{readingMinutes} دقیقه مطالعه</span></div>
-              {article.isMock && <p className="article-draft-notice"><Icon name="sparkle" /><span><strong>پیش‌نویس نمایشی</strong> این مقاله برای پیش‌نمایش مجله آماده شده و پیش از انتشار نهایی بازبینی می‌شود.</span></p>}
             </div>
             <figure className="article-cover"><Image src={sitePath(article.image.src)} alt={article.image.alt} fill sizes="(max-width: 599px) 100vw, 90vw" priority /></figure>
           </header>

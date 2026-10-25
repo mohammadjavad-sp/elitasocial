@@ -53,7 +53,7 @@ export function getDefaultSiteSettings(): SiteSettings {
       description: "از اینستاگرام تا وب‌سایت؛\nمحتوا، طراحی و همراهی برای برند تو.",
       contactTitle: "یک گفتگو تا شروع",
       contactDescription: "کسب‌وکارت را معرفی کن؛\nدربارهٔ قدم بعدی حرف می‌زنیم.",
-      bottomNote: "محتوای نمونهٔ سایت در حال تکمیل است.",
+      bottomNote: "",
     },
     seo: {
       title: "الیتا سوشیال | مدیریت اینستاگرام و طراحی سایت با الهه طاهری",
@@ -67,7 +67,7 @@ export function getDefaultSiteSettings(): SiteSettings {
       pricingDescription: pricingContent.description,
       pricingFootnote: "هزینهٔ نهایی و محدودهٔ همکاری، بعد از بررسی نیازهای برندت مشخص می‌شود.",
       insightsTitle: ["چند دقیقه برای", "حضور بهترِ برندت"],
-      insightsDescription: "یادداشت‌های کاربردی دربارهٔ محتوا، طراحی و ارتباط با مخاطب. مقاله‌ها فعلاً محتوای نمونهٔ مجله‌اند.",
+      insightsDescription: "یادداشت‌های کاربردی دربارهٔ محتوا، طراحی و ارتباط با مخاطب.",
       insightsActionLabel: "همهٔ مقاله‌های مجله",
       contactTitle: ["از ایده‌ات بگو،", "قدم اول را با هم برداریم"],
       contactDescription: "برای پیجت برنامه داری یا به یک وب‌سایت فکر می‌کنی؟ راه ارتباطی دلخواهت را انتخاب کن.",
@@ -83,6 +83,7 @@ export function getDefaultSiteSettings(): SiteSettings {
 
 /** Action URLs follow the saved contact number; layout keys remain code-owned. */
 export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
+  const defaults = getDefaultSiteSettings();
   // New fields receive defaults on upgrades; intentional empty strings/FAQ lists stay empty.
   const fillDefaults = (template: unknown, saved: unknown): unknown => {
     if (Array.isArray(template)) {
@@ -95,10 +96,20 @@ export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
     }
     return saved !== undefined && typeof saved === typeof template ? saved : structuredClone(template);
   };
-  const settings = normalizeBrandText(fillDefaults(getDefaultSiteSettings(), value) as SiteSettings);
+  const settings = normalizeBrandText(fillDefaults(defaults, value) as SiteSettings);
   if (settings.sections.contactFormDescription === "اطلاعات را بنویس تا پیامت برای ادامهٔ گفتگو در واتساپ آماده شود.") {
-    settings.sections.contactFormDescription = getDefaultSiteSettings().sections.contactFormDescription;
+    settings.sections.contactFormDescription = defaults.sections.contactFormDescription;
   }
+  // Upgrade unchanged starter copy while preserving the owner's edited content.
+  if (settings.footer.bottomNote === "محتوای نمونهٔ سایت در حال تکمیل است.") {
+    settings.footer.bottomNote = defaults.footer.bottomNote;
+  }
+  if (settings.sections.insightsDescription === "یادداشت‌های کاربردی دربارهٔ محتوا، طراحی و ارتباط با مخاطب. مقاله‌ها فعلاً محتوای نمونهٔ مجله‌اند.") {
+    settings.sections.insightsDescription = defaults.sections.insightsDescription;
+  }
+  settings.faqs = settings.faqs.map(faq => faq.question === "قیمت نهایی چطور مشخص می‌شه؟" && faq.answer === "پلن‌های فعلی نمونه‌اند. مبلغ و جزئیات نهایی، پس از بررسی نیازها و توافق دربارهٔ خدمات و خروجی‌ها مشخص می‌شود."
+    ? { ...faq, answer: closingContent.faqs[3].answer }
+    : faq);
   settings.home.navigation = structuredClone(homeContent.navigation);
   settings.home.services.items = structuredClone(homeContent.services.items);
   settings.home.benefits.items = settings.home.benefits.items.map((item, index) => {

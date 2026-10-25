@@ -14,7 +14,7 @@ export async function InsightsSection({ articles = starterArticles }: { articles
         <span className="section-spark insights-spark" aria-hidden="true"><Icon name="sparkle" /></span>
       </div>
       <div className="insights-grid">{articles.slice(0, 3).map(article => <ArticleCard article={article} key={article.slug} />)}</div>
-      {articles.length === 0 && <p className="demo-notice">مقاله‌های تازه به‌زودی در مجله منتشر می‌شوند.</p>}
+      {articles.length === 0 && <p className="demo-notice">برای راهنمایی دربارهٔ محتوا و طراحی با ما در ارتباط باش.</p>}
       <a className="pill-button services-action" href={sitePath("/blog/")}>{sections.insightsActionLabel}<span className="button-circle"><Icon name="arrow" /></span></a>
     </section>
   );

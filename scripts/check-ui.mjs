@@ -94,7 +94,7 @@ try {
     }
     await benefitButtons.first().focus();
     await page.keyboard.press('Enter');
-    assert.match(await sections.portfolio.locator('.portfolio-demo-notice').innerText(), /نمایشی/, 'Portfolio mock status is visible');
+    assert.equal(await sections.portfolio.locator('.portfolio-demo-notice, .project-demo, .art-demo-label').count(), 0, 'Portfolio omits temporary content labels');
     const portfolioLink = sections.portfolio.locator('a.portfolio-all-link');
     assert.equal(await portfolioLink.getAttribute('href'), `${new URL(baseURL).pathname.replace(/\/$/, '')}/portfolio/`, 'Gallery link preserves deployment path');
     const featuredProject = sections.portfolio.locator('.project-open').first();
@@ -105,7 +105,7 @@ try {
     await page.locator('dialog.project-dialog').waitFor({ state: 'hidden' });
     assert(await featuredProject.evaluate(button => document.activeElement === button), 'Featured project modal restores keyboard focus');
     const pricing = sections.pricing;
-    assert.match(await pricing.locator('.pricing-notice').innerText(), /نمایشی/, 'Pricing clearly identifies sample amounts');
+    assert.equal(await pricing.locator('.pricing-notice').count(), 0, 'Pricing omits temporary content notices');
     const pricingCategories = pricing.locator('.pricing-tabs button');
     assert.equal(await pricingCategories.count(), 3, 'Three pricing service categories');
     const categoryPrices = [];
@@ -120,7 +120,7 @@ try {
       assert.equal(await pricing.locator('.pricing-recommended').count(), 1, 'One plan is suggested in each category');
       const prices = [];
       for (const plan of await plans.all()) {
-        assert.match(await plan.locator('.plan-badges').innerText(), /پلن نمایشی/, 'Every plan carries its own mock label');
+        assert.doesNotMatch(await plan.locator('.plan-badges').innerText(), /نمایشی/, 'Plan badges omit temporary content labels');
         const amount = Number(await plan.locator('data').getAttribute('value'));
         assert(Number.isFinite(amount) && amount > 0, 'Plan amount is a positive number');
         assert.match(await plan.locator('.plan-price').innerText(), /تومان/, 'Plan states its currency');

@@ -47,7 +47,6 @@ export default async function MagazinePage() {
           </div>
         </section>
 
-        {articles.some(article => article.isMock) && <div className="container"><p className="magazine-demo-notice"><Icon name="sparkle" /><span>مقاله‌های دارای نشان نمونه، محتوای نمایشی مجله‌اند و پیش از انتشار رسمی بازبینی و تکمیل می‌شوند.</span></p></div>}
 
         {featured && <section className="magazine-featured container" id="magazine-featured" aria-labelledby="magazine-featured-title">
           <a className="magazine-featured-image" href={sitePath(`/blog/${featured.slug}/`)} aria-label={`خواندن ${featured.title}`}><Image src={sitePath(featured.image.src)} alt={featured.image.alt} fill sizes="(min-width: 800px) 50vw, 90vw" /></a>

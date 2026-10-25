@@ -5,7 +5,6 @@ import { SiteFooter } from "@/components/site-footer";
 import { PortfolioGallery } from "@/components/portfolio-gallery";
 import { Icon } from "@/components/icons";
 import { getNavigation } from "@/content/home";
-import { portfolioDemoNotice } from "@/content/portfolio";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
@@ -37,7 +36,7 @@ export default async function PortfolioPage() {
             <div className="editorial-photo-backdrop" aria-hidden="true" />
             <div className="editorial-hero-photo portfolio-hero-photo"><Image src={sitePath("/images/portfolio-hero.webp")} alt="میز کار خلاقانه با لپ‌تاپ، طرح‌های گرافیکی و نمونه‌های رنگ برای طراحی هویت دیجیتال" width={1500} height={1100} priority sizes="(min-width: 1000px) 46vw, (min-width: 700px) 72vw, 90vw" /></div>
             <div className="portfolio-hero-preview" aria-hidden="true">
-              <div className="portfolio-preview-chrome"><i /><i /><i /><span>کانسپت طراحی</span></div>
+              <div className="portfolio-preview-chrome"><i /><i /><i /><span>طراحی فروشگاه برگ</span></div>
               <div className="portfolio-preview-content"><span className="portfolio-preview-brand">برگ</span><strong>یک گوشهٔ سبز،<br />برای تو</strong><span className="portfolio-preview-leaf" /><span className="portfolio-preview-rule" /><span className="portfolio-preview-rule" /></div>
             </div>
             <span className="editorial-hero-seal" aria-hidden="true"><Icon name="sparkle" /><span>از ایده<br />تا تجربه</span></span>
@@ -46,7 +45,6 @@ export default async function PortfolioPage() {
         </div>
       </section>
       <section className="portfolio-page-gallery container" id="portfolio-gallery" aria-label="گالری نمونه‌کارها">
-        {portfolio.some(project => project.isMock !== false) && <p className="portfolio-demo-notice"><Icon name="sparkle" /><span>{portfolio.some(project => project.isMock === false) ? "نمونه‌های دارای نشان نمایشی، کانسپت طراحی‌اند و پروژهٔ واقعی مشتریان نیستند." : portfolioDemoNotice}</span></p>}
         <PortfolioGallery projects={portfolio} />
       </section>
       <section className="portfolio-invitation container" aria-labelledby="portfolio-invitation-title"><div><h2 id="portfolio-invitation-title">حالا نوبت قصهٔ برند توست</h2><p>بگو چه در ذهن داری تا دربارهٔ مسیر و سبک مناسب کسب‌وکارت صحبت کنیم.</p></div><div className="contact-actions"><a className="pill-button" href={contact.whatsapp} target="_blank" rel="noopener noreferrer"><span>شروع گفت‌وگو دربارهٔ برندم</span><span className="button-circle"><Icon name="arrow" /></span></a><ContactChannels contact={contact} includeWhatsapp={false} compact /></div></section>

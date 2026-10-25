@@ -19,7 +19,7 @@ export async function SiteFooter() {
         <nav className="footer-links" aria-label="خدمات و راهنما"><h3>برای برند تو</h3><a href={sitePath("/services/")}>خدمات الیتا</a><a href={sitePath("/blog/")}>مجلهٔ الیتا</a><a href={sitePath("/#faq-title")}>پرسش‌های متداول</a><a href={sitePath("/#contact")}>شروع همکاری</a></nav>
         <div className="footer-contact"><h3>{footer.contactTitle}</h3><p>{footer.contactDescription}</p><a href={contact.phone} dir="ltr">{contact.phoneLabel}</a><a href={sitePath("/#contact")}>همهٔ راه‌های ارتباط<Icon name="arrow" /></a></div>
       </div>
-      <div className="footer-bottom container"><span>{brand.name}؛ {brand.owner}</span><span>{footer.bottomNote}</span><a href="#main-content">بازگشت به ابتدای صفحه</a></div>
+      <div className="footer-bottom container"><span>{brand.name}؛ {brand.owner}</span>{footer.bottomNote && <span>{footer.bottomNote}</span>}<a href="#main-content">بازگشت به ابتدای صفحه</a></div>
     </footer>
     <MotionEnhancements />
     </>

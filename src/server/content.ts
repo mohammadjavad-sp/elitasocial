@@ -5,6 +5,7 @@ import { articles as starterArticles, type Article } from "@/content/articles";
 import { services as starterServices, type ServiceDetail } from "@/content/services";
 import { portfolioProjects as starterPortfolio, type PortfolioProject } from "@/content/portfolio";
 import { pricingContent, type DemoPlan, type PricingContent, type PricingCategoryId } from "@/content/pricing";
+import { publicArticleCopy, publicPlanCopy, publicPortfolioCopy } from "@/lib/public-content-copy";
 import { getStarterSeed } from "./seed";
 
 type PublicContent = {
@@ -24,10 +25,10 @@ export const getCmsContent = cache(async (): Promise<PublicContent> => {
   await connection();
   const { ensureSeed, listRecords } = await import("./database");
   ensureSeed(getStarterSeed());
-  const articles = listRecords("articles", true).sort((a, b) => b.createdAt.localeCompare(a.createdAt)).map(record => record.data as Article);
+  const articles = listRecords("articles", true).sort((a, b) => b.createdAt.localeCompare(a.createdAt)).map(record => publicArticleCopy(record.data as Article));
   const services = listRecords("services", true).map(record => record.data as ServiceDetail);
-  const portfolio = listRecords("portfolio", true).map(record => record.data as PortfolioProject);
-  const plans = listRecords("plans", true).map(record => record.data as DemoPlan & { categoryId: PricingCategoryId });
+  const portfolio = listRecords("portfolio", true).map(record => publicPortfolioCopy(record.data as PortfolioProject));
+  const plans = listRecords("plans", true).map(record => publicPlanCopy(record.data as DemoPlan & { categoryId: PricingCategoryId }));
   const pricing: PricingContent = {
     ...pricingContent,
     categories: pricingContent.categories.map(category => ({ ...category, plans: plans.filter(plan => plan.categoryId === category.id) })),

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { portfolioCategories, portfolioDemoNotice, portfolioProjects as starterProjects, projectConsultationUrl, type PortfolioProject } from "@/content/portfolio";
+import { portfolioCategories, portfolioProjects as starterProjects, projectConsultationUrl, type PortfolioProject } from "@/content/portfolio";
 import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
 import { useSiteSettings } from "./site-settings-provider";
@@ -10,7 +10,7 @@ import { ContactChannels } from "./contact-channels";
 
 /** Small original compositions, not screenshots of clients or third-party projects. */
 function ProjectArtwork({ project }: { project: PortfolioProject }) {
-  if (project.image?.src) return <div className={`project-art art-${project.theme}`}><Image src={sitePath(project.image.src)} alt={project.image.alt} fill sizes="(max-width: 680px) 90vw, (max-width: 1049px) 45vw, 30vw" style={{ objectFit: "cover" }} />{project.isMock !== false && <span className="art-demo-label">کانسپت نمایشی</span>}</div>;
+  if (project.image?.src) return <div className={`project-art art-${project.theme}`}><Image src={sitePath(project.image.src)} alt={project.image.alt} fill sizes="(max-width: 680px) 90vw, (max-width: 1049px) 45vw, 30vw" style={{ objectFit: "cover" }} /></div>;
   const social = project.category === "instagram";
   const editorial = project.category === "content";
   return <div className={`project-art art-${project.theme} ${social ? "art-social" : editorial ? "art-editorial" : "art-web"}`} aria-hidden="true">
@@ -27,7 +27,6 @@ function ProjectArtwork({ project }: { project: PortfolioProject }) {
       <div className="art-browser-nav"><b>{project.brand}</b><span /><span /><span /><i /></div>
       {project.category === "seo" ? <div className="art-search-page"><div className="art-search-input"><span>خدمات طراحی برند</span><span>⌕</span></div><b>{project.headline}</b><div className="art-search-result"><strong>استودیو مدار | طراحی هویت برند</strong><span /><span /></div><div className="art-search-result"><strong>از ایده تا هویت یکپارچه</strong><span /><span /></div><div className="art-search-tags"><span>خدمات</span><span>پروژه‌ها</span><span>ارتباط</span></div></div> : <><div className="art-browser-hero"><div><span className="art-tiny-label">با {project.brand}</span><strong>{project.headline}</strong><i className="art-faux-button">کشف دنیای {project.brand}</i></div><span className="art-object" /></div><div className="art-browser-products">{[0, 1, 2].map((n) => <div key={n}><span className="art-object" /><i /></div>)}</div></>}
     </div>}
-    {project.isMock !== false && <span className="art-demo-label">کانسپت نمایشی</span>}
   </div>;
 }
 
@@ -57,14 +56,14 @@ export function PortfolioGallery({ featured = false, projects: source = starterP
     {!featured && <div className="portfolio-filters" role="group" aria-label="فیلتر نمونه‌کارها بر اساس خدمت">{portfolioCategories.map((item) => <button key={item.id} type="button" aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.label}</button>)}</div>}
     {!featured && <p className="portfolio-count" role="status" aria-live="polite">{projects.length.toLocaleString("fa-IR")} نمونه‌کار{category === "all" ? " در همهٔ دسته‌ها" : ` در دستهٔ ${portfolioCategories.find((item) => item.id === category)?.label}`}</p>}
     <div className="portfolio-grid">{projects.map((project) => <article className="portfolio-card" key={project.id}>
-      <button className="project-open" type="button" aria-haspopup="dialog" aria-label={`جزئیات ${project.isMock !== false ? "طرح نمایشی" : "پروژهٔ"} ${project.title}`} onClick={(event) => { trigger.current = event.currentTarget; setSelected(project); }}>
+      <button className="project-open" type="button" aria-haspopup="dialog" aria-label={`جزئیات طرح ${project.title}`} onClick={(event) => { trigger.current = event.currentTarget; setSelected(project); }}>
         <ProjectArtwork project={project} />
-        <span className="project-card-body"><span className="project-card-meta"><span>{project.discipline}</span>{project.isMock !== false && <span className="project-demo">نمایشی</span>}</span><span className="project-card-title">{project.title}<span className="project-card-arrow"><Icon name="arrow" /></span></span><span className="project-card-caption">{project.caption}</span><span className="project-detail-label">دیدن جزئیات {project.isMock !== false ? "طرح" : "پروژه"}</span></span>
+        <span className="project-card-body"><span className="project-card-meta"><span>{project.discipline}</span></span><span className="project-card-title">{project.title}<span className="project-card-arrow"><Icon name="arrow" /></span></span><span className="project-card-caption">{project.caption}</span><span className="project-detail-label">دیدن جزئیات طرح</span></span>
       </button>
     </article>)}</div>
-    {projects.length === 0 && <p className="portfolio-demo-notice">در این دسته هنوز نمونه‌کاری منتشر نشده است.</p>}
-    <dialog className="project-dialog" ref={dialog} aria-labelledby="project-dialog-title" aria-describedby={selected?.isMock !== false ? "project-dialog-notice" : undefined} onCancel={(event) => { event.preventDefault(); closeProject(); }} onClose={() => { setSelected(null); trigger.current?.focus(); }} onClick={(event) => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeProject(); } }}>
-      {selected && <><button className="project-close" type="button" aria-label="بستن جزئیات پروژه" onClick={closeProject} autoFocus><Icon name="close" /></button><ProjectArtwork project={selected} /><div className="project-dialog-copy"><span className="project-dialog-category">{selected.discipline} {selected.isMock !== false && <span className="project-demo">نمایشی</span>}</span><h2 id="project-dialog-title">{selected.title}</h2><p>{selected.description}</p><h3>{selected.isMock !== false ? "اجزای این کانسپت" : "خروجی‌های پروژه"}</h3><ul>{selected.deliverables.map((item) => <li key={item}>{item}</li>)}</ul>{selected.isMock !== false && <p className="project-dialog-notice" id="project-dialog-notice">{portfolioDemoNotice}</p>}<div className="contact-actions"><a className="pill-button" href={projectConsultationUrl(selected, settings.home.contact.whatsapp)} target="_blank" rel="noopener noreferrer"><span>برای برند من هم صحبت کنیم</span><span className="button-circle"><Icon name="arrow" /></span></a><ContactChannels contact={settings.home.contact} includeWhatsapp={false} compact /></div></div></>}
+    {projects.length === 0 && <p className="portfolio-count">برای دیدن طرح‌های بیشتر، دستهٔ دیگری را انتخاب کن.</p>}
+    <dialog className="project-dialog" ref={dialog} aria-labelledby="project-dialog-title" aria-describedby={selected ? "project-dialog-description" : undefined} onCancel={(event) => { event.preventDefault(); closeProject(); }} onClose={() => { setSelected(null); trigger.current?.focus(); }} onClick={(event) => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeProject(); } }}>
+      {selected && <><button className="project-close" type="button" aria-label="بستن جزئیات طرح" onClick={closeProject} autoFocus><Icon name="close" /></button><ProjectArtwork project={selected} /><div className="project-dialog-copy"><span className="project-dialog-category">{selected.discipline}</span><h2 id="project-dialog-title">{selected.title}</h2><p id="project-dialog-description">{selected.description}</p><h3>اجزای طرح</h3><ul>{selected.deliverables.map((item) => <li key={item}>{item}</li>)}</ul><div className="contact-actions"><a className="pill-button" href={projectConsultationUrl(selected, settings.home.contact.whatsapp)} target="_blank" rel="noopener noreferrer"><span>برای برند من هم صحبت کنیم</span><span className="button-circle"><Icon name="arrow" /></span></a><ContactChannels contact={settings.home.contact} includeWhatsapp={false} compact /></div></div></>}
     </dialog>
   </>;
 }

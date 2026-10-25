@@ -13,7 +13,6 @@ export function ArticleCard({ article }: { article: Article }) {
     <article className="article-card">
       <a className="article-card-image" href={href} tabIndex={-1} aria-hidden="true">
         <Image src={sitePath(article.image.src)} alt="" fill sizes="(max-width: 699px) 100vw, (max-width: 1049px) 50vw, 33vw" />
-        {article.isMock && <span className="article-sample-badge">مقالهٔ نمونه</span>}
       </a>
       <div className="article-card-copy">
         <div className="article-card-meta"><a href={sitePath(`/blog/category/${category.id}/`)}>{category.label}</a><span>{article.readingMinutes.toLocaleString("fa-IR")} دقیقه مطالعه</span></div>

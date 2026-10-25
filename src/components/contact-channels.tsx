@@ -37,9 +37,9 @@ type Props = {
 export function ContactChannels({ contact, includeWhatsapp = true, className = "", tone = "default", compact = false, label = "انتخاب راه ارتباط", onNavigate }: Props) {
   return <div className={`contact-channels contact-channels-${tone}${compact ? " contact-channels-compact" : ""} ${className}`.trim()} role="group" aria-label={label}>
     {channels.filter(channel => includeWhatsapp || channel.id !== "whatsapp").map(channel => {
-      const contents = <><span className="contact-link-icon"><ContactIcon channel={channel.id} /></span><span className="contact-channel-name">{channel.name}{channel.id === "rubika" && !contact.rubika && <small>لینک به‌زودی</small>}</span></>;
+      const contents = <><span className="contact-link-icon"><ContactIcon channel={channel.id} /></span><span className="contact-channel-name">{channel.name}</span></>;
       if (channel.id === "rubika" && !contact.rubika) {
-        return <span className="contact-channel-link channel-rubika contact-channel-pending" key={channel.id} title="روبیکا؛ لینک به‌زودی">{contents}</span>;
+        return <span className="contact-channel-link channel-rubika contact-channel-pending" key={channel.id} title="روبیکا">{contents}</span>;
       }
       const external = channel.id !== "phone" && channel.id !== "email";
       const accessibleName = external ? `${channel.action} (پنجرهٔ جدید)` : channel.id === "email" ? `${channel.action} به ${contact.email}` : `${channel.action}، ${contact.phoneLabel}`;

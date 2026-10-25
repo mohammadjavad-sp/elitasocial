@@ -10,7 +10,7 @@
 .contact-channel:focus-visible, .contact-whatsapp:focus-visible { outline-color: white; }
 .contact-channel-icon { display: grid; place-items: center; width: 45px; height: 45px; color: var(--purple); background: white; border-radius: 50%; flex-shrink: 0; }
 .contact-channel-icon svg { width: 23px; height: 23px; }
-.contact-channel small { display: block; color: var(--color-tertiary); font-size: 11px; margin-bottom: 6px; }
+.contact-channel small { display: block; color: var(--color-quaternary); font-size: 11px; margin-bottom: 6px; }
 .contact-channel strong { display: block; font-size: 15px; font-weight: 500; }
 .contact-channel:hover strong { text-decoration: underline; text-underline-offset: 5px; }
 .contact-whatsapp { display: inline-flex; align-items: center; gap: 18px; min-height: 44px; margin-top: 25px; font-size: 12px; font-weight: 600; }

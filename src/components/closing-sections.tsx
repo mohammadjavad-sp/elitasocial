@@ -102,7 +102,7 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
     messageInput.setCustomValidity(message.length >= 10 ? "" : "کمی بیشتر دربارهٔ درخواستت بنویس؛ دست‌کم ۱۰ حرف.");
     serviceInput.setCustomValidity(Object.hasOwn(consultationServiceLabels, service) ? "" : "خدمت موردنیازت را انتخاب کن.");
     if (!form.reportValidity()) return;
-    const planContext = selectedPlan ? `\nپلن مورد گفت‌وگو: ${selectedPlan.plan.name} (${selectedPlan.categoryLabel}${selectedPlan.plan.isMock ? "؛ پلن و قیمت نمایشی، نیازمند پیشنهاد نهایی" : ""})` : "";
+    const planContext = selectedPlan ? `\nپلن مورد گفت‌وگو: ${selectedPlan.plan.name} (${selectedPlan.categoryLabel})` : "";
     const composed = `سلام، من ${name} هستم.\nموضوع گفتگو: ${consultationServiceLabels[service as ConsultationService]}${planContext}\nراه ارتباطی من: ${replyContact}\n\n${message}`;
     const destination = new URL(contact.whatsapp);
     destination.searchParams.set("text", composed);
@@ -138,7 +138,7 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
         recipient: contact.email,
         request: {
           name, contact: normalizedContact, service: consultationServiceLabels[service as ConsultationService], message,
-          plan: selectedPlan ? `${selectedPlan.plan.name} / ${selectedPlan.categoryLabel}${selectedPlan.plan.isMock ? " (نمایشی؛ نیازمند پیشنهاد نهایی)" : ""}` : undefined,
+          plan: selectedPlan ? `${selectedPlan.plan.name} / ${selectedPlan.categoryLabel}` : undefined,
           website: String(fields.get("_honey") ?? ""), reference: savedReference,
         },
       };
@@ -162,7 +162,7 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
           <a className="contact-channel" href={contact.telegram} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><Icon name="telegram" /></span><span><small>تلگرام</small><strong dir="ltr">{socialAccountLabel(contact.telegram)}</strong></span></a>
           <a className="contact-channel" href={contact.bale} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><ContactIcon channel="bale" /></span><span><small>بله</small><strong dir="ltr">{socialAccountLabel(contact.bale)}</strong></span></a>
           <a className="contact-channel" href={contact.eitaa} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><ContactIcon channel="eitaa" /></span><span><small>ایتا</small><strong dir="ltr">{socialAccountLabel(contact.eitaa)}</strong></span></a>
-          {contact.rubika ? <a className="contact-channel" href={contact.rubika} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><ContactIcon channel="rubika" /></span><span><small>روبیکا</small><strong dir="ltr">{socialAccountLabel(contact.rubika)}</strong></span></a> : <div className="contact-channel contact-channel-pending"><span className="contact-channel-icon"><ContactIcon channel="rubika" /></span><span><small>روبیکا</small><strong>لینک به‌زودی</strong></span></div>}
+          {contact.rubika ? <a className="contact-channel" href={contact.rubika} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><ContactIcon channel="rubika" /></span><span><small>روبیکا</small><strong dir="ltr">{socialAccountLabel(contact.rubika)}</strong></span></a> : <div className="contact-channel contact-channel-pending"><span className="contact-channel-icon"><ContactIcon channel="rubika" /></span><strong>روبیکا</strong></div>}
           <a className="contact-channel contact-channel-email" href={contactEmailHref(contact.email)}><span className="contact-channel-icon"><ContactIcon channel="email" /></span><span><small>جیمیل</small><strong dir="ltr">{contact.email}</strong></span></a>
           <a className="contact-whatsapp" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">شروع گفتگو در واتساپ<Icon name="arrow" /></a>
         </aside>
@@ -183,7 +183,7 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
               setSelectedService(nextService as ConsultationService);
               if (selectedPlan && nextService !== selectedPlan.service) setSelectedPlan(null);
             }}>{Object.entries(consultationServiceLabels).map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
-            {selectedPlan && <p className="contact-form-note" role="status"><strong>پلن انتخابی: {selectedPlan.plan.name} / {selectedPlan.categoryLabel}</strong><br />{selectedPlan.plan.isMock ? "این پلن و قیمت آن نمایشی است؛ محدوده و هزینهٔ نهایی پس از مشاوره مشخص می‌شود." : "دربارهٔ محدودهٔ همکاری و نیازهای برندت در ادامه گفتگو می‌کنیم."}</p>}
+            {selectedPlan && <p className="contact-form-note" role="status"><strong>پلن انتخابی: {selectedPlan.plan.name} / {selectedPlan.categoryLabel}</strong></p>}
             <label htmlFor="contact-message">کمی از کسب‌وکارت بگو<textarea id="contact-message" name="message" required minLength={10} maxLength={2000} rows={4} placeholder="چه کاری انجام می‌دی و دوست داری به کجا برسی؟" /></label>
             <p className="contact-form-note" id="contact-form-note">نام، راه ارتباطی و متن درخواستت برای پیگیری مشاوره از طریق سرویس ایمیل FormSubmit به الیتا ارسال می‌شود.{acceptsConsultations ? " نسخه‌ای از درخواست در سایت هم ذخیره می‌شود." : " این نسخه اطلاعات را در دیتابیس سایت ذخیره نمی‌کند."}</p>
             <button type="submit" className="pill-button" disabled={submitting || Boolean(reference) || emailStatus === "accepted"} aria-describedby="contact-form-note">{submitting ? submissionStage === "saving" ? "در حال ثبت درخواست…" : "در حال ارسال ایمیل…" : emailStatus === "accepted" ? "درخواست ارسال شد" : reference ? "درخواست ثبت شد" : acceptsConsultations ? "ثبت و ارسال درخواست مشاوره" : "ارسال درخواست مشاوره"}<span className="button-circle"><Icon name="arrow" /></span></button>

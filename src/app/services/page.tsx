@@ -46,7 +46,7 @@ export default async function ServicesPage() {
               <div className="service-catalog-body"><h3><a href={sitePath(`/services/${service.slug}/`)}>{service.title}</a></h3><p>{service.intro}</p><a className="service-text-link" href={sitePath(`/services/${service.slug}/`)}>خروجی‌ها و مراحل همکاری<Icon name="arrow" /></a></div>
             </article>)}
           </div>
-          {services.length === 0 && <p className="demo-notice">جزئیات خدمات به‌زودی منتشر می‌شود؛ برای راهنمایی دربارهٔ نیاز برندت با ما گفتگو کن.</p>}
+          {services.length === 0 && <p className="demo-notice">برای انتخاب خدمات متناسب با نیاز برندت با ما گفتگو کن.</p>}
         </section>
 
         <section className="service-overview-process container" aria-labelledby="service-overview-process-title">

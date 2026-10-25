@@ -14,11 +14,7 @@ type Props = { navigation: NavigationItem[]; whatsapp?: string; activePage?: Act
 const activePaths: Record<ActivePage, string> = { home: "/", portfolio: "/portfolio/", services: "/services/", blog: "/blog/", pricing: "/pricing/" };
 
 function NavigationLinks({ items, onNavigate, activePage }: { items: NavigationItem[]; onNavigate?: () => void; activePage: ActivePage }) {
-  return items.map((item) => item.upcoming ? (
-    <span className="nav-upcoming" key={item.label}>
-      <span aria-disabled="true">{item.label}</span><span className="coming-soon">به‌زودی</span>
-    </span>
-  ) : (
+  return items.filter(item => !item.upcoming).map((item) => (
     <a key={item.label} href={sitePath(item.href ?? "/")} onClick={onNavigate} aria-current={item.href === activePaths[activePage] ? "page" : undefined}
       {...(item.external ? { target: "_blank", rel: "noopener noreferrer", "aria-label": `${item.label} در اینستاگرام (پنجره جدید)` } : {})}>
       {item.label}

@@ -8,7 +8,6 @@ export async function FeaturedPortfolioSection({ projects = portfolioProjects }:
   const { sections } = await getSiteSettings();
   return <section className="featured-portfolio container" id="portfolio" aria-labelledby="featured-portfolio-heading">
     <div className="portfolio-section-heading"><div><h2 id="featured-portfolio-heading">{sections.portfolioTitle}</h2><p>{sections.portfolioDescription}</p></div><a className="portfolio-all-link" href={sitePath("/portfolio/")}>{sections.portfolioActionLabel} <Icon name="arrow" /></a></div>
-    {projects.some(project => project.isMock !== false) && <p className="portfolio-demo-notice"><Icon name="sparkle" /><span>طرح‌های دارای نشان نمایشی، کانسپت طراحی‌اند و پروژهٔ واقعی مشتریان نیستند.</span></p>}
     <PortfolioGallery featured projects={projects} />
   </section>;
 }
