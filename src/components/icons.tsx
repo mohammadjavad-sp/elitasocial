@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-type IconName = "arrow" | "instagram" | "website" | "phone" | "sparkle" | "menu" | "close" | "telegram";
+type IconName = "arrow" | "instagram" | "website" | "phone" | "sparkle" | "menu" | "close" | "telegram" | "whatsapp";
 export function Icon({ name, ...props }: SVGProps<SVGSVGElement> & { name: IconName }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
@@ -12,6 +12,7 @@ export function Icon({ name, ...props }: SVGProps<SVGSVGElement> & { name: IconN
       {name === "menu" && <><path d="M4 6h16M4 12h16M4 18h16" /></>}
       {name === "close" && <><path d="m6 6 12 12M18 6 6 18" /></>}
       {name === "telegram" && <><path d="m21 3-4 18-6-6-4 3 1-7L21 3ZM8 11l9-5-6 9" /><path d="m3 10 18-7" /></>}
+      {name === "whatsapp" && <><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.5L3 21l1.7-4.8A8.5 8.5 0 1 1 20.5 11.7Z" /><path d="m8 7 2 3-1 1a8 8 0 0 0 4 4l1-1 3 2c-.6 1.6-2 1.7-3.5 1-3-1.3-5.3-3.6-6.5-6.5C6.3 9 6.5 7.8 8 7Z" strokeWidth="1.3" /></>}
     </svg>
   );
 }

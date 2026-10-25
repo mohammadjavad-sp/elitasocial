@@ -1,0 +1,87 @@
+.contact-channels { display: flex; flex-wrap: wrap; gap: 8px; max-width: 100%; }
+.contact-channels .contact-channel-link {
+  --channel-color: #735397;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 44px; max-width: 100%; padding: 5px 10px;
+  color: #594669; background: #fffdfde3; border: 1px solid #dfd4ee; border-radius: 12px;
+  font-size: 11px; font-weight: 500; line-height: 1.8; text-decoration: none;
+}
+.contact-channels .channel-whatsapp { --channel-color: #16815b; }
+.contact-channels .channel-phone { --channel-color: #7450bc; }
+.contact-channels .channel-telegram { --channel-color: #237ca4; }
+.contact-channels .channel-instagram { --channel-color: #a34b83; }
+.contact-channels .channel-bale { --channel-color: #078e76; }
+.contact-channels .channel-eitaa { --channel-color: #b76806; }
+.contact-link-icon { display: grid; place-items: center; flex-shrink: 0; width: 27px; height: 27px; color: var(--channel-color); }
+.contact-link-icon svg { width: 20px; height: 20px; }
+.contact-network-image { display: block; width: 24px; height: 24px; object-fit: contain; border-radius: 7px; flex-shrink: 0; }
+.contact-channels .contact-channel-link:hover { border-color: #b39acb; background: #f1eafb; text-decoration: none; }
+.contact-channels .contact-channel-link:focus-visible { outline: 3px solid var(--purple-dark); outline-offset: 3px; }
+.contact-channels-compact { gap: 6px; }
+.contact-channels-compact .contact-channel-link { padding-inline: 8px; font-size: 10px; gap: 4px; }
+.contact-channels-compact .contact-link-icon { width: 23px; height: 25px; }
+.contact-channels-compact .contact-link-icon svg { width: 18px; height: 18px; }
+.contact-channels-compact .contact-network-image { width: 22px; height: 22px; }
+
+.contact-channels-light .contact-channel-link { color: #fff; background: #ffffff14; border-color: #ffffff55; }
+.contact-channels-light .contact-link-icon { background: #fff; border-radius: 7px; }
+.contact-channels-light .contact-channel-link:hover { color: #fff; background: #ffffff28; border-color: #ffffffa3; }
+.contact-channels-light .contact-channel-link:focus-visible { outline-color: #fff; }
+.contact-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 13px; min-width: 0; }
+.contact-actions > .contact-channels { max-width: 420px; }
+.contact-actions-overlay { gap: 9px; }
+.contact-actions-overlay > .contact-channels { max-width: 420px; }
+.benefit-content .contact-channels .contact-channel-link { font-size: 10px; gap: 4px; }
+.benefit-content .contact-channels svg { width: 18px; height: 18px; }
+.benefits-grid { min-height: 445px; }
+.contact-channel-icon .contact-network-image { width: 27px; height: 27px; border-radius: 8px; }
+.contact-prepared .contact-channels { margin-top: 12px; }
+.contact-prepared .contact-channels .contact-channel-link { text-decoration: none; font-size: 10px; font-weight: 500; }
+
+.hero-contact-options { margin-top: 25px; max-width: 390px; }
+.hero-contact-options > .social-label { margin: 0 0 9px; color: #7c748d; font-size: 10px; }
+.hero-contact-channels { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; }
+.hero-contact-channels .contact-channel-link { flex-direction: column; gap: 3px; padding: 7px 3px; border-radius: 12px; font-size: 10px; }
+.hero-contact-channels .contact-link-icon { width: 27px; height: 27px; }
+.mobile-contact-options { border-top: 1px solid #e8e0ef; margin-top: 10px; padding-top: 14px; }
+.mobile-contact-options > p { color: #7b6a8d; font-size: 11px; margin: 0 0 10px; }
+.mobile-contact-options .contact-channels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mobile-contact-options .contact-channel-link { flex-direction: column; padding: 7px 3px; gap: 3px; }
+
+.contact-chooser.header-cta { display: block; position: relative; padding: 0; min-height: 0; }
+.contact-chooser-summary { list-style: none; cursor: pointer; min-height: 44px; padding: 4px 17px 4px 4px; gap: 15px; font-size: 11px; }
+.contact-chooser-summary::-webkit-details-marker { display: none; }
+.contact-chooser-panel { position: absolute; z-index: 30; top: calc(100% + 13px); inset-inline-end: 0; width: 290px; max-width: calc(100vw - 40px); padding: 17px; background: #fffdff; border: 1px solid #e3d8ed; border-radius: 17px; box-shadow: 0 14px 38px #2c17491f; }
+.contact-chooser-panel > p { margin: 0 0 12px; color: #594669; font-size: 12px; font-weight: 600; }
+.contact-chooser-panel .contact-channels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.contact-chooser-panel .contact-channel-link { justify-content: flex-start; }
+.contact-chooser[open] > summary { background: var(--purple-dark); }
+
+.footer-contact-actions { align-items: center; }
+.footer-contact-actions > .contact-channels { justify-content: center; max-width: none; }
+.footer-contact-channels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 16px; max-width: 270px; }
+.footer-contact-channels .contact-channel-link { flex-direction: column; padding: 7px 3px; gap: 3px; background: #ffffff80; }
+.portfolio-invitation > .contact-actions { flex-shrink: 0; max-width: 410px; }
+.project-dialog-copy > .contact-actions { margin-top: 10px; }
+
+@media (max-width: 1049px) {
+  .hero-contact-options { margin-inline: auto; }
+  .hero-contact-options > .social-label { text-align: center; }
+}
+@media (min-width: 1050px) {
+  .benefits-grid { height: 495px; }
+}
+@media (max-width: 599px) {
+  .contact-chooser.header-cta { display: none; }
+  .hero-contact-options { margin-top: 20px; max-width: 370px; }
+  .hero-contact-channels { gap: 5px; }
+  .hero-contact-channels .contact-channel-link { font-size: 9px; padding-block: 6px; }
+  .contact-channels .contact-channel-link { padding-inline: 8px; }
+  .contact-channels-compact .contact-channel-link { padding-inline: 7px; }
+  .contact-actions { gap: 11px; }
+  .portfolio-invitation > .contact-actions { max-width: 100%; width: 100%; }
+  .footer-contact-actions > .contact-channels { max-width: 350px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .contact-channel-link { transition: background-color 160ms ease, border-color 160ms ease; }
+}

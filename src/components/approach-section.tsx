@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getSiteSettings } from "@/server/settings";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
+import { ContactChannels } from "./contact-channels";
 
 export async function ApproachSection() {
   const { home: { approach, contact } } = await getSiteSettings();
@@ -20,7 +21,10 @@ export async function ApproachSection() {
             <p className="approach-feature-label">{approach.featureLabel}</p>
             <h3>{approach.featureTitle.map(line => <span key={line}>{line}</span>)}</h3>
             <p>{approach.featureDescription}</p>
-            <a className="pill-button" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">{approach.actionLabel}<span className="button-circle"><Icon name="arrow" /></span></a>
+            <div className="contact-actions contact-actions-overlay">
+              <a className="pill-button" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">{approach.actionLabel}<span className="button-circle"><Icon name="arrow" /></span></a>
+              <ContactChannels contact={contact} includeWhatsapp={false} tone="light" compact />
+            </div>
           </div>
         </article>
         <div className="approach-values">

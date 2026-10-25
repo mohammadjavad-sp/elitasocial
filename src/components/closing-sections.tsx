@@ -7,6 +7,7 @@ import { consultationServiceLabels, type ConsultationService } from "@/lib/consu
 import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
 import { socialAccountLabel, useSiteSettings } from "./site-settings-provider";
+import { ContactChannels, ContactIcon } from "./contact-channels";
 
 const acceptsConsultations = process.env.NEXT_PUBLIC_CMS_ENABLED === "true";
 
@@ -86,11 +87,11 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
       });
       const result = await response.json().catch(() => null) as { reference?: unknown; message?: unknown } | null;
       if (!response.ok || typeof result?.reference !== "string" || !result.reference) {
-        throw new Error(typeof result?.message === "string" ? result.message : "ثبت درخواست تأیید نشد. دوباره تلاش کن یا مستقیم از واتساپ پیام بده.");
+        throw new Error(typeof result?.message === "string" ? result.message : "ثبت درخواست تأیید نشد. دوباره تلاش کن یا یکی از راه‌های ارتباطی کنار فرم را انتخاب کن.");
       }
       setReference(result.reference);
     } catch (caught) {
-      setError(caught instanceof Error && caught.name !== "AbortError" && !(caught instanceof TypeError) ? caught.message : "پاسخ ثبت درخواست دریافت نشد. اطلاعاتت در فرم باقی مانده؛ دوباره تلاش کن یا مستقیم از واتساپ پیام بده.");
+      setError(caught instanceof Error && caught.name !== "AbortError" && !(caught instanceof TypeError) ? caught.message : "پاسخ ثبت درخواست دریافت نشد. اطلاعاتت در فرم باقی مانده؛ دوباره تلاش کن یا یکی از راه‌های ارتباطی کنار فرم را انتخاب کن.");
     } finally {
       window.clearTimeout(timeout); busy.current = false; setSubmitting(false);
     }
@@ -105,6 +106,8 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
           <a className="contact-channel" href={contact.phone}><span className="contact-channel-icon"><Icon name="phone" /></span><span><small>تماس با {brand.name}</small><strong dir="ltr">{contact.phoneLabel}</strong></span></a>
           <a className="contact-channel" href={contact.instagram} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><Icon name="instagram" /></span><span><small>اینستاگرام</small><strong dir="ltr">{socialAccountLabel(contact.instagram)}</strong></span></a>
           <a className="contact-channel" href={contact.telegram} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><Icon name="telegram" /></span><span><small>تلگرام</small><strong dir="ltr">{socialAccountLabel(contact.telegram)}</strong></span></a>
+          <a className="contact-channel" href={contact.bale} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><ContactIcon channel="bale" /></span><span><small>بله</small><strong dir="ltr">{socialAccountLabel(contact.bale)}</strong></span></a>
+          <a className="contact-channel" href={contact.eitaa} target="_blank" rel="noopener noreferrer"><span className="contact-channel-icon"><ContactIcon channel="eitaa" /></span><span><small>ایتا</small><strong dir="ltr">{socialAccountLabel(contact.eitaa)}</strong></span></a>
           <a className="contact-whatsapp" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">شروع گفتگو در واتساپ<Icon name="arrow" /></a>
         </aside>
         <div className="contact-form-panel">
@@ -130,8 +133,9 @@ export function ContactSection({ pricing = pricingContent }: { pricing?: Pricing
             {(reference || error || whatsappHref && !submitting) && <div ref={feedback} tabIndex={-1} className={`contact-prepared${error ? " contact-request-error" : ""}`}>
               {reference ? <p role="status"><strong>درخواست مشاوره‌ات ثبت شد.</strong><br />کد پیگیری: <bdi dir="ltr">{reference}</bdi><br />این کد را نگه دار؛ برای هماهنگی از راه ارتباطی‌ای که نوشتی با تو تماس می‌گیریم.</p> : error ? <p role="alert">{error}</p> : <p role="status">متن آماده است. هنوز پیامی ارسال نشده؛ برای ارسال، واتساپ را باز کن.</p>}
               {whatsappHref && <><p>{acceptsConsultations ? "اگر دوست داری، می‌توانی جداگانه در واتساپ هم گفتگو را ادامه بدهی." : "اطلاعاتی در سایت ثبت نشده است."}</p><a href={whatsappHref} target="_blank" rel="noopener noreferrer">باز کردن واتساپ با متن آماده<Icon name="arrow" /></a></>}
+              <ContactChannels contact={contact} includeWhatsapp={false} compact label="راه‌های دیگر برای ادامهٔ گفتگو" />
             </div>}
-            <noscript><p className="contact-form-note">برای گفتگو، از لینک مستقیم واتساپ در کنار فرم استفاده کن.</p></noscript>
+            <noscript><p className="contact-form-note">برای گفتگو، یکی از راه‌های ارتباطی کنار فرم را انتخاب کن؛ تماس، واتساپ، تلگرام، اینستاگرام، بله یا ایتا.</p></noscript>
           </form>
         </div>
       </div>

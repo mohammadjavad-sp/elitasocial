@@ -6,6 +6,8 @@ import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
 import { useSiteSettings } from "./site-settings-provider";
 import { BrandLogo } from "./brand-logo";
+import { ContactChannels } from "./contact-channels";
+import { ContactChooser } from "./contact-chooser";
 
 type ActivePage = "home" | "portfolio" | "services" | "blog" | "pricing";
 type Props = { navigation: NavigationItem[]; whatsapp?: string; activePage?: ActivePage };
@@ -57,9 +59,7 @@ export function Header({ navigation, activePage = "home" }: Props) {
           <BrandLogo name={brand.name} priority />
         </a>
         <nav className="desktop-nav" aria-label="منوی اصلی"><NavigationLinks items={navigation} activePage={activePage} /></nav>
-        <a className="header-cta pill-button" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">
-          <span>{header.ctaLabel}</span><span className="button-circle"><Icon name="arrow" /></span>
-        </a>
+        <ContactChooser contact={contact} label={header.ctaLabel} className="header-cta" />
         <button className="menu-toggle" ref={toggle} type="button" aria-expanded={open} aria-controls="mobile-navigation"
           aria-label={open ? "بستن منو" : "باز کردن منو"} onClick={() => setOpen(!open)}>
           <Icon name={open ? "close" : "menu"} />
@@ -67,7 +67,10 @@ export function Header({ navigation, activePage = "home" }: Props) {
       </div>
       <div className="mobile-panel container" id="mobile-navigation" ref={panel} hidden={!open}>
         <nav aria-label="منوی موبایل"><NavigationLinks items={navigation} activePage={activePage} onNavigate={() => setOpen(false)} /></nav>
-        <a className="mobile-contact" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">{header.mobileCtaLabel} <Icon name="arrow" /></a>
+        <div className="mobile-contact-options">
+          <p>{header.mobileCtaLabel}</p>
+          <ContactChannels contact={contact} compact onNavigate={() => setOpen(false)} />
+        </div>
       </div>
     </header>
   );

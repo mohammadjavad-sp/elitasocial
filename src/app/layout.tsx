@@ -20,6 +20,7 @@ import "./editorial-heroes.css";
 import "./brand-logo.css";
 import "./gentle-motion.css";
 import "./interactions.css";
+import "./contact-channels.css";
 
 const estedad = localFont({ src: "../../public/fonts/Estedad-Variable.woff2", variable: "--font-estedad", display: "swap", weight: "100 900" });
 

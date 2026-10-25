@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
+import { ContactChannels } from "./contact-channels";
+import { useSiteSettings } from "./site-settings-provider";
 
 type BenefitsContent = {
   title: readonly string[];
@@ -20,6 +22,7 @@ type BenefitsContent = {
 
 export function BenefitsSection({ content }: { content: BenefitsContent }) {
   const [activeId, setActiveId] = useState(content.items[0]?.id);
+  const { home: { contact } } = useSiteSettings();
 
   return (
     <section id="benefits" className="benefits-section container" aria-labelledby="benefits-title">
@@ -65,14 +68,17 @@ export function BenefitsSection({ content }: { content: BenefitsContent }) {
                 hidden={!active}
               >
                 <p>{item.description}</p>
-                <a
-                  href={item.href}
-                  target={opensNewWindow ? "_blank" : undefined}
-                  rel={opensNewWindow ? "noopener noreferrer" : undefined}
-                  aria-label={opensNewWindow ? `${item.actionLabel} (پنجره جدید)` : undefined}
-                >
-                  {item.actionLabel}<Icon name="arrow" />
-                </a>
+                <div className="contact-actions contact-actions-overlay">
+                  <a
+                    href={item.href}
+                    target={opensNewWindow ? "_blank" : undefined}
+                    rel={opensNewWindow ? "noopener noreferrer" : undefined}
+                    aria-label={opensNewWindow ? `${item.actionLabel} (پنجره جدید)` : undefined}
+                  >
+                    {item.actionLabel}<Icon name="arrow" />
+                  </a>
+                  <ContactChannels contact={contact} includeWhatsapp={false} tone="light" compact />
+                </div>
               </div>
             </article>
           );

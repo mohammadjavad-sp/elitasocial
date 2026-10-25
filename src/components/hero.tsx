@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getSiteSettings } from "@/server/settings";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
+import { ContactChannels } from "./contact-channels";
 
 export async function Hero() {
   const { home: { hero, contact, brand } } = await getSiteSettings();
@@ -19,11 +20,9 @@ export async function Hero() {
             {hero.secondaryLabel}<span className="button-circle"><Icon name="arrow" /></span>
           </a>
         </div>
-        <div className="hero-socials">
-          <span className="social-label">اینجا هم در ارتباطیم</span><span className="social-divider" aria-hidden="true" />
-          <a href={contact.instagram} target="_blank" rel="noopener noreferrer" aria-label={`اینستاگرام ${brand.name} (پنجره جدید)`}><Icon name="instagram" /></a>
-          <a href={contact.telegram} target="_blank" rel="noopener noreferrer" aria-label={`تلگرام ${brand.name} (پنجره جدید)`}><Icon name="telegram" /></a>
-          <a href={contact.phone} aria-label={`تماس با ${brand.name}، ${contact.phoneLabel}`}><Icon name="phone" /></a>
+        <div className="hero-contact-options">
+          <p className="social-label" id="hero-contact-label">اینجا هم در ارتباطیم</p>
+          <ContactChannels contact={contact} includeWhatsapp={false} className="hero-contact-channels" label="راه‌های دیگر ارتباط" />
         </div>
       </div>
       <div className="hero-visual">

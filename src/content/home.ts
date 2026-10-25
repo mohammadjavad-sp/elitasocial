@@ -12,6 +12,8 @@ export const homeContent = {
     whatsapp: "https://wa.me/989338234473",
     instagram: "https://www.instagram.com/elita.nasl/",
     telegram: "https://t.me/elitanasl",
+    bale: "https://ble.ir/09338234473",
+    eitaa: "https://eitaa.com/09981420677",
     phone: "tel:+989338234473",
     phoneLabel: "۰۹۳۳ ۸۲۳ ۴۴۷۳",
   },

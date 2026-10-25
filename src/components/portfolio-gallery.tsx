@@ -6,6 +6,7 @@ import { portfolioCategories, portfolioDemoNotice, portfolioProjects as starterP
 import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
 import { useSiteSettings } from "./site-settings-provider";
+import { ContactChannels } from "./contact-channels";
 
 /** Small original compositions, not screenshots of clients or third-party projects. */
 function ProjectArtwork({ project }: { project: PortfolioProject }) {
@@ -63,7 +64,7 @@ export function PortfolioGallery({ featured = false, projects: source = starterP
     </article>)}</div>
     {projects.length === 0 && <p className="portfolio-demo-notice">در این دسته هنوز نمونه‌کاری منتشر نشده است.</p>}
     <dialog className="project-dialog" ref={dialog} aria-labelledby="project-dialog-title" aria-describedby={selected?.isMock !== false ? "project-dialog-notice" : undefined} onCancel={(event) => { event.preventDefault(); closeProject(); }} onClose={() => { setSelected(null); trigger.current?.focus(); }} onClick={(event) => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeProject(); } }}>
-      {selected && <><button className="project-close" type="button" aria-label="بستن جزئیات پروژه" onClick={closeProject} autoFocus><Icon name="close" /></button><ProjectArtwork project={selected} /><div className="project-dialog-copy"><span className="project-dialog-category">{selected.discipline} {selected.isMock !== false && <span className="project-demo">نمایشی</span>}</span><h2 id="project-dialog-title">{selected.title}</h2><p>{selected.description}</p><h3>{selected.isMock !== false ? "اجزای این کانسپت" : "خروجی‌های پروژه"}</h3><ul>{selected.deliverables.map((item) => <li key={item}>{item}</li>)}</ul>{selected.isMock !== false && <p className="project-dialog-notice" id="project-dialog-notice">{portfolioDemoNotice}</p>}<a className="pill-button" href={projectConsultationUrl(selected, settings.home.contact.whatsapp)} target="_blank" rel="noopener noreferrer"><span>برای برند من هم صحبت کنیم</span><span className="button-circle"><Icon name="arrow" /></span></a></div></>}
+      {selected && <><button className="project-close" type="button" aria-label="بستن جزئیات پروژه" onClick={closeProject} autoFocus><Icon name="close" /></button><ProjectArtwork project={selected} /><div className="project-dialog-copy"><span className="project-dialog-category">{selected.discipline} {selected.isMock !== false && <span className="project-demo">نمایشی</span>}</span><h2 id="project-dialog-title">{selected.title}</h2><p>{selected.description}</p><h3>{selected.isMock !== false ? "اجزای این کانسپت" : "خروجی‌های پروژه"}</h3><ul>{selected.deliverables.map((item) => <li key={item}>{item}</li>)}</ul>{selected.isMock !== false && <p className="project-dialog-notice" id="project-dialog-notice">{portfolioDemoNotice}</p>}<div className="contact-actions"><a className="pill-button" href={projectConsultationUrl(selected, settings.home.contact.whatsapp)} target="_blank" rel="noopener noreferrer"><span>برای برند من هم صحبت کنیم</span><span className="button-circle"><Icon name="arrow" /></span></a><ContactChannels contact={settings.home.contact} includeWhatsapp={false} compact /></div></div></>}
     </dialog>
   </>;
 }
