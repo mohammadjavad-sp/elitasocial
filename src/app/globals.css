@@ -92,10 +92,6 @@ h1 > span { display: block; }
 .browser-content i { height: 10px; background: #f1edfa; border-radius: 2px; }
 .browser-content i:first-child { grid-row: span 2; height: auto; background: #e0d2ff; }
 .browser-content i:last-child { background: #bcb2e2; height: 4px; }
-.floating-mark { display: block; position: absolute; color: var(--purple); }
-.megaphone { top: 27px; right: 1px; transform: rotate(19deg); }
-.megaphone::before { content: ""; width: 45px; height: 45px; border-radius: 50%; background: #d8c9fa; position: absolute; top: 24px; right: 7px; z-index: -1; }
-.megaphone svg { width: 57px; height: 57px; }
 .sketch-arrow { position: absolute; color: #a48bdf; bottom: 160px; right: -37px; width: 131px; height: 85px; transform: rotate(-24deg); }
 .little-star { position: absolute; left: 0; bottom: 170px; color: #9b7aeb; transform: rotate(18deg); }
 .little-star svg { width: 35px; height: 35px; stroke-width: 1.2; }
@@ -175,9 +171,6 @@ h1 > span { display: block; }
   .browser-content { gap: 3px; padding: 4px; }
   .browser-content i { height: 7px; }
   .browser-dots { height: 10px; }
-  .megaphone { top: 21px; right: 10px; }
-  .megaphone svg { width: 43px; height: 43px; }
-  .megaphone::before { width: 35px; height: 35px; top: 18px; }
   .little-star { left: 5px; bottom: 164px; }
   .little-star svg { width: 25px; height: 25px; }
   .sketch-arrow { width: 88px; height: 62px; bottom: 120px; right: -16px; }

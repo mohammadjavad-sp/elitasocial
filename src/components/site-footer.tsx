@@ -1,10 +1,13 @@
 import { getSiteSettings } from "@/server/settings";
 import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
+import { AmbientShapes } from "./ambient-shapes";
 
 export async function SiteFooter() {
   const { home: { contact, brand }, footer } = await getSiteSettings();
   return (
+    <>
+    <AmbientShapes />
     <footer className="site-footer">
       <div className="footer-cta-band"><div className="container"><h2>{footer.ctaTitle}</h2><p>{footer.ctaDescription}</p><a className="pill-button" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">{footer.ctaLabel}<span className="button-circle"><Icon name="arrow" /></span></a></div></div>
       <div className="footer-main container">
@@ -15,5 +18,6 @@ export async function SiteFooter() {
       </div>
       <div className="footer-bottom container"><span>{brand.name}؛ {brand.owner}</span><span>{footer.bottomNote}</span><a href="#main-content">بازگشت به ابتدای صفحه</a></div>
     </footer>
+    </>
   );
 }

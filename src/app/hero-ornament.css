@@ -1,0 +1,38 @@
+.hero-ribbon-mark {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: -5px;
+  display: block;
+  width: 78px;
+  height: 78px;
+  pointer-events: none;
+  user-select: none;
+  transform: rotate(13deg);
+}
+
+.hero-ribbon-mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+@media (max-width: 599px) {
+  .hero-ribbon-mark {
+    top: 12px;
+    right: 6px;
+    width: 55px;
+    height: 55px;
+    transform: rotate(8deg);
+  }
+}
+
+@media (max-width: 359px) {
+  .hero-ribbon-mark {
+    top: 17px;
+    right: 1px;
+    width: 49px;
+    height: 49px;
+  }
+}
