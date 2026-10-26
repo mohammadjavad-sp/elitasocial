@@ -45,7 +45,13 @@ Constraints: no people, faces, brands, logos, readable letters or numbers, water
 ## Supplied logo — initial restoration
 
 - File: `public/images/elita-social-logo.webp`
-- Site icon: `src/app/icon.png`, derived from the final logo at 512 × 512 px with transparent padding; replaces the earlier generic star icon.
+- Original site icon: the 512 × 512 px wordmark was later replaced by the minimal favicon described below.
+
+### Current minimal favicon
+
+- Design: one white, rounded lowercase `e` on a lilac rounded tile, `#A184C4`. No shadow, gradient or extra ornament.
+- Editable vector: `src/app/icon.svg`; 32 × 32 px PNG fallback: `src/app/icon.png`; Apple home-screen icon: `src/app/apple-icon.png`, 180 × 180 px.
+- Drawn directly as SVG and rasterized with Sharp. Inspected at 16 and 32 px on light and dark backgrounds. The full site wordmark remains unchanged.
 - Edit target supplied by the user: `C:/Users/Mohamad Javad/Downloads/IMG_7115.PNG` (171 × 109 px, transparent).
 - Generated source: `C:/Users/Mohamad Javad/.codex/generated_images/01a17225-0847-7ac3-92b2-d6edec544ff6/exec-a5894d86-92c2-49f0-ad60-6d4214289107.png`.
 - Initial output: 1200 × 767 px, lossless WebP with transparent alpha, 58982 bytes. The thinner version below is now used on the website under a new filename.
