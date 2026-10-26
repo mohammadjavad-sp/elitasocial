@@ -45,7 +45,7 @@ export function SitePreloader() {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
     let alreadyShown = document.documentElement.dataset.elitaIntro === "seen";
-    try { alreadyShown ||= window.sessionStorage.getItem(preloaderSessionKey) === "shown"; } catch { /* The animation still has a bounded duration. */ }
+    try { alreadyShown ||= navigation?.type !== "reload" && window.sessionStorage.getItem(preloaderSessionKey) === "shown"; } catch { /* The animation still has a bounded duration. */ }
     if (alreadyShown || motion.matches || window.location.hash || navigation?.type === "back_forward" || document.visibilityState === "hidden") {
       hide();
       return () => { disposed = true; };
