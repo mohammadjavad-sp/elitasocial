@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/site-image";
 import { Header } from "@/components/header";
 import { Icon } from "@/components/icons";
 import { ServiceArt } from "@/components/service-art";
@@ -33,7 +33,7 @@ export default async function ServicesPage() {
             <div className="service-hero-actions"><a className="pill-button" href="#choose-service">خدمت مناسبم را پیدا کنم<span className="button-circle"><Icon name="arrow" /></span></a><a className="service-text-link" href={sitePath("/#contact")}>دربارهٔ انتخابم مشاوره می‌خواهم<Icon name="arrow" /></a></div>
           </div>
           <div className="service-overview-visual">
-            <Image src={sitePath("/images/campaign-workspace.webp")} alt="فضای کار برنامه‌ریزی دیجیتال مارکتینگ، محتوا و طراحی سایت" width={1500} height={1000} sizes="(max-width: 800px) 90vw, 45vw" priority />
+            <Image src={sitePath("/images/campaign-workspace.webp")} alt="فضای کار برنامه‌ریزی دیجیتال مارکتینگ، محتوا و طراحی سایت" width={1536} height={1024} sizes="(min-width: 1400px) 580px, (max-width: 800px) 90vw, 45vw" preload />
             <div className="service-visual-note"><Icon name="sparkle" /><span>محتوا، طراحی و همراهی<br /><strong>در یک مسیر هماهنگ</strong></span></div>
           </div>
         </section>

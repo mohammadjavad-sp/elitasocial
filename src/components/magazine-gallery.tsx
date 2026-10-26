@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { articleCategories, articles as starterArticles, getArticleCategory, type Article, type ArticleCategoryId } from "@/content/articles";
+import { articleCategories, getArticleCategory, type ArticleCategoryId } from "@/content/articles";
+import type { ArticlePreview } from "@/lib/article-preview";
 import { ArticleCard } from "./article-card";
 
 const pageSize = 6;
@@ -16,7 +17,7 @@ function validCategory(value: string | null): value is ArticleCategoryId {
   return articleCategories.some((item) => item.id === value);
 }
 
-export function MagazineGallery({ category, articles = starterArticles }: { category?: ArticleCategoryId; articles?: Article[] }) {
+export function MagazineGallery({ category, articles }: { category?: ArticleCategoryId; articles: ArticlePreview[] }) {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>(category ?? "all");
   const [sort, setSort] = useState<ArticleSort>("newest");

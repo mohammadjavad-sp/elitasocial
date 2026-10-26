@@ -1,5 +1,7 @@
 # Marketing imagery
 
+The dimensions below describe the initial exports. Current masters restored from these original sources and their responsive delivery are documented in [Release image delivery](image-optimization.md).
+
 Generated using the built-in `image_gen.imagegen` tool for the Elita Social website. These editorial concept photographs illustrate digital marketing and website design; they do not depict an actual Elita Social workspace, client project, or measured result.
 
 ## Social marketing

@@ -17,3 +17,5 @@ artifacts/
 Thumbs.db
 # Original supplied portrait retained locally; not used by the website.
 /public/images/elaheh-about.jpg
+# Deterministic responsive derivatives are rebuilt from the tracked masters.
+/public/images/responsive/

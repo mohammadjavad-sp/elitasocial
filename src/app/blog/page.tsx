@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/site-image";
 import { Header } from "@/components/header";
 import { Icon } from "@/components/icons";
 import { MagazineGallery } from "@/components/magazine-gallery";
@@ -9,6 +9,7 @@ import { getNavigation } from "@/content/home";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
+import { toArticlePreview } from "@/lib/article-preview";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { home: { brand } } = await getSiteSettings();
@@ -39,7 +40,7 @@ export default async function MagazinePage() {
             </div>
             <div className="editorial-hero-visual magazine-hero-visual">
               <div className="editorial-photo-backdrop" aria-hidden="true" />
-              <div className="editorial-hero-photo magazine-hero-photo"><Image src={sitePath("/images/magazine-hero.webp")} alt="فضای روشن مطالعه و ایده‌پردازی با لپ‌تاپ، دفتر یادداشت و مجله‌های طراحی" width={1500} height={1100} priority sizes="(min-width: 1000px) 46vw, (min-width: 700px) 72vw, 90vw" /></div>
+              <div className="editorial-hero-photo magazine-hero-photo"><Image src={sitePath("/images/magazine-hero.webp")} alt="فضای روشن مطالعه و ایده‌پردازی با لپ‌تاپ، دفتر یادداشت و مجله‌های طراحی" width={1536} height={1024} preload sizes="(min-width: 1400px) 570px, (min-width: 1000px) 46vw, (min-width: 700px) 72vw, 90vw" /></div>
               <div className="magazine-hero-note" aria-hidden="true"><span className="magazine-note-fold" /><Icon name="sparkle" /><span>سؤال امروزِ برندت</span><strong>چطور بهتر<br />دیده شویم؟</strong><span className="magazine-note-rule" /></div>
               <span className="magazine-hero-bookmark" aria-hidden="true"><Icon name="sparkle" /></span>
               <p className="editorial-photo-caption"><span />کمی مطالعه، کلی ایده برای شروع</p>
@@ -57,7 +58,7 @@ export default async function MagazinePage() {
           {articleCategories.map(item => <a className="magazine-category-link" href={sitePath(`/blog/category/${item.slug}/`)} key={item.id}><strong>{item.label}</strong><span>{item.description}</span><Icon name="arrow" /></a>)}
         </nav>
 
-        <section className="magazine-library container" id="magazine-library" aria-labelledby="magazine-library-title"><div className="section-heading"><h2 id="magazine-library-title">از کدام موضوع شروع کنیم؟</h2><p>موضوع یا سؤال موردنظرت را جست‌وجو کن؛ یا یادداشت‌های هر دسته را ببین.</p></div><MagazineGallery articles={articles} /></section>
+        <section className="magazine-library container" id="magazine-library" aria-labelledby="magazine-library-title"><div className="section-heading"><h2 id="magazine-library-title">از کدام موضوع شروع کنیم؟</h2><p>موضوع یا سؤال موردنظرت را جست‌وجو کن؛ یا یادداشت‌های هر دسته را ببین.</p></div><MagazineGallery articles={articles.map(toArticlePreview)} /></section>
       </main>
       <SiteFooter />
     </div>

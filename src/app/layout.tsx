@@ -5,6 +5,7 @@ import { SiteSettingsProvider } from "@/components/site-settings-provider";
 import { SitePreloader } from "@/components/site-preloader";
 import { ThemeProvider } from "@/components/theme-provider";
 import { themeBootstrapScript } from "@/lib/theme";
+import { preloaderBootstrapScript } from "@/lib/preloader";
 import "./globals.css";
 import "./sections.css";
 import "./portfolio.css";
@@ -13,7 +14,6 @@ import "./closing.css";
 import "./services.css";
 import "./magazine.css";
 import "./article.css";
-import "./admin.css";
 import "./preloader.css";
 import "./atmosphere.css";
 import "./hero-ornament.css";
@@ -45,5 +45,5 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getSiteSettings();
-  return <html lang="fa" dir="rtl" data-theme="light" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} /><noscript><style>{".theme-toggle{display:none!important}"}</style></noscript></head><body className={estedad.variable}><ThemeProvider><SiteSettingsProvider settings={settings}><SitePreloader />{children}</SiteSettingsProvider></ThemeProvider></body></html>;
+  return <html lang="fa" dir="rtl" data-theme="light" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} /><script dangerouslySetInnerHTML={{ __html: preloaderBootstrapScript }} /><noscript><style>{".theme-toggle{display:none!important}"}</style></noscript></head><body className={estedad.variable}><ThemeProvider><SiteSettingsProvider settings={settings}><SitePreloader />{children}</SiteSettingsProvider></ThemeProvider></body></html>;
 }

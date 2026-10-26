@@ -6,12 +6,15 @@
     "node": ">=22.19.0"
   },
   "scripts": {
+    "predev": "node scripts/prepare-images.mjs",
     "dev": "next dev --hostname 127.0.0.1",
+    "prebuild": "node scripts/prepare-images.mjs",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "check:ui": "node scripts/check-ui.mjs",
     "check:portfolio": "node scripts/check-portfolio.mjs",
+    "check:security": "node --conditions=react-server --import tsx --test scripts/check-cms-security.test.ts scripts/check-consultation-email.test.ts",
     "cms:init": "node --conditions=react-server --import tsx scripts/cms-init.ts",
     "cms:backup": "node --conditions=react-server --import tsx scripts/cms-backup.ts",
     "cms:migrate": "node --conditions=react-server --import tsx scripts/cms-migrate.ts"
@@ -20,7 +23,8 @@
     "next": "16.4.3",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "server-only": "0.0.1"
+    "server-only": "0.0.1",
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",

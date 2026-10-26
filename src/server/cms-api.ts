@@ -28,15 +28,35 @@ async function bytes(request: Request, maximum: number): Promise<Uint8Array<Arra
   const reader = request.body.getReader();
   const chunks: Uint8Array[] = [];
   let total = 0;
+  // A client must not retain an upload/parser slot indefinitely by sending an
+  // unfinished body. The byte cap still applies to chunked requests.
+  let interrupted: CmsError | undefined;
+  const cancelBody = () => {
+    interrupted = new CmsError(408, "دریافت درخواست کامل نشد؛ دوباره تلاش کنید.");
+    void reader.cancel().catch(() => undefined);
+  };
+  const timer = setTimeout(cancelBody, 30_000);
+  timer.unref();
+  request.signal.addEventListener("abort", cancelBody, { once: true });
   try {
+    if (request.signal.aborted) throw new CmsError(408, "دریافت درخواست کامل نشد؛ دوباره تلاش کنید.");
     for (;;) {
       const { done, value } = await reader.read();
+      if (interrupted) throw interrupted;
       if (done) break;
       total += value.byteLength;
-      if (total > maximum) { await reader.cancel(); throw new CmsError(413, "حجم درخواست بیش از حد مجاز است."); }
+      if (total > maximum) throw new CmsError(413, "حجم درخواست بیش از حد مجاز است.");
       chunks.push(value);
     }
-  } finally { reader.releaseLock(); }
+  } catch (error) {
+    throw interrupted || error;
+  } finally {
+    clearTimeout(timer);
+    request.signal.removeEventListener("abort", cancelBody);
+    // Do not wait on a malicious stream's cancel callback.
+    void reader.cancel().catch(() => undefined);
+    reader.releaseLock();
+  }
   const result = new Uint8Array(total);
   let offset = 0;
   for (const chunk of chunks) { result.set(chunk, offset); offset += chunk.byteLength; }
@@ -65,7 +85,7 @@ export async function handleCmsRequest(request: Request, context: RouteContext):
       const email = text(payload.email, "ایمیل", 254).toLowerCase();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new CmsError(400, "نشانی ایمیل معتبر نیست.");
       const password = passwordText(payload.password, "رمز عبور");
-      const result = login(email, password, request);
+      const result = await login(email, password, request);
       return json(result.session, 200, { "Set-Cookie": result.cookie });
     }
     if (method === "GET" && resource === "session" && segments.length === 1) {
@@ -77,7 +97,7 @@ export async function handleCmsRequest(request: Request, context: RouteContext):
     if (resource === "logout" && method === "POST" && segments.length === 1) { logout(auth); return empty({ "Set-Cookie": clearSessionCookie() }); }
     if (resource === "password" && method === "PUT" && segments.length === 1) {
       const payload = await body(request, 16_000);
-      changePassword(auth, passwordText(payload.currentPassword, "رمز فعلی"), passwordText(payload.newPassword, "رمز تازه"));
+      await changePassword(auth, passwordText(payload.currentPassword, "رمز فعلی"), passwordText(payload.newPassword, "رمز تازه"));
       return empty();
     }
     if (resource === "settings" && segments.length === 1 && method === "GET") return json(readSiteSettings());

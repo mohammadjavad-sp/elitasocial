@@ -1,5 +1,7 @@
 # Editorial hero images and supplied logo restoration
 
+The sizes and encoding notes below document the initial image preparation. Current higher-quality masters and responsive delivery settings are recorded in [Release image delivery](image-optimization.md).
+
 These assets were prepared for the portfolio and magazine hero refresh. Generated photos are editorial decoration; they do not depict real client projects.
 
 Mode: built-in `image_gen.imagegen`. No CLI or API-key fallback was used.

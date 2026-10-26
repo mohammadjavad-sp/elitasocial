@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Icon } from "./icons";
 import { useSiteSettings } from "./site-settings-provider";
+import { preloaderSessionKey } from "@/lib/preloader";
 
 type Phase = "loading" | "leaving" | "hidden";
 
@@ -20,8 +21,6 @@ export function SitePreloader() {
     if (isAdmin) return;
     let disposed = false;
     let finished = false;
-    let minimumElapsed = false;
-    let assetsReady = false;
     const timers: ReturnType<typeof setTimeout>[] = [];
     const cleanup: (() => void)[] = [];
     const later = (callback: () => void, delay: number) => {
@@ -30,6 +29,8 @@ export function SitePreloader() {
     const hide = () => {
       if (disposed) return;
       finished = true;
+      document.documentElement.dataset.elitaIntro = "seen";
+      try { window.sessionStorage.setItem(preloaderSessionKey, "shown"); } catch { /* Optional in private/storage-blocked contexts. */ }
       timers.forEach(clearTimeout);
       cleanup.splice(0).forEach(remove => remove());
       setPhase("hidden");
@@ -38,12 +39,14 @@ export function SitePreloader() {
       if (disposed || finished) return;
       finished = true;
       setPhase("leaving");
-      later(hide, 440);
+      later(hide, 280);
     };
 
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
-    if (motion.matches || window.location.hash || navigation?.type === "back_forward" || document.visibilityState === "hidden") {
+    let alreadyShown = document.documentElement.dataset.elitaIntro === "seen";
+    try { alreadyShown ||= window.sessionStorage.getItem(preloaderSessionKey) === "shown"; } catch { /* The animation still has a bounded duration. */ }
+    if (alreadyShown || motion.matches || window.location.hash || navigation?.type === "back_forward" || document.visibilityState === "hidden") {
       hide();
       return () => { disposed = true; };
     }
@@ -71,23 +74,8 @@ export function SitePreloader() {
       motion.removeEventListener("change", onMotion);
     });
 
-    const image = document.querySelector<HTMLImageElement>(".hero-portrait, .service-overview-hero img, .editorial-hero-photo img, .magazine-featured-image img");
-    const imageReady = !image || image.complete ? Promise.resolve() : new Promise<void>(resolve => {
-      const ready = () => { remove(); resolve(); };
-      const remove = () => { image.removeEventListener("load", ready); image.removeEventListener("error", ready); };
-      image.addEventListener("load", ready, { once: true });
-      image.addEventListener("error", ready, { once: true });
-      cleanup.push(remove);
-      if (image.complete) ready();
-    });
-    const finishIfReady = () => { if (minimumElapsed && assetsReady) leave(); };
-    later(() => { minimumElapsed = true; finishIfReady(); }, 700);
-    later(leave, 1700);
-    void Promise.allSettled([document.fonts.ready, imageReady]).then(() => {
-      if (disposed) return;
-      assetsReady = true;
-      finishIfReady();
-    });
+    // A decorative intro must not hold the page behind slow images or fonts.
+    later(leave, 420);
 
     return () => {
       disposed = true;

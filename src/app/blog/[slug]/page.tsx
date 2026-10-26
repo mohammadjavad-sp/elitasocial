@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/site-image";
 import { notFound } from "next/navigation";
 import { ArticleActions } from "@/components/article-actions";
 import { ArticleCard } from "@/components/article-card";
@@ -64,7 +64,7 @@ export default async function ArticlePage({ params }: PageProps) {
               <p className="article-intro">{article.excerpt}</p>
               <div className="article-byline"><span>{article.author}</span><span>{readingMinutes} دقیقه مطالعه</span></div>
             </div>
-            <figure className="article-cover"><Image src={sitePath(article.image.src)} alt={article.image.alt} fill sizes="(max-width: 599px) 100vw, 90vw" priority /></figure>
+            <figure className="article-cover"><Image src={sitePath(article.image.src)} alt={article.image.alt} fill sizes="(min-width: 1400px) 1240px, 90vw" preload /></figure>
           </header>
 
           <div className="article-reading-layout container">

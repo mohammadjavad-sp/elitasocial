@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/site-image";
 import { Header } from "@/components/header";
 import { SiteFooter } from "@/components/site-footer";
 import { PortfolioGallery } from "@/components/portfolio-gallery";
@@ -34,7 +34,7 @@ export default async function PortfolioPage() {
           </div>
           <div className="editorial-hero-visual portfolio-hero-visual">
             <div className="editorial-photo-backdrop" aria-hidden="true" />
-            <div className="editorial-hero-photo portfolio-hero-photo"><Image src={sitePath("/images/portfolio-hero.webp")} alt="میز کار خلاقانه با لپ‌تاپ، طرح‌های گرافیکی و نمونه‌های رنگ برای طراحی هویت دیجیتال" width={1500} height={1100} priority sizes="(min-width: 1000px) 46vw, (min-width: 700px) 72vw, 90vw" /></div>
+            <div className="editorial-hero-photo portfolio-hero-photo"><Image src={sitePath("/images/portfolio-hero.webp")} alt="میز کار خلاقانه با لپ‌تاپ، طرح‌های گرافیکی و نمونه‌های رنگ برای طراحی هویت دیجیتال" width={1536} height={1024} preload sizes="(min-width: 1400px) 570px, (min-width: 1000px) 46vw, (min-width: 700px) 72vw, 90vw" /></div>
             <div className="portfolio-hero-preview" aria-hidden="true">
               <div className="portfolio-preview-chrome"><i /><i /><i /><span>طراحی فروشگاه برگ</span></div>
               <div className="portfolio-preview-content"><span className="portfolio-preview-brand">برگ</span><strong>یک گوشهٔ سبز،<br />برای تو</strong><span className="portfolio-preview-leaf" /><span className="portfolio-preview-rule" /><span className="portfolio-preview-rule" /></div>

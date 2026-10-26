@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/site-image";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/header";
 import { Icon } from "@/components/icons";
@@ -45,7 +45,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             <p className="service-lead">{service.intro}</p>
             <div className="service-hero-actions"><a className="pill-button" href={consultationHref}>مشاوره دربارهٔ این خدمت<span className="button-circle"><Icon name="arrow" /></span></a><a className="service-text-link" href="#service-deliverables">چه چیزی دریافت می‌کنم؟<Icon name="arrow" /></a></div>
           </div>
-          <div className="service-detail-visual"><Image src={sitePath(service.image.src)} alt={service.image.alt} fill sizes="(max-width: 800px) 90vw, 42vw" priority /><div className="service-detail-art"><ServiceArt type={service.slug} /></div><span className="service-detail-image-label">{service.shortTitle}<Icon name="sparkle" /></span></div>
+          <div className="service-detail-visual"><Image src={sitePath(service.image.src)} alt={service.image.alt} fill sizes="(min-width: 1400px) 550px, (max-width: 800px) 90vw, 42vw" preload /><div className="service-detail-art"><ServiceArt type={service.slug} /></div><span className="service-detail-image-label">{service.shortTitle}<Icon name="sparkle" /></span></div>
         </section>
 
         <nav className="service-page-index container" aria-label="بخش‌های این خدمت"><a href="#service-deliverables">خروجی‌های همکاری</a><a href="#service-process">مراحل انجام کار</a><a href="#service-faq">پرسش‌های متداول</a><a href={pricingHref}>{service.pricingCategory ? "دیدن پلن‌های همکاری" : "گفتگو دربارهٔ هزینه"}</a></nav>

@@ -1,5 +1,5 @@
 import "server-only";
-import { createHash, randomBytes, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
+import { createHash, randomBytes, randomUUID, scrypt, scryptSync, timingSafeEqual } from "node:crypto";
 import type { CmsSession } from "@/lib/cms-shared";
 import { getDatabase } from "./database";
 import { CmsError } from "./errors";
@@ -9,6 +9,34 @@ const sessionLifetime = 8 * 60 * 60;
 const hashToken = (value: string) => createHash("sha256").update(value).digest("hex");
 const equal = (first: string, second: string) => first.length === second.length && timingSafeEqual(Buffer.from(first), Buffer.from(second));
 type AuthState = { session: CmsSession; userId: string; tokenHash: string };
+
+// Password work belongs on Node's worker pool, with a bounded queue so it cannot
+// block page rendering or exhaust memory when several login requests arrive.
+let activeDerivations = 0;
+const pendingDerivations: Array<() => void> = [];
+async function derivePassword(password: string, salt: string, workFactor = 5): Promise<string> {
+  if (activeDerivations >= 2) {
+    if (pendingDerivations.length >= 8) throw new CmsError(503, "ورود موقتاً شلوغ است؛ چند لحظهٔ دیگر دوباره تلاش کنید.");
+    await new Promise<void>(resolve => pendingDerivations.push(resolve));
+  } else activeDerivations++;
+  try {
+    return await new Promise<string>((resolve, reject) => {
+      scrypt(password, salt, 64, { N: 16384, r: 8, p: workFactor, maxmem: 64 * 1024 * 1024 }, (error, derived) => {
+        if (error) reject(error);
+        else resolve(derived.toString("hex"));
+      });
+    });
+  } finally {
+    const next = pendingDerivations.shift();
+    if (next) next();
+    else activeDerivations--;
+  }
+}
+
+async function passwordHashAsync(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  return `scrypt$16384$8$5$${salt}$${await derivePassword(password, salt)}`;
+}
 
 export function assertOrigin(request: Request) {
   const expected = process.env.CMS_ORIGIN ? new URL(process.env.CMS_ORIGIN).origin : new URL(request.url).origin;
@@ -57,10 +85,10 @@ export function passwordHash(password: string) {
   return `scrypt$16384$8$5$${salt}$${digest}`;
 }
 
-function verifyPassword(password: string, encoded: string) {
+async function verifyPassword(password: string, encoded: string) {
   const parts = encoded.split("$");
   if (parts.length !== 6 || parts[0] !== "scrypt" || parts[1] !== "16384" || parts[2] !== "8" || !["1", "5"].includes(parts[3]) || !/^[a-f0-9]{32}$/.test(parts[4]) || !/^[a-f0-9]{128}$/.test(parts[5])) return false;
-  const actual = scryptSync(password, parts[4], 64, { N: 16384, r: 8, p: Number(parts[3]), maxmem: 64 * 1024 * 1024 }).toString("hex");
+  const actual = await derivePassword(password, parts[4], Number(parts[3]));
   return equal(actual, parts[5]);
 }
 
@@ -79,16 +107,21 @@ function consumeLoginAttempt(email: string, request: Request) {
   for (const item of keys) increment.run(item.key, expires);
 }
 
-export function login(email: string, password: string, request: Request): { session: CmsSession; cookie: string } {
+export async function login(email: string, password: string, request: Request): Promise<{ session: CmsSession; cookie: string }> {
   consumeLoginAttempt(email, request);
   const db = getDatabase();
   const row = db.prepare("SELECT id,email,name,password_hash FROM cms_users WHERE email=?").get(email);
   // Unknown accounts pay the same password derivation cost and receive the same response.
   const dummy = "scrypt$16384$8$5$00000000000000000000000000000000$" + "0".repeat(128);
-  const valid = verifyPassword(password, row ? String(row.password_hash) : dummy);
+  const valid = await verifyPassword(password, row ? String(row.password_hash) : dummy);
   if (!row || !valid) throw new CmsError(401, "ایمیل یا رمز عبور درست نیست.");
-  if (String(row.password_hash).startsWith("scrypt$16384$8$1$")) {
-    db.prepare("UPDATE cms_users SET password_hash=? WHERE id=?").run(passwordHash(password), String(row.id));
+  // An administrator may reset the password while asynchronous verification is
+  // in progress. Never create a session from the now-revoked password.
+  const upgradedHash = String(row.password_hash).startsWith("scrypt$16384$8$1$") ? await passwordHashAsync(password) : null;
+  const latest = db.prepare("SELECT password_hash FROM cms_users WHERE id=?").get(String(row.id));
+  if (!latest || String(latest.password_hash) !== String(row.password_hash)) throw new CmsError(401, "ایمیل یا رمز عبور درست نیست.");
+  if (upgradedHash) {
+    db.prepare("UPDATE cms_users SET password_hash=? WHERE id=?").run(upgradedHash, String(row.id));
   }
   const token = randomBytes(32).toString("hex");
   const csrfToken = randomBytes(32).toString("hex");
@@ -103,14 +136,16 @@ export function login(email: string, password: string, request: Request): { sess
 
 export function logout(auth: AuthState) { getDatabase().prepare("DELETE FROM cms_sessions WHERE id_hash=?").run(auth.tokenHash); }
 
-export function changePassword(auth: AuthState, currentPassword: string, newPassword: string) {
+export async function changePassword(auth: AuthState, currentPassword: string, newPassword: string) {
   if (newPassword.length < 12 || newPassword.length > 128 || !/\p{L}/u.test(newPassword) || !/\p{N}/u.test(newPassword)) throw new CmsError(400, "رمز تازه باید ۱۲ تا ۱۲۸ نویسه و شامل حرف و عدد باشد.");
   const db = getDatabase();
   const row = db.prepare("SELECT password_hash FROM cms_users WHERE id=?").get(auth.userId);
-  if (!row || !verifyPassword(currentPassword, String(row.password_hash))) throw new CmsError(400, "رمز عبور فعلی درست نیست.");
-  const nextHash = passwordHash(newPassword);
+  if (!row || !await verifyPassword(currentPassword, String(row.password_hash))) throw new CmsError(400, "رمز عبور فعلی درست نیست.");
+  const nextHash = await passwordHashAsync(newPassword);
   db.exec("BEGIN IMMEDIATE");
   try {
+    const latest = db.prepare("SELECT password_hash FROM cms_users WHERE id=?").get(auth.userId);
+    if (!latest || String(latest.password_hash) !== String(row.password_hash)) throw new CmsError(409, "رمز عبور در جای دیگری تغییر کرده است؛ دوباره وارد پنل شوید.");
     db.prepare("UPDATE cms_users SET password_hash=? WHERE id=?").run(nextHash, auth.userId);
     db.prepare("DELETE FROM cms_sessions WHERE user_id=? AND id_hash<>?").run(auth.userId, auth.tokenHash);
     db.exec("COMMIT");

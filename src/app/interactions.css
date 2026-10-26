@@ -25,7 +25,8 @@
     transition: translate 240ms var(--interaction-ease);
   }
 
-  .home-shell :is(.article-card-image, .magazine-featured-image) > img,
+  .home-shell :is(.article-card-image, .magazine-featured-image) img,
+  .home-shell .project-open .project-art > picture > img,
   .home-shell .project-open .project-art > :is(img, .art-browser, .art-phone, .art-editorial-stack) {
     transition: scale 380ms var(--interaction-ease);
   }
@@ -47,8 +48,9 @@
     translate: -2px 0;
   }
 
-  .home-shell .article-card:focus-within .article-card-image > img,
-  .home-shell .magazine-featured:focus-within .magazine-featured-image > img,
+  .home-shell .article-card:focus-within .article-card-image img,
+  .home-shell .magazine-featured:focus-within .magazine-featured-image img,
+  .home-shell .project-open:focus-visible .project-art > picture > img,
   .home-shell .project-open:focus-visible .project-art > :is(img, .art-browser, .art-phone, .art-editorial-stack) {
     scale: 1.025;
   }
@@ -65,8 +67,9 @@
     translate: -2px 0;
   }
 
-  .home-shell .article-card:hover .article-card-image > img,
-  .home-shell .magazine-featured:hover .magazine-featured-image > img,
+  .home-shell .article-card:hover .article-card-image img,
+  .home-shell .magazine-featured:hover .magazine-featured-image img,
+  .home-shell .project-open:hover .project-art > picture > img,
   .home-shell .project-open:hover .project-art > :is(img, .art-browser, .art-phone, .art-editorial-stack) {
     scale: 1.025;
   }

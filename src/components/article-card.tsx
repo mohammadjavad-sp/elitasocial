@@ -1,9 +1,10 @@
-import Image from "next/image";
-import { getArticleCategory, type Article } from "@/content/articles";
+import Image from "./site-image";
+import { getArticleCategory } from "@/content/articles";
+import type { ArticlePreview } from "@/lib/article-preview";
 import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
 
-export function ArticleCard({ article }: { article: Article }) {
+export function ArticleCard({ article }: { article: ArticlePreview }) {
   const category = getArticleCategory(article.category);
   const href = sitePath(`/blog/${article.slug}/`);
 

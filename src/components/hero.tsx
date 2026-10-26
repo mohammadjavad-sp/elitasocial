@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "./site-image";
 import { getSiteSettings } from "@/server/settings";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
@@ -29,7 +29,7 @@ export async function Hero() {
         <div className="portrait-halo" aria-hidden="true"><div /><div /><div /></div>
         <div className="portrait-frame">
           <Image className="hero-portrait" src={sitePath(hero.portrait.src)} alt={hero.portrait.alt}
-            width={hero.portrait.width} height={hero.portrait.height} sizes="(max-width: 599px) 80vw, (max-width: 1049px) 420px, 480px" preload />
+            width={hero.portrait.width} height={hero.portrait.height} sizes="(max-width: 374px) 244px, (max-width: 599px) 270px, (max-width: 1049px) 380px, (max-width: 1199px) 330px, 386px" preload />
         </div>
         <div className="service-card instagram-card">
           <span className="service-icon"><Icon name="instagram" /></span>

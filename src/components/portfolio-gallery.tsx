@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import Image from "./site-image";
 import { portfolioCategories, portfolioProjects as starterProjects, projectConsultationUrl, type PortfolioProject } from "@/content/portfolio";
 import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";

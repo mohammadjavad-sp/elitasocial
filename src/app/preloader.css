@@ -12,9 +12,11 @@
   background: var(--surface-soft);
   opacity: 1;
   visibility: visible;
-  transition: opacity 420ms ease, transform 420ms cubic-bezier(.22, 1, .36, 1);
-  animation: preloader-failsafe 1ms step-end 4s forwards;
+  transition: opacity 260ms ease, transform 260ms cubic-bezier(.22, 1, .36, 1);
+  animation: preloader-failsafe 1ms step-end 1.4s forwards;
 }
+
+html[data-elita-intro="seen"] .site-preloader { display: none; }
 
 .site-preloader[data-state="leaving"] {
   pointer-events: none;

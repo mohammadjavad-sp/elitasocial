@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AdminPanel } from "../../components/admin/admin-panel";
+import "../admin.css";
 
 export const metadata: Metadata = {
   title: "مدیریت سایت | الیتا سوشیال",

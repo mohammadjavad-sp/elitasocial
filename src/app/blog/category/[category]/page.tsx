@@ -9,6 +9,7 @@ import { getNavigation } from "@/content/home";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
+import { toArticlePreview } from "@/lib/article-preview";
 
 type PageProps = { params: Promise<{ category: string }> };
 
@@ -36,7 +37,7 @@ export default async function MagazineCategoryPage({ params }: PageProps) {
           <div className="magazine-page-heading"><div><h1 id="magazine-category-title">{category.label}</h1><p>{category.description} یادداشت‌های این موضوع را اینجا پیدا کن.</p></div><a className="service-text-link" href={sitePath("/blog/")}>همهٔ مقاله‌ها<Icon name="arrow" /></a></div>
         </section>
         <nav className="magazine-category-links container" aria-label="موضوع‌های دیگر مجله">{articleCategories.map(item => <a className="magazine-category-link" href={sitePath(`/blog/category/${item.slug}/`)} aria-current={item.id === category.id ? "page" : undefined} key={item.id}><strong>{item.label}</strong><span>{item.description}</span><Icon name="arrow" /></a>)}</nav>
-        <section className="magazine-library container" id="magazine-library" aria-labelledby="category-library-title"><h2 className="sr-only" id="category-library-title">مقاله‌های {category.label}</h2><MagazineGallery category={category.id} articles={articles} /></section>
+        <section className="magazine-library container" id="magazine-library" aria-labelledby="category-library-title"><h2 className="sr-only" id="category-library-title">مقاله‌های {category.label}</h2><MagazineGallery category={category.id} articles={articles.map(toArticlePreview)} /></section>
       </main>
       <SiteFooter />
     </div>

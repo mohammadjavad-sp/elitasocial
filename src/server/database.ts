@@ -42,7 +42,9 @@ function ensureCmsSchema(db: DatabaseSync) {
   schemaReady.add(db);
 }
 
-export function cmsDataDirectory() { return path.resolve(process.env.CMS_DATA_DIR || path.join(process.cwd(), ".data")); }
+// This is mutable runtime storage supplied by the host, never a build asset.
+// Do not trace an environment-controlled absolute path into the server bundle.
+export function cmsDataDirectory() { return path.resolve(/* turbopackIgnore: true */ process.env.CMS_DATA_DIR || path.join(process.cwd(), ".data")); }
 
 export function getDatabase(): DatabaseSync {
   if (process.env.DEPLOY_TARGET === "github-pages") throw new CmsError(503, "مدیریت محتوا به میزبانی Node.js نیاز دارد.");

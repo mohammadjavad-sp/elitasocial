@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "./site-image";
 import { getSiteSettings } from "@/server/settings";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";

@@ -1,0 +1,377 @@
+{
+  "/images/elaheh-hero.jpg": {
+    "width": 853,
+    "height": 1280,
+    "avif": [
+      {
+        "width": 320,
+        "src": "/images/responsive/elaheh-hero-f92da6c04cdf-320.avif"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/elaheh-hero-f92da6c04cdf-480.avif"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/elaheh-hero-f92da6c04cdf-640.avif"
+      },
+      {
+        "width": 853,
+        "src": "/images/responsive/elaheh-hero-f92da6c04cdf-853.avif"
+      }
+    ],
+    "webp": [
+      {
+        "width": 320,
+        "src": "/images/responsive/elaheh-hero-f92da6c04cdf-320.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/elaheh-hero-f92da6c04cdf-480.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/elaheh-hero-f92da6c04cdf-640.webp"
+      },
+      {
+        "width": 853,
+        "src": "/images/responsive/elaheh-hero-f92da6c04cdf-853.webp"
+      }
+    ]
+  },
+  "/images/social-marketing.webp": {
+    "width": 1086,
+    "height": 1448,
+    "avif": [
+      {
+        "width": 320,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-320.avif"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-480.avif"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-640.avif"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-960.avif"
+      },
+      {
+        "width": 1086,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-1086.avif"
+      }
+    ],
+    "webp": [
+      {
+        "width": 320,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-320.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-480.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-640.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-960.webp"
+      },
+      {
+        "width": 1086,
+        "src": "/images/responsive/social-marketing-fe8f3b5bf98e-1086.webp"
+      }
+    ]
+  },
+  "/images/website-workspace.webp": {
+    "width": 1086,
+    "height": 1448,
+    "avif": [
+      {
+        "width": 320,
+        "src": "/images/responsive/website-workspace-9466e54ff820-320.avif"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/website-workspace-9466e54ff820-480.avif"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/website-workspace-9466e54ff820-640.avif"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/website-workspace-9466e54ff820-960.avif"
+      },
+      {
+        "width": 1086,
+        "src": "/images/responsive/website-workspace-9466e54ff820-1086.avif"
+      }
+    ],
+    "webp": [
+      {
+        "width": 320,
+        "src": "/images/responsive/website-workspace-9466e54ff820-320.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/website-workspace-9466e54ff820-480.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/website-workspace-9466e54ff820-640.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/website-workspace-9466e54ff820-960.webp"
+      },
+      {
+        "width": 1086,
+        "src": "/images/responsive/website-workspace-9466e54ff820-1086.webp"
+      }
+    ]
+  },
+  "/images/campaign-workspace.webp": {
+    "width": 1536,
+    "height": 1024,
+    "avif": [
+      {
+        "width": 320,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-320.avif"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-480.avif"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-640.avif"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-960.avif"
+      },
+      {
+        "width": 1280,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-1280.avif"
+      },
+      {
+        "width": 1536,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-1536.avif"
+      }
+    ],
+    "webp": [
+      {
+        "width": 320,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-320.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-480.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-640.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-960.webp"
+      },
+      {
+        "width": 1280,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-1280.webp"
+      },
+      {
+        "width": 1536,
+        "src": "/images/responsive/campaign-workspace-3da1faadb0bc-1536.webp"
+      }
+    ]
+  },
+  "/images/content-studio.webp": {
+    "width": 1086,
+    "height": 1448,
+    "avif": [
+      {
+        "width": 320,
+        "src": "/images/responsive/content-studio-76875725983f-320.avif"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/content-studio-76875725983f-480.avif"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/content-studio-76875725983f-640.avif"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/content-studio-76875725983f-960.avif"
+      },
+      {
+        "width": 1086,
+        "src": "/images/responsive/content-studio-76875725983f-1086.avif"
+      }
+    ],
+    "webp": [
+      {
+        "width": 320,
+        "src": "/images/responsive/content-studio-76875725983f-320.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/content-studio-76875725983f-480.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/content-studio-76875725983f-640.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/content-studio-76875725983f-960.webp"
+      },
+      {
+        "width": 1086,
+        "src": "/images/responsive/content-studio-76875725983f-1086.webp"
+      }
+    ]
+  },
+  "/images/portfolio-hero.webp": {
+    "width": 1536,
+    "height": 1024,
+    "avif": [
+      {
+        "width": 320,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-320.avif"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-480.avif"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-640.avif"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-960.avif"
+      },
+      {
+        "width": 1280,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-1280.avif"
+      },
+      {
+        "width": 1536,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-1536.avif"
+      }
+    ],
+    "webp": [
+      {
+        "width": 320,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-320.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-480.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-640.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-960.webp"
+      },
+      {
+        "width": 1280,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-1280.webp"
+      },
+      {
+        "width": 1536,
+        "src": "/images/responsive/portfolio-hero-ef1ab320f8ad-1536.webp"
+      }
+    ]
+  },
+  "/images/magazine-hero.webp": {
+    "width": 1536,
+    "height": 1024,
+    "avif": [
+      {
+        "width": 320,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-320.avif"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-480.avif"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-640.avif"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-960.avif"
+      },
+      {
+        "width": 1280,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-1280.avif"
+      },
+      {
+        "width": 1536,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-1536.avif"
+      }
+    ],
+    "webp": [
+      {
+        "width": 320,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-320.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-480.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-640.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-960.webp"
+      },
+      {
+        "width": 1280,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-1280.webp"
+      },
+      {
+        "width": 1536,
+        "src": "/images/responsive/magazine-hero-5ab1741cb7cb-1536.webp"
+      }
+    ]
+  },
+  "/images/elita-social-logo-thin.webp": {
+    "width": 1200,
+    "height": 767,
+    "avif": [],
+    "webp": [
+      {
+        "width": 160,
+        "src": "/images/responsive/elita-social-logo-thin-129853feca53-160.webp"
+      },
+      {
+        "width": 240,
+        "src": "/images/responsive/elita-social-logo-thin-129853feca53-240.webp"
+      },
+      {
+        "width": 320,
+        "src": "/images/responsive/elita-social-logo-thin-129853feca53-320.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/elita-social-logo-thin-129853feca53-480.webp"
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "./site-image";
 import { useState } from "react";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";

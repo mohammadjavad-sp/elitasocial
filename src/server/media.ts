@@ -2,12 +2,16 @@ import "server-only";
 import { mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import sharp from "sharp";
 import type { CmsMedia } from "@/lib/cms-shared";
 import { cmsDataDirectory, getDatabase, mediaFromRow, mediaIsReferenced } from "./database";
 import { CmsError } from "./errors";
 import { text } from "./validation";
 
 export const maxUploadBytes = 8 * 1024 * 1024;
+const maxDecodedPixels = 40_000_000;
+const maxAnimationFrames = 100;
+let activeUploads = 0;
 function directory() { const result = path.join(cmsDataDirectory(), "media"); mkdirSync(result, { recursive: true, mode: 0o700 }); return result; }
 function validDimensions(width: number, height: number) {
   if (width < 1 || height < 1 || width > 16000 || height > 16000 || width * height > 40_000_000) throw new CmsError(400, "ابعاد تصویر بیش از حد مجاز است؛ تصویر را کوچک‌تر از ۴۰ مگاپیکسل و ۱۶۰۰۰ پیکسل در هر ضلع ذخیره کنید.");
@@ -70,13 +74,39 @@ function rasterType(buffer: Buffer): { extension: string; mime: string } {
 export async function uploadMedia(file: File, altValue: unknown): Promise<CmsMedia> {
   if (!file || file.size < 1 || file.size > maxUploadBytes) throw new CmsError(413, "حجم تصویر باید کمتر از ۸ مگابایت باشد.");
   const alt = text(altValue, "توضیح تصویر", 350);
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const type = rasterType(buffer);
+  if (activeUploads >= 2) throw new CmsError(503, "پردازش تصاویر شلوغ است؛ چند لحظهٔ دیگر دوباره تلاش کنید.");
+  activeUploads++;
+  try { return await persistMedia(file, alt); }
+  finally { activeUploads--; }
+}
+
+async function persistMedia(file: File, alt: string): Promise<CmsMedia> {
+  const input = Buffer.from(await file.arrayBuffer());
+  rasterType(input);
+  let buffer: Buffer;
+  try {
+    const options = { failOn: "warning" as const, limitInputPixels: maxDecodedPixels };
+    const metadata = await sharp(input, options).metadata();
+    if (!metadata.width || !metadata.height || !["png", "jpeg", "webp", "gif"].includes(metadata.format || "")) throw new Error("Unsupported raster");
+    const frames = metadata.pages || 1;
+    const frameHeight = metadata.pageHeight || metadata.height;
+    validDimensions(metadata.width, frameHeight);
+    if (frames > maxAnimationFrames || metadata.width * frameHeight * frames > maxDecodedPixels) throw new CmsError(400, "تصویر متحرک باید حداکثر ۱۰۰ فریم و مجموعاً کمتر از ۴۰ مگاپیکسل باشد.");
+    const image = sharp(input, { ...options, animated: frames > 1 });
+    // Full decoding rejects header-only/truncated files. Re-encoding also removes
+    // appended payloads and private EXIF data; metadata is not copied by default.
+    if (frames === 1) image.autoOrient();
+    buffer = await image.webp({ quality: 90, alphaQuality: 100, effort: 4 }).timeout({ seconds: 10 }).toBuffer();
+    if (buffer.length > maxUploadBytes) throw new CmsError(413, "حجم تصویر پس از پردازش بیش از ۸ مگابایت است؛ تصویر را کوچک‌تر ذخیره کنید.");
+  } catch (error) {
+    if (error instanceof CmsError) throw error;
+    throw new CmsError(400, "تصویر کامل و معتبر نیست یا پردازش آن بیش از حد طول کشید؛ دوباره آن را به‌صورت PNG، JPG، WebP یا GIF ذخیره کنید.");
+  }
   const id = randomUUID();
-  const filename = `${id}.${type.extension}`;
+  const filename = `${id}.webp`;
   const target = path.join(directory(), filename);
   const temporary = `${target}.tmp`;
-  const item: CmsMedia = { id, filename, url: `/api/cms/files/${filename}`, alt, mimeType: type.mime, size: buffer.length, createdAt: new Date().toISOString() };
+  const item: CmsMedia = { id, filename, url: `/api/cms/files/${filename}`, alt, mimeType: "image/webp", size: buffer.length, createdAt: new Date().toISOString() };
   try {
     writeFileSync(temporary, buffer, { flag: "wx", mode: 0o600 });
     renameSync(temporary, target);
