@@ -49,17 +49,18 @@ Constraints: no people, faces, brands, logos, readable letters or numbers, water
 - File: `public/images/elita-social-logo.webp`
 - Original site icon: the 512 × 512 px wordmark was later replaced by the minimal favicon described below.
 
-### Current minimal favicon
+### Current favicon — the original logo's first e
 
-- Design: one white, rounded lowercase `e` on a lilac rounded tile, `#A184C4`. No shadow, gradient or extra ornament.
-- Editable vector: `src/app/icon.svg`; 32 × 32 px PNG fallback: `src/app/icon.png`; Apple home-screen icon: `src/app/apple-icon.png`, 180 × 180 px.
-- Drawn directly as SVG and rasterized with Sharp. Inspected at 16 and 32 px on light and dark backgrounds. The full site wordmark remains unchanged.
+- The letter is cut directly from `public/images/elita-social-logo-thin.webp`: left 8, top 204, width 390, height 426 on the 1200 × 767 source. This excludes the following `l` and the SOCIAL subtitle. The source wordmark is untouched.
+- `src/app/icon.svg` embeds the crop's original alpha pixels as a PNG mask, centered in a 480 × 480 transparent canvas. A narrow clip excludes faint antialiasing from the neighboring `l` in the last two columns, retaining those columns at the e's terminal (source y=490–525). The letter's contours are preserved rather than traced or replaced with another font. Foreground is the previously selected light purple `#A184C4`; dark browser themes use `#DFC3F3`. There is no tile, border or shadow.
+- PNG fallback: `src/app/icon.png`, 32 × 32 px; Apple home-screen icon: `src/app/apple-icon.png`, 180 × 180 px, with a white background for the platform.
+- Reproduce with `node scripts/prepare-favicon.mjs`. The generator checks that the mask bytes equal the original crop's alpha and verifies the PNG dimensions. Next's file-based icon conventions update the image references automatically.
 
 ### Transparent dark-mode wordmark
 
 - Asset: `public/images/elita-social-logo-dark.svg`, pale lilac `#DFC3F3`, 1200 × 767 px.
 - The original thin wordmark's alpha channel is embedded as a grayscale PNG mask in the SVG. The visible silhouette and transparency are identical to the light logo; only the foreground color changes. No pink backing or image filter is applied.
-- The shared component switches the visible asset with theme CSS in the header, footer and admin. The original light wordmark and favicon are unchanged.
+- The shared component switches the visible asset with theme CSS in the header, footer and admin. The original light wordmark is unchanged; the favicon is maintained separately as described above.
 - Edit target supplied by the user: `C:/Users/Mohamad Javad/Downloads/IMG_7115.PNG` (171 × 109 px, transparent).
 - Generated source: `C:/Users/Mohamad Javad/.codex/generated_images/01a17225-0847-7ac3-92b2-d6edec544ff6/exec-a5894d86-92c2-49f0-ad60-6d4214289107.png`.
 - Initial output: 1200 × 767 px, lossless WebP with transparent alpha, 58982 bytes. The thinner version below is now used on the website under a new filename.
