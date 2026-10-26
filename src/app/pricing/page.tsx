@@ -7,13 +7,16 @@ import { getNavigation } from "@/content/home";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
+import { createPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { home: { brand } } = await getSiteSettings();
-  return {
+  return createPageMetadata({
     title: `پلن‌ها و قیمت‌ها | ${brand.name}`,
     description: `پلن‌های مدیریت اینستاگرام، طراحی وب‌سایت و سئو و پشتیبانی ${brand.name} را همراه با امکانات، دوره و هزینه مقایسه کنید و برای همکاری مشاوره بگیرید.`,
-  };
+    path: "/pricing/",
+    siteName: brand.name,
+  });
 }
 
 export default async function PricingPage() {

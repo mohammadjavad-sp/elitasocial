@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { AboutSection, ServicesSection } from "@/components/home-sections";
@@ -11,6 +12,17 @@ import { SiteFooter } from "@/components/site-footer";
 import { getNavigation } from "@/content/home";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
+import { createPageMetadata } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo, home: { brand } } = await getSiteSettings();
+  return createPageMetadata({
+    title: seo.title,
+    description: seo.description,
+    path: "/",
+    siteName: brand.name,
+  });
+}
 
 export default async function Home() {
   const [content, settings] = await Promise.all([getCmsContent(), getSiteSettings()]);

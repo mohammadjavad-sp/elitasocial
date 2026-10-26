@@ -11,6 +11,7 @@ import { sitePath } from "@/lib/site-path";
 import { serviceContactHref, servicePricingHref } from "@/lib/service-selection";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
+import { createPageMetadata } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -20,7 +21,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const [{ services }, { home: { brand } }] = await Promise.all([getCmsContent(), getSiteSettings()]);
   const service = services.find(item => item.slug === slug);
-  return service ? { title: `${service.title} | ${brand.name}`, description: service.intro } : { title: `خدمت پیدا نشد | ${brand.name}` };
+  if (!service) notFound();
+  return createPageMetadata({
+    title: `${service.title} | ${brand.name}`,
+    description: service.intro,
+    path: `/services/${service.slug}/`,
+    siteName: brand.name,
+    image: service.image,
+  });
 }
 
 export default async function ServiceDetailPage({ params }: PageProps) {

@@ -9,10 +9,16 @@ import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
 import { ContactChannels } from "@/components/contact-channels";
+import { createPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { home: { brand } } = await getSiteSettings();
-  return { title: `نمونه‌کارها و ایده‌های طراحی | ${brand.name}`, description: "گالری نمونه‌کارهای طراحی سایت، مدیریت اینستاگرام و تولید محتوا در الیتا سوشیال. سبک مناسب برندتان را پیدا کنید." };
+  return createPageMetadata({
+    title: `نمونه‌کارها و ایده‌های طراحی | ${brand.name}`,
+    description: "گالری نمونه‌کارهای طراحی سایت، مدیریت اینستاگرام و تولید محتوا در الیتا سوشیال. سبک مناسب برندتان را پیدا کنید.",
+    path: "/portfolio/",
+    siteName: brand.name,
+  });
 }
 
 export default async function PortfolioPage() {

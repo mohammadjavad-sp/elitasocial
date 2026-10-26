@@ -20,6 +20,8 @@ jobs:
     env:
       DEPLOY_TARGET: github-pages
       NEXT_PUBLIC_BASE_PATH: /elitasocial
+      SITE_URL: https://mohammadjavad-sp.github.io
+      SITE_INDEXING: "false"
       NEXT_TELEMETRY_DISABLED: "1"
     steps:
       - name: Checkout

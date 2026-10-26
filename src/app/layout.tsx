@@ -6,6 +6,7 @@ import { SitePreloader } from "@/components/site-preloader";
 import { ThemeProvider } from "@/components/theme-provider";
 import { themeBootstrapScript } from "@/lib/theme";
 import { preloaderBootstrapScript } from "@/lib/preloader";
+import { getSeoConfig, indexingMetadata } from "@/lib/seo";
 import "./globals.css";
 import "./sections.css";
 import "./portfolio.css";
@@ -33,11 +34,11 @@ const estedad = localFont({ src: "../../public/fonts/Estedad-Variable.woff2", va
 export async function generateMetadata(): Promise<Metadata> {
   const { seo, home: { brand } } = await getSiteSettings();
   return {
+    metadataBase: getSeoConfig().siteUrl,
     title: seo.title,
     description: seo.description,
     applicationName: brand.latinName,
-    robots: { index: false, follow: false },
-    openGraph: { title: seo.title, description: seo.description, locale: "fa_IR", type: "website" },
+    robots: indexingMetadata(),
   };
 }
 

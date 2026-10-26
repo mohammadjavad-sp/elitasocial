@@ -12,6 +12,7 @@ import { serviceContactHref } from "@/lib/service-selection";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
+import { createPageMetadata } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -23,12 +24,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const [{ articles }, { home: { brand } }] = await Promise.all([getCmsContent(), getSiteSettings()]);
   const article = getArticle(slug, articles);
-  if (!article) return { title: `مقاله پیدا نشد | ${brand.name}` };
-  return {
+  if (!article || !getArticleCategory(article.category)) notFound();
+  return createPageMetadata({
     title: `${article.title} | مجلهٔ ${brand.name}`,
     description: article.excerpt,
-    openGraph: { type: "article", title: article.title, description: article.excerpt, locale: "fa_IR", siteName: brand.name },
-  };
+    path: `/blog/${article.slug}/`,
+    siteName: brand.name,
+    image: article.image,
+    type: "article",
+    author: article.author,
+  });
 }
 
 export default async function ArticlePage({ params }: PageProps) {

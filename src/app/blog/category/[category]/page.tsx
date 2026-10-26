@@ -10,6 +10,7 @@ import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
 import { toArticlePreview } from "@/lib/article-preview";
+import { createPageMetadata } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ category: string }> };
 
@@ -19,7 +20,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { category: slug } = await params;
   const { home: { brand } } = await getSiteSettings();
   const category = getArticleCategory(slug);
-  return category ? { title: `${category.label} | مجلهٔ ${brand.name}`, description: category.description } : { title: `موضوع پیدا نشد | مجلهٔ ${brand.name}` };
+  if (!category) notFound();
+  return createPageMetadata({
+    title: `${category.label} | مجلهٔ ${brand.name}`,
+    description: category.description,
+    path: `/blog/category/${category.slug}/`,
+    siteName: brand.name,
+  });
 }
 
 export default async function MagazineCategoryPage({ params }: PageProps) {

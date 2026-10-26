@@ -8,13 +8,16 @@ import { getNavigation } from "@/content/home";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
+import { createPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { home: { brand } } = await getSiteSettings();
-  return {
+  return createPageMetadata({
     title: `خدمات دیجیتال مارکتینگ | ${brand.name}`,
     description: "مدیریت اینستاگرام، طراحی وب‌سایت، تولید محتوا و سئو؛ با خدمات الیتا سوشیال، خروجی‌ها و مراحل همکاری آشنا شوید.",
-  };
+    path: "/services/",
+    siteName: brand.name,
+  });
 }
 
 export default async function ServicesPage() {

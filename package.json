@@ -15,6 +15,7 @@
     "check:ui": "node scripts/check-ui.mjs",
     "check:portfolio": "node scripts/check-portfolio.mjs",
     "check:security": "node --conditions=react-server --import tsx --test scripts/check-cms-security.test.ts scripts/check-consultation-email.test.ts",
+    "check:seo": "node --conditions=react-server --import tsx --test scripts/check-seo.test.ts scripts/check-seo-discovery.test.ts",
     "cms:init": "node --conditions=react-server --import tsx scripts/cms-init.ts",
     "cms:backup": "node --conditions=react-server --import tsx scripts/cms-backup.ts",
     "cms:migrate": "node --conditions=react-server --import tsx scripts/cms-migrate.ts"

@@ -10,13 +10,16 @@ import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
 import { toArticlePreview } from "@/lib/article-preview";
+import { createPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { home: { brand } } = await getSiteSettings();
-  return {
+  return createPageMetadata({
     title: `مجلهٔ ${brand.name} | راهنمای محتوا، طراحی سایت و حضور دیجیتال`,
     description: "یادداشت‌های کاربردی الیتا دربارهٔ مدیریت اینستاگرام، طراحی وب‌سایت، تولید محتوا و سئو. موضوع دلخواهت را پیدا کن و قدم بعدی برندت را روشن‌تر بردار.",
-  };
+    path: "/blog/",
+    siteName: brand.name,
+  });
 }
 
 export default async function MagazinePage() {
