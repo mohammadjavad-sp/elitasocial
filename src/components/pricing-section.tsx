@@ -9,6 +9,11 @@ import { useSiteSettings } from "./site-settings-provider";
 
 const priceFormatter = new Intl.NumberFormat("fa-IR");
 
+function formatPrice(value: number) {
+  // Keep Persian digits, using Peyda's baseline comma for thousands groups.
+  return priceFormatter.formatToParts(value).map(part => part.type === "group" ? "," : part.value).join("");
+}
+
 export function PricingSection({ pricing = pricingContent, variant = "home" }: { pricing?: PricingContent; variant?: "home" | "page" }) {
   const { sections } = useSiteSettings();
   const [categoryId, setCategoryId] = useState("instagram");
@@ -46,7 +51,7 @@ export function PricingSection({ pricing = pricingContent, variant = "home" }: {
         {plans.map(plan => <article key={plan.id} className={`pricing-card${plan.recommended ? " pricing-recommended" : ""}`}>
           <div className="plan-badges">{plan.recommended && <span className="plan-recommended-label">پیشنهادی</span>}</div>
           <h3>{plan.name}</h3><p className="plan-description">{plan.description}</p>
-          <div className="plan-price"><data value={plan.price}>{priceFormatter.format(plan.price)}</data><span>{plan.currency}<small>{plan.period}</small></span></div>
+          <div className="plan-price"><data value={plan.price} dir="ltr">{formatPrice(plan.price)}</data><span>{plan.currency}<small>{plan.period}</small></span></div>
           <ul>{plan.features.map(feature => <li key={feature}><svg viewBox="0 0 20 20" aria-hidden="true" fill="none"><path d="m4 10 4 4 8-8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>{feature}</li>)}</ul>
           <a className={`pill-button ${plan.recommended ? "" : "secondary-button"}`} href={planContactHref(category.id, plan.id)}>مشاوره دربارهٔ این پلن<span className="button-circle"><Icon name="arrow" /></span></a>
         </article>)}
