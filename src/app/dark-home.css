@@ -1,0 +1,111 @@
+/* The dark canvas keeps Elita's lilac artwork, with quieter colour blooms. */
+html[data-theme="dark"] .home-shell {
+  background:
+    linear-gradient(to bottom, transparent 68%, var(--background) 100%),
+    radial-gradient(ellipse 540px 450px at -4% 9%, rgb(var(--color-tertiary-rgb) / .16), transparent 76%),
+    radial-gradient(ellipse 550px 570px at 105% 32%, rgb(var(--color-secondary-rgb) / .19), transparent 77%),
+    radial-gradient(ellipse 560px 380px at 8% 89%, rgb(var(--color-quaternary-rgb) / .09), transparent 76%),
+    var(--background);
+  background-size: 100% 1100px;
+  background-repeat: no-repeat;
+}
+
+html[data-theme="dark"] .home-continuation::before { opacity: .2; }
+
+/* A light backing preserves the original fine logo without altering its pixels. */
+html[data-theme="dark"] .brand-logo {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--color-quaternary);
+}
+
+html[data-theme="dark"] :is(.desktop-nav > a:hover, .desktop-nav > a[aria-current]) { color: var(--accent-text); }
+html[data-theme="dark"] .desktop-nav > a[aria-current]::after { background: var(--accent-text); }
+html[data-theme="dark"] .menu-toggle { color: var(--accent-text); background: var(--surface); }
+html[data-theme="dark"] .mobile-panel { background: var(--surface); box-shadow: 0 18px 45px #0005; }
+html[data-theme="dark"] .mobile-panel nav > a:hover { background: var(--surface-soft); }
+html[data-theme="dark"] .mobile-contact { color: var(--accent-text); }
+html[data-theme="dark"] .mobile-contact-options { border-color: var(--line); }
+
+html[data-theme="dark"] .secondary-button { color: var(--accent-text); border-color: var(--color-secondary); box-shadow: 0 3px 0 var(--color-secondary); }
+html[data-theme="dark"] .secondary-button:hover { color: var(--ink); background: var(--surface-soft); border-color: var(--accent-text); }
+html[data-theme="dark"] .hero-socials a:hover { color: var(--accent-text); background: var(--surface-soft); }
+html[data-theme="dark"] .portrait-halo > div { background: rgb(var(--color-quaternary-rgb) / .07); }
+html[data-theme="dark"] .portrait-halo > div:nth-child(2) { background: rgb(var(--color-quaternary-rgb) / .07); }
+html[data-theme="dark"] .portrait-halo > div:nth-child(3) { background: linear-gradient(155deg, rgb(var(--color-tertiary-rgb) / .16), rgb(var(--color-secondary-rgb) / .22)); }
+html[data-theme="dark"] .service-card { background: var(--surface); border-color: var(--line); box-shadow: 0 7px 28px #0004; }
+html[data-theme="dark"] .service-card strong { color: var(--ink); }
+html[data-theme="dark"] .service-icon { color: var(--accent-text); background: var(--surface-soft); }
+html[data-theme="dark"] :is(.about-seal, .about-photo-caption strong) { color: var(--accent-text); }
+
+/* These four pastel panels intentionally retain their original light artwork. */
+html[data-theme="dark"] .offering-card { color-scheme: light; }
+html[data-theme="dark"] .offering-card h3 { color: #151326; }
+html[data-theme="dark"] .offering-card > p { color: #3e3547; }
+html[data-theme="dark"] .offering-card > a { color: #3c285c; }
+html[data-theme="dark"] .offering-card > a:focus-visible { outline-color: var(--color-primary); }
+
+/* Brand-coloured photo captions and value cards keep their own light/dark roles. */
+html[data-theme="dark"] :is(.approach-feature, .benefit-panel, .contact-info, .footer-cta-band) { color: #fff; }
+html[data-theme="dark"] :is(.approach-value h3, .approach-value p) { color: var(--ink-on-accent); }
+html[data-theme="dark"] .contact-form-panel { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] .contact-form label { color: var(--ink); }
+html[data-theme="dark"] .contact-form :is(input, select, textarea) {
+  color: var(--ink);
+  background: var(--background);
+  border-color: var(--color-secondary);
+}
+html[data-theme="dark"] .contact-form :is(input, textarea)::placeholder { color: var(--muted); opacity: 1; }
+html[data-theme="dark"] .contact-form select option { color: var(--ink); background: var(--surface); }
+html[data-theme="dark"] .contact-prepared { background: #1b352b; border-color: #56836b; }
+html[data-theme="dark"] .contact-prepared :is(p, a) { color: #c5f1d9; }
+html[data-theme="dark"] .contact-request-error { background: #3b242d; border-color: #af788b; }
+html[data-theme="dark"] .contact-request-error :is(p, a) { color: #ffd1df; }
+html[data-theme="dark"] .contact-prepared .pill-button { color: #fff; }
+html[data-theme="dark"] .contact-new-request { color: var(--accent-text); }
+html[data-theme="dark"] .contact-new-request:hover { color: var(--ink); }
+html[data-theme="dark"] .contact-new-request:focus-visible { outline-color: var(--focus-ring); }
+
+/* Labelled platform links stay distinguishable on both dark and purple panels. */
+html[data-theme="dark"] .contact-channels .contact-channel-link {
+  --channel-color: var(--accent-text);
+  color: var(--ink);
+  background: var(--surface);
+  border-color: var(--line);
+}
+html[data-theme="dark"] .contact-channels a.contact-channel-link:hover { color: var(--ink); background: var(--surface-soft); border-color: var(--color-secondary); }
+html[data-theme="dark"] .contact-channels .contact-channel-pending { color: var(--muted); background: var(--surface-soft); }
+html[data-theme="dark"] .contact-channels .contact-channel-link:focus-visible { outline-color: var(--focus-ring); }
+html[data-theme="dark"] .contact-channels-light .contact-channel-link {
+  --channel-color: var(--color-primary);
+  color: #fff;
+  background: #ffffff14;
+  border-color: #ffffff55;
+}
+html[data-theme="dark"] .contact-channels-light a.contact-channel-link:hover { color: #fff; background: #ffffff28; border-color: #ffffffa3; }
+html[data-theme="dark"] .contact-channels-light .contact-channel-pending { color: #fff; background: #ffffff08; border-color: #ffffff40; }
+html[data-theme="dark"] .contact-channels-light .contact-channel-link:focus-visible { outline-color: #fff; }
+html[data-theme="dark"] .contact-chooser-panel { background: var(--surface); border-color: var(--line); box-shadow: 0 14px 38px #0006; }
+html[data-theme="dark"] .contact-chooser-panel > p { color: var(--ink); }
+
+html[data-theme="dark"] .footer-links > a:hover { color: var(--accent-text); }
+html[data-theme="dark"] :is(.footer-contact > a, .footer-bottom > a) { color: var(--accent-text); }
+html[data-theme="dark"] .footer-socials > a { color: var(--accent-text); background: var(--surface-soft); }
+html[data-theme="dark"] .footer-socials > a:hover { color: var(--ink); background: var(--surface); }
+
+html[data-theme="dark"] .site-preloader { color: var(--ink); }
+html[data-theme="dark"] .preloader-backdrop { opacity: .35; }
+html[data-theme="dark"] .preloader-satellite-three { color: var(--color-primary); }
+
+@media (max-width: 599px) {
+  html[data-theme="dark"] .home-shell {
+    background:
+      linear-gradient(to bottom, transparent 67%, var(--background) 100%),
+      radial-gradient(ellipse 290px 400px at -12% 16%, rgb(var(--color-tertiary-rgb) / .14), transparent 78%),
+      radial-gradient(ellipse 290px 380px at 115% 40%, rgb(var(--color-secondary-rgb) / .19), transparent 78%),
+      radial-gradient(ellipse 310px 320px at 0% 91%, rgb(var(--color-quaternary-rgb) / .09), transparent 78%),
+      var(--background);
+    background-size: 100% 1150px;
+    background-repeat: no-repeat;
+  }
+}

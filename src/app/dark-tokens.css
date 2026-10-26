@@ -1,0 +1,17 @@
+:root { color-scheme: light; }
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #18131f;
+  --surface: #221b2b;
+  --surface-soft: #2c2336;
+  --ink: #f5edf9;
+  --muted: #c4b6ce;
+  --line: #534261;
+  --accent-text: #dfc3f3;
+  --focus-ring: #dfc3f3;
+  --lavender: #33273e;
+}
+
+html[data-theme="dark"] ::selection { background: #694f8d; color: #fff; }
+html[data-theme="dark"] :focus-visible { outline-color: var(--focus-ring); }

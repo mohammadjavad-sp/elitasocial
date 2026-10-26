@@ -8,6 +8,7 @@ import { useSiteSettings } from "./site-settings-provider";
 import { BrandLogo } from "./brand-logo";
 import { ContactChannels } from "./contact-channels";
 import { ContactChooser } from "./contact-chooser";
+import { ThemeToggle } from "./theme-toggle";
 
 type ActivePage = "home" | "portfolio" | "services" | "blog" | "pricing";
 type Props = { navigation: NavigationItem[]; whatsapp?: string; activePage?: ActivePage };
@@ -55,11 +56,14 @@ export function Header({ navigation, activePage = "home" }: Props) {
           <BrandLogo name={brand.name} priority />
         </a>
         <nav className="desktop-nav" aria-label="منوی اصلی"><NavigationLinks items={navigation} activePage={activePage} /></nav>
+        <div className="header-actions">
+        <ThemeToggle />
         <ContactChooser contact={contact} label={header.ctaLabel} className="header-cta" />
         <button className="menu-toggle" ref={toggle} type="button" aria-expanded={open} aria-controls="mobile-navigation"
           aria-label={open ? "بستن منو" : "باز کردن منو"} onClick={() => setOpen(!open)}>
           <Icon name={open ? "close" : "menu"} />
         </button>
+        </div>
       </div>
       <div className="mobile-panel container" id="mobile-navigation" ref={panel} hidden={!open}>
         <nav aria-label="منوی موبایل"><NavigationLinks items={navigation} activePage={activePage} onNavigate={() => setOpen(false)} /></nav>

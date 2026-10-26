@@ -1,0 +1,273 @@
+/* Page surfaces follow the selected theme; illustrations keep their own palette. */
+html[data-theme="dark"] :is(.portfolio-card, .article-card, .pricing-card) {
+  background: var(--surface);
+}
+
+html[data-theme="dark"] :is(.portfolio-invitation, .magazine-featured, .magazine-empty, .article-takeaway, .article-consultation, .article-toc-mobile, .service-process-band, .service-audience, .service-plan-invitation) {
+  background: var(--surface-soft);
+}
+
+html[data-theme="dark"] :is(.portfolio-demo-notice, .project-demo, .project-dialog-notice, .magazine-demo-notice, .article-draft-notice, .article-tags a, .article-category-label) {
+  background: var(--surface-soft);
+}
+
+html[data-theme="dark"] :is(.portfolio-all-link, .portfolio-breadcrumb a, .portfolio-heading-mark, .project-detail-label, .project-card-arrow, .project-dialog-category, .editorial-hero-kicker, .editorial-hero-text-link) {
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] .project-close {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+html[data-theme="dark"] :is(.project-dialog, .admin-delete-dialog, .admin-consultation-dialog)::backdrop {
+  background: rgb(10 7 15 / .78);
+}
+
+html[data-theme="dark"] .portfolio-filters button:hover:not([aria-pressed="true"]) {
+  color: var(--accent-text);
+}
+
+/* The hero's browser preview, stamp and paper remain small, light art accents. */
+html[data-theme="dark"] .editorial-hero-seal {
+  color: var(--color-primary);
+  outline-color: var(--surface-soft);
+}
+
+html[data-theme="dark"] .magazine-hero-note {
+  color: var(--color-primary);
+}
+
+html[data-theme="dark"] .magazine-hero-note > span:not(.magazine-note-fold):not(.magazine-note-rule) {
+  color: #5c5c70;
+}
+
+html[data-theme="dark"] .magazine-note-fold {
+  background: linear-gradient(135deg, var(--color-quaternary) 50%, #fff7fc 51%);
+}
+
+/* Plans retain the brand-colored selected state and white button text. */
+html[data-theme="dark"] .pricing-recommended {
+  background: #30233e;
+  border-color: var(--color-secondary);
+}
+
+html[data-theme="dark"] :is(.plan-price data, .plan-price > span, .pricing-card li, .pricing-card li svg, .pricing-choice-steps h3, .pricing-questions-list summary) {
+  color: var(--ink);
+}
+
+html[data-theme="dark"] :is(.pricing-card li svg, .pricing-choice-steps li > span, .pricing-questions-list summary > span:last-child) {
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] :is(.pricing-choice-steps li > span, .pricing-questions-list summary > span:last-child) {
+  background: var(--surface-soft);
+}
+
+html[data-theme="dark"] .pricing-page-cta {
+  background: linear-gradient(120deg, var(--surface-soft), var(--surface));
+}
+
+html[data-theme="dark"] .pricing-visual-card-front {
+  background: linear-gradient(150deg, var(--surface), var(--surface-soft));
+  border-color: var(--line);
+  box-shadow: 0 15px 40px rgb(0 0 0 / .2), 0 0 0 1px var(--line);
+}
+
+html[data-theme="dark"] :is(.pricing-visual-tag, .pricing-visual-card-front > strong, .pricing-visual-service) {
+  color: var(--ink);
+}
+
+/* Service artwork and pastel catalog cards remain intentionally light. */
+html[data-theme="dark"] :is(.service-catalog-card, .service-related-card) {
+  --service-wash: #f5e8f7;
+  color: var(--ink-on-accent);
+}
+
+html[data-theme="dark"] :is(.service-catalog-card, .service-related-card).service-theme-pink {
+  --service-wash: var(--color-quaternary);
+}
+
+html[data-theme="dark"] :is(.service-catalog-card, .service-related-card).service-theme-lilac {
+  --service-wash: var(--color-tertiary);
+}
+
+html[data-theme="dark"] :is(.service-catalog-card, .service-related-card).service-theme-mint {
+  --service-wash: #e8e4ef;
+}
+
+html[data-theme="dark"] :is(.service-catalog-card, .service-related-card) .service-text-link {
+  color: var(--ink-on-accent);
+}
+
+html[data-theme="dark"] .service-related-card > span {
+  color: var(--color-primary);
+}
+
+html[data-theme="dark"] :is(.service-visual-note strong, .service-visual-note > svg, .service-kicker, .service-text-link, .service-deliverable-number, .service-detail-steps li > span, .service-intro-steps li > span, .service-faq-list summary > span) {
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] :is(.service-audience p, .service-plan-invitation > div > p:not(.service-kicker)) {
+  color: var(--muted);
+}
+
+html[data-theme="dark"] .service-audience > svg {
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] :is(.service-breadcrumb a:hover, .service-page-index > a:hover) {
+  color: var(--accent-text);
+}
+
+/* Magazine controls and reading surfaces. */
+html[data-theme="dark"] .magazine-shell {
+  background: radial-gradient(ellipse at 8% 9%, rgb(var(--color-secondary-rgb) / .13), transparent 28%), radial-gradient(ellipse at 95% 20%, rgb(var(--color-tertiary-rgb) / .07), transparent 30%), var(--background);
+}
+
+html[data-theme="dark"] .magazine-category-link {
+  background: var(--surface);
+}
+
+html[data-theme="dark"] .magazine-category-link:hover {
+  background: var(--surface-soft);
+}
+
+html[data-theme="dark"] .magazine-category-link[aria-current="page"] {
+  outline-color: var(--focus-ring);
+}
+
+html[data-theme="dark"] :is(.magazine-category-link svg, .magazine-search-row label, .article-card-meta > a, .article-card-read, .article-category-label, .article-back-to-magazine, .article-draft-notice > svg, .article-draft-notice strong, .article-takeaway h2, .article-related-heading > a) {
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] :is(.magazine-search-input, .magazine-sort-field select, .magazine-pagination > button, .article-url-fallback input) {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+html[data-theme="dark"] .article-sample-badge {
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+html[data-theme="dark"] .magazine-search-input:focus-within {
+  outline-color: var(--focus-ring);
+}
+
+html[data-theme="dark"] .magazine-filters > button:hover:not([aria-pressed="true"]) {
+  background: var(--surface-soft);
+  color: var(--ink);
+}
+
+html[data-theme="dark"] .magazine-pagination > button[aria-current="page"] {
+  background: var(--purple);
+  color: white;
+}
+
+html[data-theme="dark"] .magazine-pagination > button:hover:not(:disabled):not([aria-current="page"]) {
+  color: var(--accent-text);
+  border-color: var(--color-secondary);
+}
+
+html[data-theme="dark"] .magazine-empty > button {
+  color: var(--accent-text);
+  border-color: var(--color-secondary);
+}
+
+html[data-theme="dark"] :is(.magazine-breadcrumb a:hover, .article-breadcrumb a:hover, .article-card-copy h3 a:hover, .article-toc-desktop li a:hover, .article-toc-mobile li a:hover) {
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] :is(.article-prose, .article-neighbors strong, .article-neighbors svg, .article-action-buttons button, .article-toc-mobile summary > span) {
+  color: var(--ink);
+}
+
+html[data-theme="dark"] .article-prose li::marker {
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] :is(.article-action-buttons button:hover, .article-tags a:hover, .article-neighbors > a:hover) {
+  background: var(--surface-soft);
+  color: var(--accent-text);
+}
+
+/* Administration uses the same saved appearance, including dialogs and forms. */
+html[data-theme="dark"] :is(.admin-shell, .admin-access) {
+  --admin-soft: var(--surface-soft);
+  --admin-danger: #ffacbc;
+}
+
+html[data-theme="dark"] .admin-shell {
+  background: var(--background);
+}
+
+html[data-theme="dark"] .admin-access {
+  background: radial-gradient(ellipse at 20% 15%, rgb(var(--color-secondary-rgb) / .18), transparent 55%), var(--background);
+}
+
+html[data-theme="dark"] :is(.admin-sidebar, .admin-topbar, .admin-access-card, .admin-stats > button, .admin-list-tools, .admin-field input, .admin-field select, .admin-field textarea, .admin-empty, .admin-record, .admin-delete-dialog, .admin-editor form, .admin-repeat-toolbar button, .admin-upload, .admin-media-card, .admin-account, .admin-settings-navigation, .admin-settings-layout > form, .admin-consultation-filters > button, .admin-consultation-search, .admin-consultation-card, .admin-consultation-dialog) {
+  background: var(--surface);
+}
+
+html[data-theme="dark"] :is(.admin-guidance, .admin-consultation-plan, .admin-status-draft, .admin-consultation-count, .admin-consultation-status-new, .admin-consultation-status-contacted, .admin-consultation-status-archived) {
+  background: var(--surface-soft);
+}
+
+html[data-theme="dark"] :is(.admin-brand, .admin-sidebar-bottom > a, .admin-topbar > a, .admin-text-link, .admin-stats strong, .admin-field > label, .admin-field > span, .admin-repeat-toolbar strong, .admin-repeat-toolbar button, .admin-empty h3, .admin-consultation-card-meta a, .admin-consultation-status-new, .admin-consultation-status-contacted) {
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] :is(.admin-guidance > p, .admin-media-picker > button) {
+  color: var(--ink);
+}
+
+html[data-theme="dark"] :is(.admin-sidebar nav button:hover, .admin-sidebar nav button[aria-current], .admin-settings-navigation button:hover, .admin-settings-navigation button[aria-current], .admin-consultation-filters > button[aria-pressed="true"]) {
+  background: var(--surface-soft);
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] .admin-secondary {
+  background: var(--surface);
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] .admin-secondary:hover {
+  background: var(--surface-soft);
+  border-color: var(--color-secondary);
+}
+
+html[data-theme="dark"] .admin-field input::file-selector-button {
+  background: var(--surface-soft);
+  color: var(--accent-text);
+}
+
+html[data-theme="dark"] :is(.admin-shell input, .admin-shell textarea, .admin-shell select, .admin-access input):focus-visible {
+  outline-color: var(--focus-ring);
+  border-color: var(--focus-ring);
+}
+
+html[data-theme="dark"] :is(.admin-field input, .admin-field textarea)::placeholder {
+  color: var(--muted);
+}
+
+html[data-theme="dark"] :is(.admin-status-published, .admin-success, .admin-consultation-status-completed) {
+  color: #a8e7c5;
+  background: #18392d;
+  border-color: #387657;
+}
+
+html[data-theme="dark"] .admin-mock {
+  color: #f3d28f;
+  background: #443418;
+}
+
+html[data-theme="dark"] .admin-error {
+  color: #ffc1cd;
+  background: #482430;
+  border-color: #925067;
+}
+
+html[data-theme="dark"] .admin-danger-text {
+  color: var(--admin-danger, #ffacbc) !important;
+}
