@@ -78,30 +78,44 @@ html[data-theme="dark"] :is(.pricing-visual-tag, .pricing-visual-card-front > st
   color: var(--ink);
 }
 
-/* Service artwork and pastel catalog cards remain intentionally light. */
+/* Catalog and related cards use the same muted service palette as the home page. */
 html[data-theme="dark"] :is(.service-catalog-card, .service-related-card) {
-  --service-wash: #f5e8f7;
-  color: var(--ink-on-accent);
+  color: var(--service-heading);
+  box-shadow: inset 0 0 0 1px var(--service-border);
 }
 
-html[data-theme="dark"] :is(.service-catalog-card, .service-related-card).service-theme-pink {
-  --service-wash: var(--color-quaternary);
+html[data-theme="dark"] .service-catalog-body > p {
+  color: var(--service-copy);
 }
 
-html[data-theme="dark"] :is(.service-catalog-card, .service-related-card).service-theme-lilac {
-  --service-wash: var(--color-tertiary);
+html[data-theme="dark"] .service-catalog-body h3 a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
-html[data-theme="dark"] :is(.service-catalog-card, .service-related-card).service-theme-mint {
-  --service-wash: #e8e4ef;
+html[data-theme="dark"] :is(.service-catalog-card .service-item-number, .service-catalog-card .service-text-link, .service-related-card > span) {
+  color: var(--service-art);
 }
 
-html[data-theme="dark"] :is(.service-catalog-card, .service-related-card) .service-text-link {
-  color: var(--ink-on-accent);
+html[data-theme="dark"] :is(.service-catalog-body h3 a:hover, .service-related-card:hover h3) {
+  color: var(--service-art);
 }
 
-html[data-theme="dark"] .service-related-card > span {
-  color: var(--color-primary);
+html[data-theme="dark"] .service-detail-art {
+  background: var(--service-wash);
+  border-color: var(--service-border);
+  box-shadow: 0 7px 25px #0003;
+}
+
+html[data-theme="dark"] .service-detail-image-label {
+  color: var(--service-heading);
+  background: var(--surface);
+  border: 1px solid var(--service-border);
+}
+
+html[data-theme="dark"] :is(.service-catalog-card a, .service-related-card):focus-visible {
+  outline-color: var(--focus-ring);
 }
 
 html[data-theme="dark"] :is(.service-visual-note strong, .service-visual-note > svg, .service-kicker, .service-text-link, .service-deliverable-number, .service-detail-steps li > span, .service-intro-steps li > span, .service-faq-list summary > span) {

@@ -52,6 +52,12 @@ Constraints: no people, faces, brands, logos, readable letters or numbers, water
 - Design: one white, rounded lowercase `e` on a lilac rounded tile, `#A184C4`. No shadow, gradient or extra ornament.
 - Editable vector: `src/app/icon.svg`; 32 × 32 px PNG fallback: `src/app/icon.png`; Apple home-screen icon: `src/app/apple-icon.png`, 180 × 180 px.
 - Drawn directly as SVG and rasterized with Sharp. Inspected at 16 and 32 px on light and dark backgrounds. The full site wordmark remains unchanged.
+
+### Transparent dark-mode wordmark
+
+- Asset: `public/images/elita-social-logo-dark.svg`, pale lilac `#DFC3F3`, 1200 × 767 px.
+- The original thin wordmark's alpha channel is embedded as a grayscale PNG mask in the SVG. The visible silhouette and transparency are identical to the light logo; only the foreground color changes. No pink backing or image filter is applied.
+- The shared component switches the visible asset with theme CSS in the header, footer and admin. The original light wordmark and favicon are unchanged.
 - Edit target supplied by the user: `C:/Users/Mohamad Javad/Downloads/IMG_7115.PNG` (171 × 109 px, transparent).
 - Generated source: `C:/Users/Mohamad Javad/.codex/generated_images/01a17225-0847-7ac3-92b2-d6edec544ff6/exec-a5894d86-92c2-49f0-ad60-6d4214289107.png`.
 - Initial output: 1200 × 767 px, lossless WebP with transparent alpha, 58982 bytes. The thinner version below is now used on the website under a new filename.

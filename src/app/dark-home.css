@@ -12,13 +12,6 @@ html[data-theme="dark"] .home-shell {
 
 html[data-theme="dark"] .home-continuation::before { opacity: .2; }
 
-/* A light backing preserves the original fine logo without altering its pixels. */
-html[data-theme="dark"] .brand-logo {
-  padding: 6px 8px;
-  border-radius: 8px;
-  background: var(--color-quaternary);
-}
-
 html[data-theme="dark"] :is(.desktop-nav > a:hover, .desktop-nav > a[aria-current]) { color: var(--accent-text); }
 html[data-theme="dark"] .desktop-nav > a[aria-current]::after { background: var(--accent-text); }
 html[data-theme="dark"] .menu-toggle { color: var(--accent-text); background: var(--surface); }
@@ -38,12 +31,59 @@ html[data-theme="dark"] .service-card strong { color: var(--ink); }
 html[data-theme="dark"] .service-icon { color: var(--accent-text); background: var(--surface-soft); }
 html[data-theme="dark"] :is(.about-seal, .about-photo-caption strong) { color: var(--accent-text); }
 
-/* These four pastel panels intentionally retain their original light artwork. */
-html[data-theme="dark"] .offering-card { color-scheme: light; }
-html[data-theme="dark"] .offering-card h3 { color: #151326; }
-html[data-theme="dark"] .offering-card > p { color: #3e3547; }
-html[data-theme="dark"] .offering-card > a { color: #3c285c; }
-html[data-theme="dark"] .offering-card > a:focus-visible { outline-color: var(--color-primary); }
+/* The service family shares a restrained night palette across home and detail pages. */
+html[data-theme="dark"] :is(.offering-card, .service-shell) {
+  --service-wash: #29243c;
+  --service-art: #b5a2df;
+  --service-heading: #f3edf6;
+  --service-copy: #d2c5d9;
+  --service-border: #51415d;
+  --service-art-paper: #25212e;
+  --service-art-ink: #c9b3df;
+  --service-art-line: #9d8caf;
+  --service-art-fold: #40334e;
+  --service-art-dot: #a490ba;
+  --service-art-dot-soft: #766389;
+  --service-art-mark: #25212e;
+}
+
+html[data-theme="dark"] :is(.offering-pink, .service-theme-pink) {
+  --service-wash: #302235;
+  --service-art: #db9fbe;
+  --art-color: #db9fbe;
+  --service-border: #614257;
+}
+
+html[data-theme="dark"] :is(.offering-lilac, .service-theme-lilac) {
+  --service-wash: #29243c;
+  --service-art: #b5a2df;
+  --art-color: #b5a2df;
+  --service-border: #51415d;
+}
+
+html[data-theme="dark"] :is(.offering-yellow, .service-theme-yellow) {
+  --service-wash: #302a24;
+  --service-art: #d6b17e;
+  --art-color: #d6b17e;
+  --service-border: #62513e;
+}
+
+html[data-theme="dark"] :is(.offering-mint, .service-theme-mint) {
+  --service-wash: #22302c;
+  --service-art: #9ec9ac;
+  --art-color: #9ec9ac;
+  --service-border: #415f52;
+}
+
+html[data-theme="dark"] .offering-card {
+  color: var(--service-heading);
+  background: var(--service-wash);
+  box-shadow: inset 0 0 0 1px var(--service-border);
+}
+html[data-theme="dark"] .offering-card h3 { color: var(--service-heading); }
+html[data-theme="dark"] .offering-card > p { color: var(--service-copy); }
+html[data-theme="dark"] .offering-card > a { color: var(--service-art); }
+html[data-theme="dark"] .offering-card > a:focus-visible { outline-color: var(--focus-ring); }
 
 /* Brand-coloured photo captions and value cards keep their own light/dark roles. */
 html[data-theme="dark"] :is(.approach-feature, .benefit-panel, .contact-info, .footer-cta-band) { color: #fff; }

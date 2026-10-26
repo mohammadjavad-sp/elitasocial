@@ -1,4 +1,7 @@
 .brand-logo { display: block; width: 112px; height: auto; aspect-ratio: 1200 / 767; object-fit: contain; flex-shrink: 0; }
+.brand-logo-dark { display: none; }
+html[data-theme="dark"] .brand-logo-light { display: none; }
+html[data-theme="dark"] .brand-logo-dark { display: block; }
 .site-header .brand { min-height: 74px; }
 .footer-brand-column .brand { width: fit-content; }
 .footer-brand-column .brand-logo { width: 124px; }
