@@ -33,7 +33,7 @@ try {
     const typography = await page.evaluate(() => {
       const style = getComputedStyle(document.body);
       const normalize = value => value.trim().replaceAll('"', '').replaceAll("'", '');
-      const expected = normalize(style.getPropertyValue('--font-estedad').split(',')[0]);
+      const expected = normalize(style.getPropertyValue('--font-peyda').split(',')[0]);
       return {
         family: style.fontFamily,
         expected,

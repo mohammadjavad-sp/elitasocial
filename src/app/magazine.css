@@ -4,7 +4,7 @@
 .magazine-breadcrumb a { min-height: 34px; display: inline-flex; align-items: center; text-underline-offset: 5px; }
 .magazine-breadcrumb a:hover { color: var(--purple); text-decoration: underline; }
 .magazine-page-heading { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 33px; }
-.magazine-page-heading h1 { max-width: 720px; font-size: clamp(34px, 4vw, 53px); line-height: 1.75; letter-spacing: -1.6px; }
+.magazine-page-heading h1 { max-width: 720px; font-size: clamp(34px, 4vw, 53px); line-height: 1.75; letter-spacing: normal; }
 .magazine-page-heading > p, .magazine-page-heading > div > p { font-size: 14px; line-height: 2.25; max-width: 520px; color: var(--muted); margin: 13px 0 0; }
 .magazine-demo-notice { display: flex; gap: 10px; align-items: start; font-size: 12px; line-height: 2.15; padding: 13px 18px; margin: 0 0 28px; border-inline-start: 3px solid var(--muted); background: var(--color-quaternary); color: var(--muted); }
 .magazine-demo-notice > svg { width: 18px; height: 18px; margin-top: 4px; }
@@ -13,7 +13,7 @@
 .magazine-featured-image img { object-fit: cover; }
 .magazine-featured-copy { display: flex; flex-direction: column; justify-content: center; align-items: start; padding: clamp(25px, 4vw, 51px); }
 .magazine-featured-copy > span { font-size: 12px; color: var(--color-primary); }
-.magazine-featured-copy h2 { font-size: clamp(24px, 2.6vw, 35px); font-weight: 780; letter-spacing: -.8px; line-height: 1.95; margin: 16px 0 12px; }
+.magazine-featured-copy h2 { font-size: clamp(24px, 2.6vw, 35px); font-weight: 800; letter-spacing: normal; line-height: 1.95; margin: 16px 0 12px; }
 .magazine-featured-copy h2 a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 7px; }
 .magazine-featured-copy > p { font-size: 14px; color: var(--muted); line-height: 2.25; margin: 0 0 19px; }
 .magazine-featured-copy .article-card-read { margin-top: 6px; }
@@ -28,7 +28,7 @@
 .magazine-category-link:hover { border-color: var(--color-secondary); background: var(--color-quaternary); }
 .magazine-category-link[aria-current="page"] { outline: 2px solid var(--purple); outline-offset: 2px; }
 .magazine-library { padding-block: 12px 100px; scroll-margin-top: 28px; }
-.magazine-library > h2, .magazine-library-heading h2 { font-size: clamp(25px, 2.8vw, 34px); letter-spacing: -.8px; line-height: 1.85; margin: 0 0 25px; font-weight: 750; }
+.magazine-library > h2, .magazine-library-heading h2 { font-size: clamp(25px, 2.8vw, 34px); letter-spacing: normal; line-height: 1.85; margin: 0 0 25px; font-weight: 700; }
 .magazine-library-heading > p { font-size: 14px; line-height: 2.1; color: var(--muted); margin: -12px 0 27px; }
 .magazine-search-row { display: grid; grid-template-columns: minmax(0, 1fr) 225px; align-items: end; gap: 24px; max-width: 900px; }
 .magazine-search-field, .magazine-sort-field { min-width: 0; }
@@ -41,7 +41,7 @@
 .magazine-search-input > input::placeholder { color: var(--muted); font-size: 12px; }
 .magazine-sort-field select { display: block; width: 100%; min-height: 54px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 5px; background: white; color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
 .magazine-filters { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 25px; }
-.magazine-filters > button { min-height: 44px; padding: 8px 18px; border: 1px solid var(--line); background: transparent; color: var(--muted); font-size: 12px; font-weight: 550; border-radius: 25px; transition: background 150ms, color 150ms; }
+.magazine-filters > button { min-height: 44px; padding: 8px 18px; border: 1px solid var(--line); background: transparent; color: var(--muted); font-size: 12px; font-weight: 500; border-radius: 25px; transition: background 150ms, color 150ms; }
 .magazine-filters > button:hover { background: var(--color-quaternary); }
 .magazine-filters > button[aria-pressed="true"] { background: var(--purple); color: white; border-color: var(--purple); }
 .magazine-results-count { margin: 23px 0 22px; font-size: 12px; line-height: 2.1; color: var(--muted); overflow-wrap: anywhere; }
@@ -54,10 +54,10 @@
 .article-card-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; width: 100%; font-size: 10px; line-height: 2; color: var(--muted); }
 .article-card-meta > a { color: var(--color-primary); text-underline-offset: 4px; }
 .article-card-meta > a:hover { text-decoration: underline; }
-.article-card-copy h3 { font-size: 18px; font-weight: 750; line-height: 2; letter-spacing: -.3px; margin: 13px 0 9px; }
+.article-card-copy h3 { font-size: 18px; font-weight: 700; line-height: 2; letter-spacing: normal; margin: 13px 0 9px; }
 .article-card-copy h3 a:hover { color: var(--purple); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
 .article-card-copy > p { font-size: 12px; line-height: 2.2; color: var(--muted); margin: 0 0 18px; }
-.article-card-read { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: auto; color: var(--purple); font-size: 12px; font-weight: 650; text-underline-offset: 5px; }
+.article-card-read { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: auto; color: var(--purple); font-size: 12px; font-weight: 600; text-underline-offset: 5px; }
 .article-card-read > svg { width: 18px; height: 18px; }
 .article-card-read:hover { text-decoration: underline; }
 .magazine-empty { padding: 57px 28px; text-align: center; border: 1px dashed var(--line); border-radius: 5px; background: #ffffff80; }
@@ -84,7 +84,7 @@
   .magazine-intro { padding-block: 10px 45px; }
   .magazine-breadcrumb { margin-bottom: 22px; gap: 8px; font-size: 11px; }
   .magazine-page-heading { margin-bottom: 25px; }
-  .magazine-page-heading h1 { font-size: 33px; letter-spacing: -1px; line-height: 1.8; }
+  .magazine-page-heading h1 { font-size: 33px; letter-spacing: normal; line-height: 1.8; }
   .magazine-page-heading > p, .magazine-page-heading > div > p { font-size: 13px; }
   .magazine-demo-notice { font-size: 11px; padding: 12px 14px; }
   .magazine-featured { grid-template-columns: 1fr; }

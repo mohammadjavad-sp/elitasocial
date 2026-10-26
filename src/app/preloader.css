@@ -223,15 +223,14 @@ html[data-elita-intro="seen"] .site-preloader { display: none; }
 
 .preloader-wordmark strong {
   font-size: clamp(25px, 5vw, 31px);
-  font-weight: 850;
+  font-weight: 800;
   line-height: 1.7;
-  letter-spacing: -1.2px;
+  letter-spacing: normal;
   overflow-wrap: anywhere;
 }
 
 .preloader-wordmark > span {
   color: var(--muted);
-  font-family: Arial, sans-serif;
   font-size: 11px;
   line-height: 1.5;
   letter-spacing: 3.7px;

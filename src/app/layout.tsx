@@ -29,7 +29,22 @@ import "./dark-home.css";
 import "./dark-pages.css";
 import "./theme-toggle.css";
 
-const estedad = localFont({ src: "../../public/fonts/Estedad-Variable.woff2", variable: "--font-estedad", display: "swap", weight: "100 900" });
+const peyda = localFont({
+  src: [
+    { path: "../../public/fonts/peyda/Peyda-Thin.woff2", weight: "100", style: "normal" },
+    { path: "../../public/fonts/peyda/Peyda-ExtraLight.woff2", weight: "200", style: "normal" },
+    { path: "../../public/fonts/peyda/Peyda-Light.woff2", weight: "300", style: "normal" },
+    { path: "../../public/fonts/peyda/Peyda-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../../public/fonts/peyda/Peyda-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../../public/fonts/peyda/Peyda-SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "../../public/fonts/peyda/Peyda-Bold.woff2", weight: "700", style: "normal" },
+    { path: "../../public/fonts/peyda/Peyda-ExtraBold.woff2", weight: "800", style: "normal" },
+    { path: "../../public/fonts/peyda/Peyda-Black.woff2", weight: "900", style: "normal" },
+  ],
+  variable: "--font-peyda",
+  display: "swap",
+  preload: false,
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo, home: { brand } } = await getSiteSettings();
@@ -46,5 +61,5 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getSiteSettings();
-  return <html lang="fa" dir="rtl" data-theme="light" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} /><script dangerouslySetInnerHTML={{ __html: preloaderBootstrapScript }} /><noscript><style>{".theme-toggle{display:none!important}"}</style></noscript></head><body className={estedad.variable}><ThemeProvider><SiteSettingsProvider settings={settings}><SitePreloader />{children}</SiteSettingsProvider></ThemeProvider></body></html>;
+  return <html lang="fa" dir="rtl" data-theme="light" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} /><script dangerouslySetInnerHTML={{ __html: preloaderBootstrapScript }} /><noscript><style>{".theme-toggle{display:none!important}"}</style></noscript></head><body className={peyda.variable}><ThemeProvider><SiteSettingsProvider settings={settings}><SitePreloader />{children}</SiteSettingsProvider></ThemeProvider></body></html>;
 }

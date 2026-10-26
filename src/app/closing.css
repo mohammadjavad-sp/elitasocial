@@ -4,7 +4,7 @@
 .contact-grid { display: grid; grid-template-columns: .85fr 1.3fr; gap: 30px; align-items: stretch; }
 .contact-info { padding: 37px 32px 25px; background: var(--purple); color: #fff; border-radius: 6px; position: relative; overflow: hidden; isolation: isolate; }
 .contact-info::after { content: ""; position: absolute; left: -135px; bottom: -155px; width: 330px; aspect-ratio: 1; border: 45px solid #ffffff08; border-radius: 50%; z-index: -1; pointer-events: none; }
-.contact-info h3, .contact-form-panel h3 { font-size: 20px; line-height: 1.9; margin: 0; font-weight: 650; }
+.contact-info h3, .contact-form-panel h3 { font-size: 20px; line-height: 1.9; margin: 0; font-weight: 600; }
 .contact-info > p { margin: 12px 0 27px; max-width: 310px; color: var(--color-quaternary); font-size: 13px; line-height: 2.3; }
 .contact-channel { display: flex; align-items: center; gap: 15px; margin-block: 9px; padding-block: 10px; border-radius: 6px; }
 .contact-channel:focus-visible, .contact-whatsapp:focus-visible { outline-color: white; }
@@ -41,19 +41,19 @@
 .contact-new-request:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 3px; }
 .contact-prepared .pill-button { margin-block: 4px 10px; }
 .contact-faq { display: grid; grid-template-columns: .85fr 1.3fr; gap: 30px; padding-top: 65px; }
-.contact-faq h3 { font-size: 23px; line-height: 1.9; margin: 0; letter-spacing: -.5px; }
+.contact-faq h3 { font-size: 23px; line-height: 1.9; margin: 0; letter-spacing: normal; }
 .contact-faq > div > p { font-size: 12px; color: var(--muted); line-height: 2; }
 .contact-faq-list details { border-bottom: 1px solid var(--line); }
-.contact-faq-list summary { position: relative; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; min-height: 65px; padding: 14px 0; font-size: 13px; font-weight: 550; list-style: none; }
+.contact-faq-list summary { position: relative; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; min-height: 65px; padding: 14px 0; font-size: 13px; font-weight: 500; list-style: none; }
 .contact-faq-list summary::-webkit-details-marker { display: none; }
-.contact-faq-list summary > span { display: grid; place-items: center; width: 28px; height: 28px; flex-shrink: 0; background: var(--color-quaternary); border-radius: 50%; color: var(--purple); font: 21px Arial, sans-serif; }
+.contact-faq-list summary > span { display: grid; place-items: center; width: 28px; height: 28px; flex-shrink: 0; background: var(--color-quaternary); border-radius: 50%; color: var(--purple); font-size: 21px; font-weight: 400; }
 .contact-faq-list details[open] summary > span { transform: rotate(45deg); }
 .contact-faq-list details > p { margin: 0 0 20px; color: var(--muted); font-size: 12px; line-height: 2.3; max-width: 570px; }
 .footer-cta-band { position: relative; overflow: hidden; isolation: isolate; background: var(--purple); color: white; padding: 60px 0; text-align: center; }
 .footer-cta-band::before, .footer-cta-band::after { content: ""; position: absolute; width: 400px; aspect-ratio: 1; border: 55px solid #ffffff07; border-radius: 50%; z-index: -1; pointer-events: none; }
 .footer-cta-band::before { top: -280px; right: -110px; }
 .footer-cta-band::after { bottom: -310px; left: -130px; }
-.footer-cta-band h2 { margin: 0; font-size: 34px; letter-spacing: -1px; line-height: 1.9; }
+.footer-cta-band h2 { margin: 0; font-size: 34px; letter-spacing: normal; line-height: 1.9; }
 .footer-cta-band p { color: var(--color-quaternary); margin: 10px 0 24px; font-size: 13px; line-height: 2.2; }
 .footer-cta-band .pill-button { color: var(--purple-dark); background: white; border-color: white; }
 .footer-cta-band .pill-button:hover { background: var(--color-quaternary); }
@@ -71,7 +71,7 @@
 .footer-links > a { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; min-height: 44px; }
 .footer-links > a:hover { color: var(--purple); text-decoration: underline; text-underline-offset: 5px; }
 .footer-contact > a { display: flex; align-items: center; gap: 12px; width: fit-content; min-height: 44px; color: var(--purple-dark); font-size: 13px; }
-.footer-contact > a[dir] { font-size: 16px; font-weight: 550; }
+.footer-contact > a[dir] { font-size: 16px; font-weight: 500; }
 .footer-contact svg { width: 17px; height: 17px; }
 .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 25px; border-top: 1px solid var(--line); padding-block: 20px; color: var(--muted); font-size: 10px; line-height: 2; }
 .footer-bottom > a { min-height: 44px; display: inline-flex; align-items: center; color: var(--purple-dark); }

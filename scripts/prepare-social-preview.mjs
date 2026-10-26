@@ -10,7 +10,6 @@ const imagePath = (name) => path.join(root, "public/images", name);
 const destination = imagePath("social-share.jpg");
 const width = 1200;
 const height = 630;
-const fontfile = path.join(root, "public/fonts/Estedad-Variable.woff2");
 const svg = (body, w = width, h = height) => Buffer.from(
   `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${body}</svg>`,
 );
@@ -38,16 +37,17 @@ const logo = await sharp(imagePath("elita-social-logo-thin.webp"))
   .toBuffer({ resolveWithObject: true });
 
 async function textLayer(text, size, color, weight = 400) {
+  const fontfile = path.join(root, "public/fonts/peyda", weight >= 600 ? "Peyda-SemiBold.woff2" : "Peyda-Regular.woff2");
   return sharp({ text: {
     text: `<span foreground="${color}" weight="${weight}">${text}</span>`,
-    font: `Estedad ${size}`,
+    font: `Peyda ${size}`,
     fontfile,
     rgba: true,
     dpi: 72,
   } }).png().toBuffer({ resolveWithObject: true });
 }
 
-const title = await textLayer("الیتاسوشیال", 45, "#694f8d", 650);
+const title = await textLayer("الیتاسوشیال", 45, "#694f8d", 600);
 const description = await textLayer("طراحی وب، محتوا و شبکه‌های اجتماعی", 24, "#594b6d");
 const center = 884;
 const layers = [

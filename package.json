@@ -33,6 +33,7 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "tsx": "4.23.15",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wawoff2": "2.0.1"
   }
 }

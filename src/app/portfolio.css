@@ -1,8 +1,8 @@
 .featured-portfolio { padding-block: 35px 100px; scroll-margin-top: 35px; }
 .portfolio-section-heading { display: flex; justify-content: space-between; align-items: center; gap: 28px; margin-bottom: 24px; }
-.portfolio-section-heading h2 { font-size: clamp(26px, 3vw, 37px); font-weight: 750; line-height: 1.8; letter-spacing: -1.1px; margin: 0; }
+.portfolio-section-heading h2 { font-size: clamp(26px, 3vw, 37px); font-weight: 700; line-height: 1.8; letter-spacing: normal; margin: 0; }
 .portfolio-section-heading p { color: var(--muted); font-size: 14px; line-height: 2.2; max-width: 620px; margin: 9px 0 0; }
-.portfolio-all-link { display: inline-flex; flex-shrink: 0; gap: 14px; color: var(--purple); font-size: 13px; font-weight: 650; align-items: center; min-height: 44px; text-underline-offset: 6px; }
+.portfolio-all-link { display: inline-flex; flex-shrink: 0; gap: 14px; color: var(--purple); font-size: 13px; font-weight: 600; align-items: center; min-height: 44px; text-underline-offset: 6px; }
 .portfolio-all-link:hover { text-decoration: underline; }
 .portfolio-all-link svg { width: 20px; height: 20px; }
 .portfolio-demo-notice { display: flex; align-items: start; gap: 11px; color: var(--muted); background: var(--color-quaternary); border-inline-start: 3px solid var(--muted); padding: 13px 17px; margin: 0 0 28px; font-size: 12px; line-height: 2; }
@@ -13,7 +13,7 @@
 .project-card-body { display: block; padding: 20px 21px 17px; }
 .project-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 9px; color: var(--muted); font-size: 10px; line-height: 1.8; }
 .project-demo { display: inline-block; padding: 2px 8px; background: var(--color-quaternary); border: 1px solid var(--line); border-radius: 3px; color: var(--muted); font-size: 10px; font-weight: 500; white-space: nowrap; }
-.project-card-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 16px; font-weight: 750; line-height: 1.9; margin-top: 12px; }
+.project-card-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 16px; font-weight: 700; line-height: 1.9; margin-top: 12px; }
 .project-card-arrow { width: 29px; height: 29px; display: grid; place-items: center; flex-shrink: 0; border-radius: 50%; background: var(--lavender); color: var(--purple); transition: color 180ms, background 180ms; }
 .project-card-arrow svg { width: 16px; height: 16px; }
 .project-card-caption { display: block; font-size: 12px; color: var(--muted); line-height: 2.1; margin-top: 9px; }
@@ -36,7 +36,7 @@
 .art-browser-chrome > span { width: 3px; height: 3px; border-radius: 50%; background: #c7c1b5; }
 .art-browser-chrome > i { width: 41%; height: 5px; border-radius: 3px; background: #e3dfd975; margin-left: 17%; }
 .art-browser-nav { display: flex; align-items: center; padding: 11px 17px; gap: 8px; }
-.art-browser-nav b { font-size: 17px; font-weight: 850; margin-inline-end: auto; }
+.art-browser-nav b { font-size: 17px; font-weight: 800; margin-inline-end: auto; }
 .art-browser-nav > span { height: 2px; width: 10%; background: var(--art-accent); opacity: .45; }
 .art-browser-nav > i { width: 13px; height: 13px; border: 1px solid var(--art-accent); border-radius: 50%; margin-inline-start: 5px; }
 .art-browser-hero { display: grid; grid-template-columns: 1.3fr 1fr; align-items: center; gap: 9px; padding: 6px 17px 20px; }
@@ -81,7 +81,7 @@
 .art-paper { position: absolute; width: 75%; height: 95%; background: var(--art-light); box-shadow: 2px 8px 17px #45383919; display: flex; flex-direction: column; align-items: center; }
 .art-paper-back { left: 0; top: 1%; transform: rotate(-15deg); background: var(--art-ink); color: var(--art-light); padding: 15px; font-size: 16px; }
 .art-paper-front { right: 0; top: 4%; transform: rotate(8deg); justify-content: space-between; padding: 17px 13px 16px; }
-.art-paper-brand { font-size: 12px; font-weight: 750; align-self: start; }
+.art-paper-brand { font-size: 12px; font-weight: 700; align-self: start; }
 .art-paper-front strong { font-size: 14px; line-height: 1.9; max-width: 125px; }
 .art-paper-rule { height: 2px; width: 100%; background: var(--art-accent); }
 .art-jewelry .art-paper .art-object { width: 64px; height: 64px; border-radius: 50%; border: 7px solid #b99a51; box-shadow: inset 1px 2px 1px #755822, 2px 2px 1px #e7cd85; transform: rotate(-25deg); }
@@ -103,7 +103,7 @@
 .portfolio-breadcrumb a { min-height: 44px; display: grid; align-items: center; color: var(--purple); text-underline-offset: 4px; }
 .portfolio-breadcrumb a:hover { text-decoration: underline; }
 .portfolio-page-title { display: flex; align-items: center; justify-content: space-between; gap: 35px; padding-block: 27px 43px; }
-.portfolio-page-title h1 { font-size: clamp(33px, 4.1vw, 58px); line-height: 1.8; letter-spacing: -1.9px; }
+.portfolio-page-title h1 { font-size: clamp(33px, 4.1vw, 58px); line-height: 1.8; letter-spacing: normal; }
 .portfolio-page-title p { color: var(--muted); font-size: 14px; line-height: 2.4; margin: 18px 0 0; }
 .portfolio-heading-mark { display: flex; align-items: center; flex-direction: column; justify-content: center; width: 165px; aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--line); color: var(--purple); transform: rotate(-12deg); margin-inline-end: 8%; flex-shrink: 0; }
 .portfolio-heading-mark svg { width: 39px; height: 39px; stroke-width: 1; }
@@ -115,7 +115,7 @@
 .portfolio-filters button:hover:not([aria-pressed="true"]) { background: var(--lavender); border-color: var(--color-secondary); }
 .portfolio-count { color: var(--muted); font-size: 12px; margin: 8px 0 22px; }
 .portfolio-invitation { display: flex; gap: 30px; justify-content: space-between; align-items: center; background: var(--color-quaternary); padding: 35px 40px; margin-bottom: 80px; border-radius: 4px; }
-.portfolio-invitation h2 { font-size: 27px; letter-spacing: -.8px; margin: 0 0 10px; line-height: 1.9; }
+.portfolio-invitation h2 { font-size: 27px; letter-spacing: normal; margin: 0 0 10px; line-height: 1.9; }
 .portfolio-invitation p { font-size: 13px; color: var(--muted); line-height: 2.1; margin: 0; max-width: 570px; }
 .portfolio-invitation .pill-button { flex-shrink: 0; }
 .project-dialog { border: 0; border-radius: 8px; padding: 0; width: min(850px, calc(100% - 40px)); max-height: calc(100svh - 48px); overflow-y: auto; overscroll-behavior: contain; background: var(--surface-soft); color: var(--ink); }
@@ -128,7 +128,7 @@
 .project-dialog .art-phone { width: 73%; }
 .project-dialog-copy { padding: 40px 28px 30px; }
 .project-dialog-category { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: var(--purple); font-size: 11px; line-height: 2; margin-top: 10px; }
-.project-dialog h2 { font-size: 23px; font-weight: 750; line-height: 1.8; letter-spacing: -.6px; margin: 15px 0; }
+.project-dialog h2 { font-size: 23px; font-weight: 700; line-height: 1.8; letter-spacing: normal; margin: 15px 0; }
 .project-dialog p { color: var(--muted); font-size: 12px; line-height: 2.3; }
 .project-dialog h3 { font-size: 13px; margin: 24px 0 10px; }
 .project-dialog ul { padding-inline-start: 18px; font-size: 12px; color: var(--muted); line-height: 2.4; }
@@ -162,7 +162,7 @@
   .portfolio-demo-notice { font-size: 11px; padding: 12px; }
   .portfolio-page-heading { padding-top: 15px; }
   .portfolio-page-title { padding-block: 20px 30px; }
-  .portfolio-page-title h1 { font-size: clamp(29px, 7vw, 40px); letter-spacing: -1.2px; }
+  .portfolio-page-title h1 { font-size: clamp(29px, 7vw, 40px); letter-spacing: normal; }
   .portfolio-page-title p { font-size: 12px; }
   .portfolio-heading-mark { display: none; }
   .portfolio-filters { gap: 8px; }

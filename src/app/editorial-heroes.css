@@ -4,9 +4,9 @@
 .editorial-hero .magazine-breadcrumb a { min-height: 44px; }
 .editorial-hero-grid { display: grid; gap: 48px; align-items: center; padding-block: 12px 20px; }
 .editorial-hero-copy { position: relative; z-index: 2; min-width: 0; }
-.editorial-hero-kicker { display: flex; align-items: center; gap: 10px; color: var(--color-primary); margin: 0 0 17px; font-size: 12px; font-weight: 550; }
+.editorial-hero-kicker { display: flex; align-items: center; gap: 10px; color: var(--color-primary); margin: 0 0 17px; font-size: 12px; font-weight: 500; }
 .editorial-hero-kicker > span { width: 25px; height: 1px; background: var(--color-secondary); }
-.editorial-hero-copy h1 { font-size: clamp(32px, 4vw, 53px); line-height: 1.75; letter-spacing: -1.8px; font-weight: 850; max-width: 620px; text-wrap: balance; }
+.editorial-hero-copy h1 { font-size: clamp(32px, 4vw, 53px); line-height: 1.75; letter-spacing: normal; font-weight: 800; max-width: 620px; text-wrap: balance; }
 .editorial-hero-description { margin: 20px 0 27px; max-width: 450px; color: var(--muted); font-size: 14px; line-height: 2.35; }
 .editorial-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; }
 .editorial-hero-text-link { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; color: var(--color-primary); font-size: 12px; font-weight: 600; text-underline-offset: 6px; }
@@ -27,8 +27,8 @@
 .portfolio-preview-chrome > i { display: block; width: 4px; height: 4px; border-radius: 50%; background: #d6cddf; }
 .portfolio-preview-chrome > span { margin-left: auto; color: #83758c; font-size: 7px; direction: rtl; }
 .portfolio-preview-content { position: relative; height: 138px; padding: 10px 13px; background: #edf2e7; color: #375443; }
-.portfolio-preview-brand { display: block; font-size: 16px; font-weight: 850; margin-bottom: 12px; }
-.portfolio-preview-content > strong { display: block; font-size: 12px; font-weight: 750; line-height: 1.9; max-width: 88px; }
+.portfolio-preview-brand { display: block; font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+.portfolio-preview-content > strong { display: block; font-size: 12px; font-weight: 700; line-height: 1.9; max-width: 88px; }
 .portfolio-preview-leaf { display: block; position: absolute; left: 13px; top: 43px; width: 34px; height: 53px; border-radius: 38px 0 38px 0; transform: rotate(-15deg); background: linear-gradient(100deg, #648067 50%, #83a280 51%); box-shadow: 13px 16px 0 -6px #9cb193; }
 .portfolio-preview-rule { display: block; width: 48%; height: 2px; margin-top: 7px; background: #c9d5c2; }
 .portfolio-preview-rule:last-child { width: 32%; }
@@ -42,7 +42,7 @@
 .magazine-note-fold { position: absolute; top: 0; inset-inline-start: 0; width: 22px; height: 22px; background: linear-gradient(135deg, var(--color-quaternary) 50%, var(--surface-soft) 51%); }
 .magazine-hero-note > svg { width: 22px; height: 22px; margin-bottom: 10px; color: var(--color-primary); }
 .magazine-hero-note > span:not(.magazine-note-fold):not(.magazine-note-rule) { font-size: 9px; color: var(--muted); }
-.magazine-hero-note > strong { display: block; font-size: 18px; line-height: 1.8; margin-top: 6px; letter-spacing: -.5px; }
+.magazine-hero-note > strong { display: block; font-size: 18px; line-height: 1.8; margin-top: 6px; letter-spacing: normal; }
 .magazine-note-rule { display: block; width: 42px; height: 1px; background: var(--color-secondary); margin-top: 13px; }
 .magazine-hero-bookmark { display: grid; place-items: center; position: absolute; top: 0; inset-inline-start: 40px; width: 46px; height: 72px; color: #fff; background: var(--color-secondary); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 83%, 0 100%); padding-bottom: 11px; }
 .magazine-hero-bookmark > svg { width: 23px; height: 23px; }
@@ -65,7 +65,7 @@
   .editorial-hero .portfolio-breadcrumb, .editorial-hero .magazine-breadcrumb { margin-bottom: 11px; }
   .editorial-hero-grid { gap: 36px; padding-block: 7px 16px; }
   .editorial-hero-kicker { font-size: 11px; margin-bottom: 12px; }
-  .editorial-hero-copy h1 { font-size: clamp(28px, 7.5vw, 40px); letter-spacing: -1.1px; line-height: 1.85; }
+  .editorial-hero-copy h1 { font-size: clamp(28px, 7.5vw, 40px); letter-spacing: normal; line-height: 1.85; }
   .editorial-hero-description { margin-block: 14px 20px; font-size: 13px; line-height: 2.25; }
   .editorial-hero-actions { gap: 5px 14px; }
   .editorial-hero-actions .pill-button { min-height: 48px; font-size: 11px; padding-inline-start: 16px; gap: 9px; }
