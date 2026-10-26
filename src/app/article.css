@@ -34,6 +34,7 @@
 .article-prose > section + section { margin-top: 42px; }
 .article-prose h2 { font-size: 24px; font-weight: 700; line-height: 1.95; letter-spacing: normal; color: var(--ink); margin: 0 0 15px; text-wrap: balance; }
 .article-prose p { margin: 0 0 18px; }
+.article-intro, .article-prose p, .article-prose li { text-align: justify; text-align-last: start; text-justify: inter-word; }
 .article-prose ul { margin: 20px 0 0; padding-inline-start: 23px; }
 .article-prose li { padding-inline-start: 4px; margin-bottom: 12px; }
 .article-prose li::marker { color: var(--color-primary); }

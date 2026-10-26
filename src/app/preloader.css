@@ -16,7 +16,7 @@
   animation: preloader-failsafe 1ms step-end 1.4s forwards;
 }
 
-html[data-elita-intro="seen"] .site-preloader { display: none; }
+html[data-elita-intro-skip] .site-preloader { display: none; }
 
 .site-preloader[data-state="leaving"] {
   pointer-events: none;

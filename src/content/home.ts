@@ -14,7 +14,7 @@ export const homeContent = {
     telegram: "https://t.me/elitanasl",
     bale: "https://ble.ir/09338234473",
     eitaa: "https://eitaa.com/09981420677",
-    rubika: "",
+    rubika: "https://rubika.ir/elita_nasl",
     email: "elitasociall@gmail.com",
     phone: "tel:+989338234473",
     phoneLabel: "۰۹۳۳ ۸۲۳ ۴۴۷۳",

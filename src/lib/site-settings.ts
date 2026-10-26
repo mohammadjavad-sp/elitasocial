@@ -84,7 +84,7 @@ export function getDefaultSiteSettings(): SiteSettings {
 /** Action URLs follow the saved contact number; layout keys remain code-owned. */
 export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
   const defaults = getDefaultSiteSettings();
-  // New fields receive defaults on upgrades; intentional empty strings/FAQ lists stay empty.
+  // Preserve intentional empty values; the former Rubika placeholder is upgraded below.
   const fillDefaults = (template: unknown, saved: unknown): unknown => {
     if (Array.isArray(template)) {
       if (!Array.isArray(saved)) return structuredClone(template);
@@ -97,6 +97,8 @@ export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
     return saved !== undefined && typeof saved === typeof template ? saved : structuredClone(template);
   };
   const settings = normalizeBrandText(fillDefaults(defaults, value) as SiteSettings);
+  // Rubika used to be an icon-only placeholder in saved CMS settings.
+  if (settings.home.contact.rubika === "") settings.home.contact.rubika = defaults.home.contact.rubika;
   if (settings.sections.contactFormDescription === "اطلاعات را بنویس تا پیامت برای ادامهٔ گفتگو در واتساپ آماده شود.") {
     settings.sections.contactFormDescription = defaults.sections.contactFormDescription;
   }

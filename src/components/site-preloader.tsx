@@ -1,24 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Icon } from "./icons";
 import { useSiteSettings } from "./site-settings-provider";
-import { preloaderSessionKey } from "@/lib/preloader";
 
 type Phase = "loading" | "leaving" | "hidden";
 
 /** A short brand entrance; resource failures must never keep the site covered. */
 export function SitePreloader() {
-  const { home: { brand } } = useSiteSettings();
   const pathname = usePathname() || "/";
   const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/$/, "");
   const localPath = basePath && pathname.startsWith(`${basePath}/`) ? pathname.slice(basePath.length) : pathname;
   const isAdmin = /^\/admin(?:\/|$)/.test(localPath);
+
+  return isAdmin ? null : <PreloaderEntrance key={pathname} />;
+}
+
+function PreloaderEntrance() {
+  const { home: { brand } } = useSiteSettings();
   const [phase, setPhase] = useState<Phase>("loading");
 
-  useEffect(() => {
-    if (isAdmin) return;
+  useLayoutEffect(() => {
     let disposed = false;
     let finished = false;
     const timers: ReturnType<typeof setTimeout>[] = [];
@@ -29,8 +32,6 @@ export function SitePreloader() {
     const hide = () => {
       if (disposed) return;
       finished = true;
-      document.documentElement.dataset.elitaIntro = "seen";
-      try { window.sessionStorage.setItem(preloaderSessionKey, "shown"); } catch { /* Optional in private/storage-blocked contexts. */ }
       timers.forEach(clearTimeout);
       cleanup.splice(0).forEach(remove => remove());
       setPhase("hidden");
@@ -43,10 +44,11 @@ export function SitePreloader() {
     };
 
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
-    let alreadyShown = document.documentElement.dataset.elitaIntro === "seen";
-    try { alreadyShown ||= navigation?.type !== "reload" && window.sessionStorage.getItem(preloaderSessionKey) === "shown"; } catch { /* The animation still has a bounded duration. */ }
-    if (alreadyShown || motion.matches || window.location.hash || navigation?.type === "back_forward" || document.visibilityState === "hidden") {
+    // The head script only suppresses this document's initial entrance. Consume
+    // its marker before paint so it cannot suppress a later client navigation.
+    const skipInitialEntrance = document.documentElement.dataset.elitaIntroSkip === window.location.pathname;
+    delete document.documentElement.dataset.elitaIntroSkip;
+    if (skipInitialEntrance || motion.matches || window.location.hash || document.visibilityState === "hidden") {
       hide();
       return () => { disposed = true; };
     }
@@ -82,9 +84,9 @@ export function SitePreloader() {
       timers.forEach(clearTimeout);
       cleanup.forEach(remove => remove());
     };
-  }, [isAdmin]);
+  }, []);
 
-  if (isAdmin || phase === "hidden") return null;
+  if (phase === "hidden") return null;
 
   return <>
     <div className="site-preloader" data-state={phase}>
