@@ -23,11 +23,11 @@ export default async function Home() {
         <Hero />
         <div className="home-continuation">
           <AboutSection />
+          <FeaturedPortfolioSection projects={content.portfolio} />
+          <PricingSection pricing={content.pricing} />
           <ServicesSection items={content.services} />
           <ApproachSection />
           <BenefitsSection content={settings.home.benefits} />
-          <FeaturedPortfolioSection projects={content.portfolio} />
-          <PricingSection pricing={content.pricing} />
           <InsightsSection articles={content.articles} />
           <ContactSection pricing={content.pricing} />
         </div>
