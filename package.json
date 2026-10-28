@@ -11,6 +11,8 @@
     "prebuild": "node scripts/prepare-images.mjs",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
+    "start:cpanel": "node server.js",
+    "check:host": "node scripts/check-host.mjs",
     "typecheck": "tsc --noEmit",
     "check:ui": "node scripts/check-ui.mjs",
     "check:portfolio": "node scripts/check-portfolio.mjs",

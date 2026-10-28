@@ -1,5 +1,7 @@
 # انتشار با GitHub Pages
 
+برای انتشار رسمی `elitasocial.ir` روی **cPanel / Setup Node.js App**، [راهنمای مخصوص cPanel](cpanel-launch.md) را دنبال کنید. راه‌انداز `server.js` و نمونهٔ تنظیمات هاست در `deploy/cpanel.env.example` آماده‌اند. مراحل زیر مربوط به پیش‌نمایش GitHub Pages هستند.
+
 مخزن مقصد: [mohammadjavad-sp/elitasocial](https://github.com/mohammadjavad-sp/elitasocial)
 
 در تنظیمات مخزن، بخش **Settings → Pages → Build and deployment → Source** روی **GitHub Actions** تنظیم شده است. جریان انتشار در `.github/workflows/deploy-pages.yml` با هر push به شاخهٔ `main` اجرا می‌شود؛ از تب **Actions** نیز می‌توان آن را دستی اجرا کرد.
