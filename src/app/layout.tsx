@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { getSiteSettings } from "@/server/settings";
 import { SiteSettingsProvider } from "@/components/site-settings-provider";
 import { SitePreloader } from "@/components/site-preloader";
+import { FloatingContact } from "@/components/floating-contact";
 import { ThemeProvider } from "@/components/theme-provider";
 import { themeBootstrapScript } from "@/lib/theme";
 import { preloaderBootstrapScript } from "@/lib/preloader";
@@ -28,6 +29,7 @@ import "./dark-tokens.css";
 import "./dark-home.css";
 import "./dark-pages.css";
 import "./theme-toggle.css";
+import "./floating-contact.css";
 
 const peyda = localFont({
   src: [
@@ -61,5 +63,5 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getSiteSettings();
-  return <html lang="fa" dir="rtl" data-theme="light" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} /><script dangerouslySetInnerHTML={{ __html: preloaderBootstrapScript }} /><noscript><style>{".theme-toggle{display:none!important}"}</style></noscript></head><body className={peyda.variable}><ThemeProvider><SiteSettingsProvider settings={settings}><SitePreloader />{children}</SiteSettingsProvider></ThemeProvider></body></html>;
+  return <html lang="fa" dir="rtl" data-theme="light" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} /><script dangerouslySetInnerHTML={{ __html: preloaderBootstrapScript }} /><noscript><style>{".theme-toggle{display:none!important}"}</style></noscript></head><body className={peyda.variable}><ThemeProvider><SiteSettingsProvider settings={settings}><SitePreloader />{children}<FloatingContact /></SiteSettingsProvider></ThemeProvider></body></html>;
 }

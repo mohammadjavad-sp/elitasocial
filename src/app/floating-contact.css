@@ -1,0 +1,164 @@
+.floating-contact {
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  z-index: 80;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  color: var(--ink);
+}
+
+/* Keep the final footer links reachable above the fixed trigger. */
+body:has(.floating-contact) .footer-bottom { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+
+.floating-contact-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 56px;
+  padding: 8px 17px 8px 10px;
+  border: 1px solid rgb(var(--color-secondary-rgb) / .55);
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 5px 20px rgb(var(--color-primary-rgb) / .23);
+  cursor: pointer;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.8;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.floating-contact-trigger::-webkit-details-marker { display: none; }
+.floating-contact-trigger::marker { content: ""; }
+.floating-contact-trigger::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgb(var(--color-secondary-rgb) / .65);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+.floating-contact-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / .12);
+}
+.floating-contact-icon svg { width: 19px; height: 19px; }
+.floating-contact-dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-tertiary);
+}
+.floating-contact-trigger:hover,
+.floating-contact[open] > .floating-contact-trigger { background: var(--primary-hover); }
+.floating-contact-trigger:focus-visible { outline-offset: 5px; }
+
+.floating-contact-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: 330px;
+  max-width: calc(100vw - 32px - env(safe-area-inset-right) - env(safe-area-inset-left));
+  max-height: calc(100vh - 120px - env(safe-area-inset-bottom));
+  max-height: calc(100svh - 120px - env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 19px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: 0 14px 44px rgb(var(--color-primary-rgb) / .17);
+  scrollbar-width: thin;
+  text-align: start;
+}
+.floating-contact-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 9px; }
+.floating-contact-heading > div { min-width: 0; }
+.floating-contact-kicker { margin: 0 0 3px; color: var(--muted); font-size: 10px; line-height: 1.8; }
+.floating-contact-heading h2 { margin: 0; color: var(--ink); font-size: 16px; font-weight: 700; line-height: 1.9; }
+.floating-contact-close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface-soft);
+  color: var(--ink);
+}
+.floating-contact-close svg { width: 18px; height: 18px; }
+.floating-contact-close:hover { border-color: var(--color-secondary); }
+.floating-contact-description { margin: 10px 0 17px; color: var(--muted); font-size: 12px; line-height: 2; }
+.floating-contact-channels.contact-channels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.floating-contact .floating-contact-channels .contact-channel-link {
+  justify-content: flex-start;
+  min-width: 0;
+  min-height: 48px;
+  padding: 8px 10px;
+  font-size: 11px;
+  background: var(--surface-soft);
+  border-color: var(--line);
+}
+.floating-contact-channels .contact-channel-name { min-width: 0; text-align: start; overflow-wrap: anywhere; }
+.floating-contact-channels .contact-link-icon { width: 26px; height: 26px; }
+.floating-contact-motion-toggle { display: block; min-height: 44px; margin: 10px 0 -7px; padding: 5px 0; border: 0; border-radius: 4px; background: transparent; color: var(--muted); font-size: 11px; text-decoration: underline; text-underline-offset: 4px; }
+
+html[data-theme="dark"] .floating-contact-trigger { border-color: var(--color-secondary); box-shadow: 0 5px 24px rgb(0 0 0 / .28); }
+html[data-theme="dark"] .floating-contact-panel { box-shadow: 0 14px 44px rgb(0 0 0 / .34); }
+
+@media (max-width: 599px) {
+  .floating-contact { right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); }
+  .floating-contact-panel { padding: 17px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .floating-contact-trigger { transition: background-color 160ms ease; }
+  .floating-contact-trigger::before { animation: floating-contact-halo 2.8s ease-out infinite; }
+  .floating-contact-dot { animation: floating-contact-beacon 2.8s ease-in-out infinite; }
+  .floating-contact[open] > .floating-contact-panel { animation: floating-contact-open 160ms ease-out; }
+}
+
+.floating-contact[data-paused="true"] .floating-contact-trigger::before,
+.floating-contact[data-paused="true"] .floating-contact-dot { animation-play-state: paused; }
+.floating-contact[data-blink="off"] .floating-contact-trigger::before,
+.floating-contact[data-blink="off"] .floating-contact-dot { animation: none; }
+.floating-contact[data-blink="off"] .floating-contact-trigger::before { opacity: 0; }
+.floating-contact[open] > .floating-contact-trigger::before,
+.floating-contact:focus-within > .floating-contact-trigger::before,
+.floating-contact-trigger:hover::before { animation: none; opacity: 0; }
+.floating-contact[open] .floating-contact-dot,
+.floating-contact:focus-within .floating-contact-dot,
+.floating-contact-trigger:hover .floating-contact-dot { animation: none; opacity: 1; }
+
+@keyframes floating-contact-halo {
+  0% { opacity: .55; transform: scale(.98); }
+  75%, 100% { opacity: 0; transform: scale(1.13); }
+}
+@keyframes floating-contact-beacon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .55; }
+}
+@keyframes floating-contact-open {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (forced-colors: active) {
+  .floating-contact-trigger, .floating-contact-panel { border: 1px solid ButtonText; box-shadow: none; }
+  .floating-contact-trigger::before, .floating-contact-dot { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .floating-contact-motion-toggle { display: none; } }
+@media print { .floating-contact { display: none; } }
