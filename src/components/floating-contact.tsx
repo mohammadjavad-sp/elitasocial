@@ -71,8 +71,6 @@ function FloatingContactPanel() {
       <summary ref={trigger} className="floating-contact-trigger" aria-controls={`${id}-panel`}
         aria-label={`ارتباط با ما؛ راه‌های ارتباطی ${brand.name}`}>
         <span className="floating-contact-icon"><Icon name={open ? "close" : "phone"} /></span>
-        <span>ارتباط با ما</span>
-        <span className="floating-contact-dot" aria-hidden="true" />
       </summary>
       <div className="floating-contact-panel" id={`${id}-panel`} role="region" aria-labelledby={`${id}-title`}>
         <div className="floating-contact-heading">
@@ -81,7 +79,6 @@ function FloatingContactPanel() {
         </div>
         <p className="floating-contact-description">راهی که راحت‌تری را انتخاب کن.</p>
         <ContactChannels contact={contact} className="floating-contact-channels" onNavigate={() => close(true)} />
-        <button type="button" className="floating-contact-motion-toggle" onClick={toggleBlink}>{blinkEnabled ? "توقف چشمک" : "فعال کردن چشمک"}</button>
       </div>
     </details>
     <noscript><style>{".floating-contact-close,.floating-contact-motion-toggle{display:none}"}</style></noscript>
