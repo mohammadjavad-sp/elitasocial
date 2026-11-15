@@ -3,6 +3,10 @@
 .pricing-tabs button { min-height: 44px; padding: 10px 17px; font-size: 12px; font-weight: 500; color: var(--muted); background: var(--surface-soft); border: 1px solid var(--line); border-radius: 100px; }
 .pricing-tabs button[aria-pressed="true"] { background: var(--purple); color: white; border-color: var(--purple); }
 .pricing-tabs button:hover { border-color: var(--purple); }
+@media (max-width: 649px) {
+  .pricing-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pricing-tabs button { padding-inline: 9px; line-height: 1.8; }
+}
 .pricing-notice { display: flex; align-items: flex-start; justify-content: center; gap: 7px; text-align: center; max-width: 750px; margin: 0 auto 28px; font-size: 11px; line-height: 2.2; color: var(--muted); }
 .pricing-notice svg { width: 16px; height: 16px; margin-top: 4px; }
 .pricing-grid { display: grid; gap: 22px; }

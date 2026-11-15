@@ -10,9 +10,9 @@ import { ContactChannels } from "./contact-channels";
 import { ContactChooser } from "./contact-chooser";
 import { ThemeToggle } from "./theme-toggle";
 
-type ActivePage = "home" | "portfolio" | "services" | "blog" | "pricing";
+type ActivePage = "home" | "services" | "blog" | "pricing";
 type Props = { navigation: NavigationItem[]; whatsapp?: string; activePage?: ActivePage };
-const activePaths: Record<ActivePage, string> = { home: "/", portfolio: "/portfolio/", services: "/services/", blog: "/blog/", pricing: "/pricing/" };
+const activePaths: Record<ActivePage, string> = { home: "/", services: "/services/", blog: "/blog/", pricing: "/pricing/" };
 
 function NavigationLinks({ items, onNavigate, activePage }: { items: NavigationItem[]; onNavigate?: () => void; activePage: ActivePage }) {
   return items.filter(item => !item.upcoming).map((item) => (

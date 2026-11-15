@@ -1,16 +1,26 @@
 import type { NextConfig } from "next";
 
 const githubPages = process.env.DEPLOY_TARGET === "github-pages";
+const lowResourceBuild = !githubPages && process.env.CPANEL_LOW_RESOURCE_BUILD === "true";
 const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/$/, "");
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Opt in on shared hosts that cannot spawn the separate TypeScript CLI.
+  ...(lowResourceBuild ? {
+    experimental: {
+      cpus: 1,
+      workerThreads: true,
+      webpackBuildWorker: false,
+      useTypeScriptCli: false,
+    },
+  } : {}),
   turbopack: { root: process.cwd() },
   outputFileTracingRoot: process.cwd(),
   outputFileTracingExcludes: {
     "/*": ["./.env*", "./.data/**/*", "./backups/**/*", "./artifacts/**/*", "./.git/**/*"],
   },
   basePath,
-  pageExtensions: githubPages ? ["tsx", "ts", "jsx", "js"] : ["server.tsx", "server.ts", "tsx", "ts", "jsx", "js"],
+  pageExtensions: githubPages ? ["static.tsx", "tsx", "ts", "jsx", "js"] : ["server.tsx", "server.ts", "tsx", "ts", "jsx", "js"],
   env: { NEXT_PUBLIC_CMS_ENABLED: githubPages ? "false" : "true" },
   output: githubPages ? "export" : undefined,
   trailingSlash: githubPages,
@@ -27,6 +37,9 @@ const nextConfig: NextConfig = {
   },
   // GitHub Pages controls its own HTTP headers. These apply to the Node release.
   ...(githubPages ? {} : {
+    async redirects() {
+      return [{ source: "/portfolio", destination: "/#portfolio", permanent: true }];
+    },
     async headers() {
       return [
         {

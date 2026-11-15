@@ -15,7 +15,6 @@ export function buildPublicSitemap({ articles, services }: PublicSitemapContent)
   const paths = [
     "/",
     "/services/",
-    "/portfolio/",
     "/pricing/",
     "/blog/",
     ...services.filter(service => validSlug(service.slug)).map(service => `/services/${service.slug}/`),

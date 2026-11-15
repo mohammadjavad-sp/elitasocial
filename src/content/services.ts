@@ -1,4 +1,6 @@
 /** Service copy stays separate from page presentation for future CMS editing. */
+import type { PricingCategoryId } from "@/lib/pricing-categories";
+
 export type ServiceSlug = "instagram" | "website" | "content" | "seo";
 
 export type ServiceDetail = {
@@ -14,7 +16,7 @@ export type ServiceDetail = {
   deliverables: { title: string; description: string }[];
   steps: { title: string; description: string }[];
   faqs: { question: string; answer: string }[];
-  pricingCategory: "instagram" | "website" | "support" | null;
+  pricingCategory: PricingCategoryId | null;
   pricingLabel: string;
 };
 
@@ -103,8 +105,8 @@ export const services: ServiceDetail[] = [
       { question: "عکاسی و فیلم‌برداری هم انجام می‌شود؟", answer: "اگر پروژه به تصویربرداری نیاز داشته باشد، محل اجرا، محصول یا سوژه و شیوهٔ تولید را جداگانه هماهنگ می‌کنیم. این بخش بدون توافق قبلی جزو همهٔ سفارش‌ها نیست." },
       { question: "هزینهٔ تولید محتوا چطور مشخص می‌شود؟", answer: "قالب محتوا، تعداد خروجی، نیاز به تصویربرداری یا تدوین و میزان آماده بودن اطلاعات روی هزینه اثر دارند. بعد از مرور نیازت، محدودهٔ کار و پیشنهاد هزینه ارائه می‌شود." },
     ],
-    pricingCategory: null,
-    pricingLabel: "مشاوره برای سفارش محتوا",
+    pricingCategory: "content",
+    pricingLabel: "دیدن پلن‌های تولید محتوا",
   },
   {
     slug: "seo",
@@ -132,8 +134,8 @@ export const services: ServiceDetail[] = [
       { question: "پشتیبانی سایت شامل چه کارهایی است؟", answer: "بسته به بستر سایت می‌تواند شامل به‌روزرسانی محتوا، رسیدگی به خطاها و اصلاحات فنی باشد. توسعهٔ امکانات تازه یا بازطراحی، در صورت نیاز جداگانه تعریف می‌شود." },
       { question: "برای سایتی که جای دیگری ساخته شده هم می‌توانیم همکاری کنیم؟", answer: "بله؛ ابتدا بستر، دسترسی‌ها و وضعیت فعلی بررسی می‌شود. پس از آن مشخص می‌کنیم کدام بخش‌ها قابل پشتیبانی هستند و چه پیش‌نیازهایی دارند." },
     ],
-    pricingCategory: "support",
-    pricingLabel: "دیدن پلن‌های پشتیبانی سایت",
+    pricingCategory: "seo",
+    pricingLabel: "دیدن پلن‌های سئو",
   },
 ];
 

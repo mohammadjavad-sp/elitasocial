@@ -6,7 +6,7 @@ import { ArticleCard } from "@/components/article-card";
 import { Header } from "@/components/header";
 import { Icon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
-import { articles as starterArticles, getArticle, getArticleCategory, getRelatedArticles } from "@/content/articles";
+import { getArticle, getArticleCategory, getRelatedArticles } from "@/content/articles";
 import { getNavigation } from "@/content/home";
 import { serviceContactHref } from "@/lib/service-selection";
 import { sitePath } from "@/lib/site-path";
@@ -15,10 +15,6 @@ import { getSiteSettings } from "@/server/settings";
 import { createPageMetadata } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ slug: string }> };
-
-export function generateStaticParams() {
-  return process.env.DEPLOY_TARGET === "github-pages" ? starterArticles.map(({ slug }) => ({ slug })) : [];
-}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;

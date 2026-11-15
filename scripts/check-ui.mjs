@@ -47,9 +47,8 @@ try {
     assert.equal(await page.locator('h1').count(), 1, 'One primary heading');
     const about = page.locator('#about');
     const services = page.locator('#services');
-    const approach = page.locator('#approach');
     const benefits = page.locator('#benefits');
-    const sections = { about, services, approach, benefits, ...Object.fromEntries(['portfolio', 'pricing', 'insights', 'contact'].map(id => [id, page.locator(`#${id}`)])) };
+    const sections = { about, services, benefits, ...Object.fromEntries(['portfolio', 'pricing', 'insights', 'contact'].map(id => [id, page.locator(`#${id}`)])) };
     for (const section of Object.values(sections)) {
       await section.waitFor({ state: 'visible' });
       assert.equal(await section.locator('h2:visible').count(), 1, 'Each section has a descriptive visible heading');
@@ -66,7 +65,7 @@ try {
     assert.equal(await services.locator('article').count(), 4, 'Four offered services');
     assert.equal(await about.locator('img').count(), 2, 'About uses two marketing photos');
     assert(await about.locator('img').evaluateAll(images => images.every(img => !decodeURIComponent(img.src).includes('elaheh'))), 'About no longer reuses the founder portraits');
-    assert(await approach.locator('img').count() > 0, 'Approach includes an editorial marketing photo');
+    assert.equal(await page.locator('#approach').count(), 0, 'Removed collaboration section is not rendered');
     assert.equal(await benefits.locator('img').count(), 5, 'Benefits includes five photo panels');
 
     const benefitButtons = benefits.locator('button[aria-expanded][aria-controls]');
@@ -94,20 +93,17 @@ try {
     }
     await benefitButtons.first().focus();
     await page.keyboard.press('Enter');
-    assert.equal(await sections.portfolio.locator('.portfolio-demo-notice, .project-demo, .art-demo-label').count(), 0, 'Portfolio omits temporary content labels');
-    const portfolioLink = sections.portfolio.locator('a.portfolio-all-link');
-    assert.equal(await portfolioLink.getAttribute('href'), `${new URL(baseURL).pathname.replace(/\/$/, '')}/portfolio/`, 'Gallery link preserves deployment path');
-    const featuredProject = sections.portfolio.locator('.project-open').first();
-    await featuredProject.focus();
-    await page.keyboard.press('Enter');
-    await page.locator('dialog.project-dialog').waitFor({ state: 'visible' });
-    await page.keyboard.press('Escape');
-    await page.locator('dialog.project-dialog').waitFor({ state: 'hidden' });
-    assert(await featuredProject.evaluate(button => document.activeElement === button), 'Featured project modal restores keyboard focus');
+    assert.equal(await sections.portfolio.locator('.portfolio-card, .project-open, dialog').count(), 0, 'On-site project gallery has been removed');
+    const portfolioLink = sections.portfolio.locator('a.portfolio-social-action');
+    assert.equal(await portfolioLink.getAttribute('href'), 'https://www.instagram.com/elita.nasl/', 'Work samples lead to the Instagram account');
+    assert.equal(await portfolioLink.getAttribute('target'), '_blank');
+    assert.equal(await sections.portfolio.locator('.portfolio-social-topics li').count(), 4, 'All four service areas are represented');
+    await portfolioLink.focus();
+    assert(await portfolioLink.evaluate(link => document.activeElement === link), 'Instagram invitation is keyboard accessible');
     const pricing = sections.pricing;
     assert.equal(await pricing.locator('.pricing-notice').count(), 0, 'Pricing omits temporary content notices');
     const pricingCategories = pricing.locator('.pricing-tabs button');
-    assert.equal(await pricingCategories.count(), 3, 'Three pricing service categories');
+    assert.equal(await pricingCategories.count(), 6, 'Six pricing service categories');
     const categoryPrices = [];
     for (let index = 0; index < await pricingCategories.count(); index++) {
       const category = pricingCategories.nth(index);
@@ -124,21 +120,21 @@ try {
         const amount = Number(await plan.locator('data').getAttribute('value'));
         assert(Number.isFinite(amount) && amount > 0, 'Plan amount is a positive number');
         assert.match(await plan.locator('.plan-price').innerText(), /تومان/, 'Plan states its currency');
-        assert.match(await plan.locator('.plan-price small').innerText(), index === 1 ? /پروژه‌ای/ : /ماهانه/, 'Plan states the correct pricing period');
+        assert.match(await plan.locator('.plan-price small').innerText(), index === 1 || index === 4 ? /پروژه‌ای/ : /ماهانه/, 'Plan states the correct pricing period');
         assert(await plan.locator('li').count() >= 4, 'Plan includes useful scope details');
         const consultation = new URL(await plan.locator('a').getAttribute('href'), page.url());
         assert.equal(consultation.origin, new URL(baseURL).origin, 'Plan consultation opens the site contact form');
         assert.equal(consultation.pathname, new URL(baseURL).pathname, 'Plan consultation preserves the deployment subpath');
         assert.equal(consultation.hash, '#contact', 'Plan consultation targets the contact form');
-        assert.equal(consultation.searchParams.get('planCategory'), ['instagram', 'website', 'support'][index], 'Consultation preserves the selected pricing category');
-        assert.equal(consultation.searchParams.get('service'), ['instagram', 'website', 'seo'][index], 'Consultation preserves the selected service');
-        assert(consultation.searchParams.get('plan')?.startsWith(['ig-', 'web-', 'care-'][index]), 'Consultation identifies the selected plan');
+        assert.equal(consultation.searchParams.get('planCategory'), ['instagram', 'website', 'seo', 'support', 'redesign', 'content'][index], 'Consultation preserves the selected pricing category');
+        assert.equal(consultation.searchParams.get('service'), ['instagram', 'website', 'seo', 'seo', 'website', 'content'][index], 'Consultation preserves the selected service');
+        assert(consultation.searchParams.get('plan')?.startsWith(['ig-', 'web-', 'seo-', 'care-', 'redesign-', 'content-'][index]), 'Consultation identifies the selected plan');
         prices.push(amount);
       }
       assert(prices.every((amount, planIndex) => planIndex === 0 || amount > prices[planIndex - 1]), 'Increasing plan scope has increasing sample pricing');
       categoryPrices.push(prices);
     }
-    assert(new Set(categoryPrices.map(prices => prices.join(','))).size === 3, 'Switching categories changes pricing content');
+    assert(new Set(categoryPrices.map(prices => prices.join(','))).size === 6, 'Switching categories changes pricing content');
     await pricingCategories.first().click();
     assert.equal(await page.locator('#insights .article-card-read').count(), 3, 'Three linked homepage articles');
     const blogPath = `${new URL(baseURL).pathname.replace(/\/$/, '')}/blog/`;

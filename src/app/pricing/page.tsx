@@ -8,12 +8,13 @@ import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
 import { createPageMetadata } from "@/lib/seo";
+import { pricingCategoryIcons } from "@/lib/pricing-categories";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { home: { brand } } = await getSiteSettings();
   return createPageMetadata({
     title: `پلن‌ها و قیمت‌ها | ${brand.name}`,
-    description: `پلن‌های مدیریت اینستاگرام، طراحی وب‌سایت و سئو و پشتیبانی ${brand.name} را همراه با امکانات، دوره و هزینه مقایسه کنید و برای همکاری مشاوره بگیرید.`,
+    description: `پلن‌های مدیریت اینستاگرام، طراحی سایت، سئو، پشتیبانی، ری دیزاین و اصلاح طراحی و تولید محتوا در ${brand.name} را همراه با امکانات و هزینه مقایسه کنید.`,
     path: "/pricing/",
     siteName: brand.name,
   });
@@ -40,7 +41,7 @@ export default async function PricingPage() {
           <div className="pricing-visual-card pricing-visual-card-front">
             <span className="pricing-visual-tag"><Icon name="sparkle" />همکاری با {settings.home.brand.name}</span>
             <strong>برای برند تو،<br />با نیازهای خودت</strong>
-            {content.pricing.categories.map(category => <div className="pricing-visual-service" key={category.id}><span><Icon name={category.id === "instagram" ? "instagram" : category.id === "website" ? "website" : "sparkle"} /></span>{category.label}</div>)}
+            {content.pricing.categories.map(category => <div className="pricing-visual-service" key={category.id}><span><Icon name={pricingCategoryIcons[category.id]} /></span>{category.label}</div>)}
             <p className="pricing-visual-note">از یک انتخاب روشن شروع کنیم.</p>
           </div>
         </div>

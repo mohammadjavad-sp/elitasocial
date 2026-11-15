@@ -1,4 +1,5 @@
 import type { CmsCollection } from "./cms-shared";
+import { pricingCategoryIds, pricingCategoryLabels } from "./pricing-categories";
 
 export type EditorOption = { value: string; label: string };
 export type EditorField = {
@@ -16,7 +17,7 @@ export const categoryOptions: EditorOption[] = [
   { value: "content", label: "تولید محتوا" },
   { value: "seo", label: "سئو و نگهداری" },
 ];
-export const planCategoryOptions = [categoryOptions[0], categoryOptions[1], { value: "support", label: "سئو و پشتیبانی" }];
+export const planCategoryOptions = pricingCategoryIds.map(value => ({ value, label: pricingCategoryLabels[value] }));
 
 const slug: EditorField = { key: "slug", label: "نشانی کوتاه", required: true, hint: "فقط حروف کوچک انگلیسی، عدد و خط تیره؛ مثل content-calendar. تغییر این نشانی، لینک قبلی را تغییر می‌دهد." };
 const mock: EditorField = { key: "isMock", label: "این محتوا نمایشی است", type: "checkbox", hint: "پس از تأیید محتوای واقعی، این گزینه را بردار." };
@@ -45,21 +46,6 @@ export const editorFields: Record<CmsCollection, EditorField[]> = {
     ] },
     { key: "pricingCategory", label: "پلن‌های مرتبط", type: "select", options: [{ value: "", label: "بدون پلن مرتبط" }, ...planCategoryOptions] },
     { key: "pricingLabel", label: "متن دکمهٔ مشاوره یا پلن", required: true },
-  ],
-  portfolio: [
-    { key: "title", label: "عنوان پروژه", required: true },
-    { ...slug, key: "id" },
-    { key: "category", label: "دسته‌بندی", type: "select", options: categoryOptions, required: true },
-    { key: "discipline", label: "نوع همکاری", required: true },
-    { key: "brand", label: "نام برند", required: true },
-    { key: "headline", label: "تیتر پروژه", required: true },
-    { key: "caption", label: "توضیح کوتاه", type: "textarea", required: true },
-    { key: "description", label: "شرح پروژه", type: "textarea", required: true },
-    { key: "theme", label: "قالب پیش‌نمایش", type: "select", options: [
-      { value: "botanical", label: "گیاه و طبیعت" }, { value: "cafe", label: "کافه" }, { value: "jewelry", label: "زیورآلات" }, { value: "beauty", label: "زیبایی" },
-      { value: "studio", label: "استودیوی طراحی" }, { value: "travel", label: "سفر" }, { value: "interior", label: "معماری" }, { value: "wellness", label: "سبک زندگی" },
-    ] },
-    { key: "deliverables", label: "خروجی‌های پروژه", type: "lines", required: true, hint: "هر خروجی در یک خط." }, mock,
   ],
   plans: [
     { key: "name", label: "نام پلن", required: true }, { ...slug, key: "id" },
@@ -92,6 +78,5 @@ export function recordTitle(data: Record<string, unknown>) {
 export function publicRecordPath(collection: CmsCollection, data: Record<string, unknown>) {
   if (collection === "articles") return `/blog/${encodeURIComponent(String(data.slug))}/`;
   if (collection === "services") return `/services/${encodeURIComponent(String(data.slug))}/`;
-  if (collection === "portfolio") return "/portfolio/";
   return "/#pricing";
 }

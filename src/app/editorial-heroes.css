@@ -1,5 +1,4 @@
 .editorial-hero { padding-block: 18px 74px; }
-.editorial-hero .portfolio-breadcrumb,
 .editorial-hero .magazine-breadcrumb { min-height: 44px; margin: 0 0 22px; }
 .editorial-hero .magazine-breadcrumb a { min-height: 44px; }
 .editorial-hero-grid { display: grid; gap: 48px; align-items: center; padding-block: 12px 20px; }
@@ -18,20 +17,8 @@
 .editorial-photo-backdrop { position: absolute; z-index: -1; inset: 0 4px 37px; background: var(--color-tertiary); border-radius: 90px 22px 90px 22px; transform: rotate(-5deg); }
 .editorial-hero-photo { overflow: hidden; position: relative; aspect-ratio: 1.2; background: var(--color-quaternary); box-shadow: 0 20px 40px rgb(var(--color-primary-rgb) / 0.063); }
 .editorial-hero-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.portfolio-hero-photo { border-radius: 90px 17px 75px 17px; }
-.portfolio-hero-photo img { object-position: center; }
 .editorial-photo-caption { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 10px; margin: 24px 0 -25px; line-height: 2; }
 .editorial-photo-caption > span { height: 1px; width: 18px; background: var(--color-secondary); }
-.portfolio-hero-preview { position: absolute; width: 180px; bottom: 37px; inset-inline-end: -7px; background: #f2f5ed; border: 5px solid #fff; border-radius: 9px; overflow: hidden; box-shadow: 0 12px 32px #3d2d5126; transform: rotate(-8deg); }
-.portfolio-preview-chrome { display: flex; align-items: center; gap: 3px; background: #fff; padding: 6px 5px 8px; direction: ltr; }
-.portfolio-preview-chrome > i { display: block; width: 4px; height: 4px; border-radius: 50%; background: #d6cddf; }
-.portfolio-preview-chrome > span { margin-left: auto; color: #83758c; font-size: 7px; direction: rtl; }
-.portfolio-preview-content { position: relative; height: 138px; padding: 10px 13px; background: #edf2e7; color: #375443; }
-.portfolio-preview-brand { display: block; font-size: 16px; font-weight: 800; margin-bottom: 12px; }
-.portfolio-preview-content > strong { display: block; font-size: 12px; font-weight: 700; line-height: 1.9; max-width: 88px; }
-.portfolio-preview-leaf { display: block; position: absolute; left: 13px; top: 43px; width: 34px; height: 53px; border-radius: 38px 0 38px 0; transform: rotate(-15deg); background: linear-gradient(100deg, #648067 50%, #83a280 51%); box-shadow: 13px 16px 0 -6px #9cb193; }
-.portfolio-preview-rule { display: block; width: 48%; height: 2px; margin-top: 7px; background: #c9d5c2; }
-.portfolio-preview-rule:last-child { width: 32%; }
 .editorial-hero-seal { position: absolute; width: 96px; height: 96px; top: -9px; inset-inline-start: -5px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 5px; border: 1px solid var(--color-secondary); outline: 5px solid var(--line); background: var(--color-quaternary); border-radius: 50%; color: var(--color-primary); transform: rotate(12deg); }
 .editorial-hero-seal > svg { width: 23px; height: 23px; stroke-width: 1.2; }
 .editorial-hero-seal > span { text-align: center; font-size: 10px; line-height: 1.8; }
@@ -46,7 +33,7 @@
 .magazine-note-rule { display: block; width: 42px; height: 1px; background: var(--color-secondary); margin-top: 13px; }
 .magazine-hero-bookmark { display: grid; place-items: center; position: absolute; top: 0; inset-inline-start: 40px; width: 46px; height: 72px; color: #fff; background: var(--color-secondary); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 83%, 0 100%); padding-bottom: 11px; }
 .magazine-hero-bookmark > svg { width: 23px; height: 23px; }
-#portfolio-gallery, #magazine-featured { scroll-margin-top: 30px; }
+#magazine-featured { scroll-margin-top: 30px; }
 
 @media (min-width: 1000px) {
   .editorial-hero-grid { grid-template-columns: 1fr 1.05fr; gap: clamp(40px, 5vw, 75px); min-height: 520px; padding-block: 20px 28px; }
@@ -62,7 +49,7 @@
 }
 @media (max-width: 699px) {
   .editorial-hero { padding-block: 8px 49px; }
-  .editorial-hero .portfolio-breadcrumb, .editorial-hero .magazine-breadcrumb { margin-bottom: 11px; }
+  .editorial-hero .magazine-breadcrumb { margin-bottom: 11px; }
   .editorial-hero-grid { gap: 36px; padding-block: 7px 16px; }
   .editorial-hero-kicker { font-size: 11px; margin-bottom: 12px; }
   .editorial-hero-copy h1 { font-size: clamp(28px, 7.5vw, 40px); letter-spacing: normal; line-height: 1.85; }
@@ -73,17 +60,8 @@
   .editorial-hero-disciplines { font-size: 10px; margin-top: 16px; gap: 5px 8px; }
   .editorial-hero-visual { width: min(100%, 490px); padding: 9px 9px 35px; }
   .editorial-hero-photo { aspect-ratio: 1.32; }
-  .portfolio-hero-photo { border-radius: 62px 15px 55px 15px; }
   .editorial-photo-backdrop { inset: 0 3px 35px; border-radius: 62px 15px 55px 15px; }
   .editorial-photo-caption { margin-top: 22px; font-size: 9px; }
-  .portfolio-hero-preview { width: 133px; border-width: 4px; bottom: 34px; inset-inline-end: -2px; }
-  .portfolio-preview-content { height: 107px; padding: 7px 9px; }
-  .portfolio-preview-brand { font-size: 13px; margin-bottom: 7px; }
-  .portfolio-preview-content > strong { font-size: 9px; }
-  .portfolio-preview-leaf { width: 25px; height: 40px; top: 33px; left: 10px; }
-  .portfolio-preview-chrome { padding: 4px 3px 6px; }
-  .portfolio-preview-chrome > span { font-size: 6px; }
-  .portfolio-preview-rule { margin-top: 5px; }
   .editorial-hero-seal { width: 70px; height: 70px; inset-inline-start: 0; top: -6px; gap: 3px; outline-width: 4px; }
   .editorial-hero-seal > svg { width: 17px; height: 17px; }
   .editorial-hero-seal > span { font-size: 8px; }

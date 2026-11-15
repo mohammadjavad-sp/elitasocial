@@ -14,8 +14,6 @@ import { createPageMetadata } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ category: string }> };
 
-export function generateStaticParams() { return process.env.DEPLOY_TARGET === "github-pages" ? articleCategories.map(item => ({ category: item.slug })) : []; }
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { category: slug } = await params;
   const { home: { brand } } = await getSiteSettings();

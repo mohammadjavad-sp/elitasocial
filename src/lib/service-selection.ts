@@ -1,5 +1,6 @@
 import { pricingContent, type DemoPlan, type PricingContent } from "@/content/pricing";
 import { sitePath } from "@/lib/site-path";
+import { pricingCategoryServices, type PricingCategoryId } from "./pricing-categories";
 
 export const serviceLabels = {
   instagram: "مدیریت اینستاگرام",
@@ -9,10 +10,10 @@ export const serviceLabels = {
 } as const;
 
 export type ServiceId = keyof typeof serviceLabels;
-export type PlanCategoryId = "instagram" | "website" | "support";
+export type PlanCategoryId = PricingCategoryId;
 export type SelectedPlan = { plan: DemoPlan; categoryId: string; categoryLabel: string; service: ServiceId };
 
-const categoryServices: Record<string, ServiceId> = { instagram: "instagram", website: "website", support: "seo" };
+const categoryServices: Record<string, ServiceId> = pricingCategoryServices;
 
 export function serviceContactHref(service: ServiceId) {
   return sitePath(`/?service=${service}#contact`);

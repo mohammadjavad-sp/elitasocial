@@ -10,7 +10,7 @@ import { preloaderBootstrapScript } from "@/lib/preloader";
 import { getSeoConfig, indexingMetadata } from "@/lib/seo";
 import "./globals.css";
 import "./sections.css";
-import "./portfolio.css";
+import "./portfolio-invitation.css";
 import "./pricing.css";
 import "./closing.css";
 import "./services.css";

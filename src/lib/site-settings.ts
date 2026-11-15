@@ -60,9 +60,9 @@ export function getDefaultSiteSettings(): SiteSettings {
       description: "با الهه طاهری در الیتا سوشیال، از مدیریت اینستاگرام تا طراحی وب‌سایت همراه برند شما هستیم. برای مشاوره و شروع همکاری در ارتباط باشید.",
     },
     sections: {
-      portfolioTitle: "هر برند، یک دنیای دیدنی",
-      portfolioDescription: "از ویترین یک فروشگاه تا قصهٔ یک پیج؛ چند ایده برای آنچه می‌توانیم با هم بسازیم.",
-      portfolioActionLabel: "همهٔ نمونه‌ها",
+      portfolioTitle: "از ایده تا اجرا، نمونه‌ها را در پیج ببین",
+      portfolioDescription: "نمونه‌های ادمینی اینستاگرام، طراحی سایت، سئو و تولید محتوا را در پیج الیتا دنبال کن؛ با سبک کارها آشنا شو و ایدهٔ نزدیک به برندت را پیدا کن.",
+      portfolioActionLabel: "دیدن نمونه‌کارها در اینستاگرام",
       pricingTitle: [...pricingContent.title],
       pricingDescription: pricingContent.description,
       pricingFootnote: "هزینهٔ نهایی و محدودهٔ همکاری، بعد از بررسی نیازهای برندت مشخص می‌شود.",
@@ -103,6 +103,12 @@ export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
     settings.sections.contactFormDescription = defaults.sections.contactFormDescription;
   }
   // Upgrade unchanged starter copy while preserving the owner's edited content.
+  if (settings.sections.portfolioTitle === "هر برند، یک دنیای دیدنی") settings.sections.portfolioTitle = defaults.sections.portfolioTitle;
+  if (["از ویترین یک فروشگاه تا قصهٔ یک پیج؛ چند ایده برای آنچه می‌توانیم با هم بسازیم.", "نمونه‌هایی از طراحی سایت، تولید محتوا و سئو؛ برای ایده گرفتن از آنچه می‌توانیم با هم بسازیم."].includes(settings.sections.portfolioDescription)) {
+    settings.sections.portfolioDescription = defaults.sections.portfolioDescription;
+  }
+  if (settings.sections.portfolioActionLabel === "همهٔ نمونه‌ها") settings.sections.portfolioActionLabel = defaults.sections.portfolioActionLabel;
+  if (settings.home.hero.secondaryLabel === "دیدن نمونه‌کارها") settings.home.hero.secondaryLabel = defaults.home.hero.secondaryLabel;
   if (settings.footer.bottomNote === "محتوای نمونهٔ سایت در حال تکمیل است.") {
     settings.footer.bottomNote = defaults.footer.bottomNote;
   }

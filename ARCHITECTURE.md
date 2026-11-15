@@ -1,6 +1,6 @@
 # معماری پروژه — Elita Social
 
-ممیزی مبتنی بر سورس موجود در ۳۰ اکتبر ۲۰۲۶؛ مسیرها و نسخه‌ها از فایل‌های tracked و `package.json`/`package-lock.json` خوانده شده‌اند. اجرای مجدد build یا تست جزو این ممیزی نبود.
+ممیزی اولیه مبتنی بر سورس موجود در ۳۰ اکتبر ۲۰۲۶ بود؛ مسیرها و نسخه‌ها از فایل‌های tracked و `package.json`/`package-lock.json` خوانده شدند و در آن مرحله build یا تست بازاجرا نشد. بررسی‌های بعدی استقرار در انتهای این سند و `docs/verification.md` ثبت شده‌اند.
 
 ## نمای کلی
 
@@ -17,6 +17,8 @@ static GitHub Pages build: صفحات و starter content؛ بدون route سرو
 ```
 
 Node و Pages با متغیر انتخاب هدف build تفکیک می‌شوند. در Pages خروجی `export`، تصاویر unoptimized و CMS غیرفعال است؛ Node حالت عادی Next و APIهای dynamic را اجرا می‌کند. متغیر مسیر پایهٔ عمومی، مسیر preview را می‌سازد. این سند نام تنظیم‌ها را برای توضیح ساختار ذکر می‌کند و هیچ مقدار محیطی را افشا نمی‌کند؛ برای راهنمای تنظیم به `.env.example` و `deploy/cpanel.env.example` رجوع کنید.
+
+سه مسیر پارامتری خدمات، مقاله و دستهٔ مقاله، `generateStaticParams` را در `layout.static.tsx` دارند؛ این پسوند فقط در build مخصوص Pages فعال است. در Node این layoutها شناخته نمی‌شوند و صفحه‌ها با `connection()` در هر درخواست از CMS می‌خوانند. بازگرداندن آرایهٔ خالی از generator مشترک، مسیر Node را به fallback ایستا می‌برد و با خواندن dynamic دیتابیس تعارض دارد؛ این الگو در بررسی production خطای `DYNAMIC_SERVER_USAGE` ایجاد کرد.
 
 ## ساختار کد
 
@@ -39,7 +41,7 @@ Node و Pages با متغیر انتخاب هدف build تفکیک می‌شون
 
 | فناوری | نسخه/قید |
 | --- | --- |
-| Node.js | `>=22.19.0` (قید package و بررسی `server.js`/`check:host`) |
+| Node.js | `>=22.18.0` (قید package و بررسی `server.js`/`check:host`) |
 | Next.js | `16.4.3` |
 | React / React DOM | `19.3.1` |
 | TypeScript | `^5.9.3` در package؛ lockfile نسخهٔ `5.9.3` |
@@ -108,3 +110,9 @@ API عمومیِ مشاهدهٔ درخواست با کد پیگیری در ای�
 - GitHub Pages: هدف build static و base path متناسب؛ API و پنل DB اجرا نمی‌شوند.
 - پیش از build، SEO origin/indexing باید برای مقصد تعیین شود. هیچ مقدار خصوصی یا واقعی از env نباید در commit/گزارش باشد.
 - مراحل اجرایی و branching حفظ DB/شروع نو در `docs/cpanel-launch.md`; GitHub Pages در `docs/deployment.md`.
+
+برای ساخت Node روی هاست دارای محدودیت ایجاد فرایند، `CPANEL_LOW_RESOURCE_BUILD=true` پروفایل اختیاری `next.config.ts` را فعال می‌کند: `experimental.cpus: 1`، `workerThreads: true`، `webpackBuildWorker: false` و `useTypeScriptCli: false`. بدون این پرچم و در تمام buildهای Pages، تنظیمات قبلی حفظ می‌شوند. این پروفایل فرایند مستقل webpack و CLI تایپ‌اسکریپت را حذف می‌کند و workerهای بررسی نوع و تولید صفحات را به thread منتقل می‌کند؛ کاهش تعداد threadها تضمین عبور از محدودیت‌های هاست نیست.
+
+بررسی نوع برنامه با API نسخهٔ نصب‌شدهٔ TypeScript `5.9.3` فعال می‌ماند. checker این مسیر خطاهای فایل‌های تست را فیلتر می‌کند؛ برای پوشش کل `tsconfig`، `npm run typecheck` نیز مستقل اجرا شود. ارتقا به TypeScript 7 نیازمند بازبینی این پروفایل است، زیرا API جاوااسکریپت آن در مسیر مستندشدهٔ Next در دسترس نیست. هنگام استفاده از worker thread، `--v8-pool-size` در `NODE_OPTIONS` یا آرگومان مستقیم Node قرار نگیرد؛ Next آن را به worker منتقل می‌کند و در بررسی محلی خطای `ERR_WORKER_INVALID_EXEC_ARGV` ایجاد شد.
+
+طبق تصاویر خروجی هاست میهن‌وب‌هاست، `check:host` روی Node `22.18.0` و سپس انتقال بکاپ و `cms:migrate` موفق شدند. ساخت هاست دو بار هنگام ایجاد فرایند `tsc --showConfig` با `EAGAIN` شکست خورد؛ تلاش دوم با CLI مستقیم و poolهای محدود نیز همین خطا را داشت. پروفایل جدید و `tsc --noEmit` مستقل با باینری رسمی Node `22.18.0` روی Windows موفق شدند. سپس خروجی Terminal ارسالی کاربر، موفقیت build کامل Webpack و typecheck مستقل روی خود هاست با همین Node و Next `16.4.3`، بدون پرچم V8 فوق و با poolهای UV/Rayon محدود را نشان داد؛ پیام پایانی `BUILD_AND_TYPECHECK_OK` مشاهده شد. اجرای واقعی Passenger و پاسخ دامنه هنوز تأیید نشده‌اند.

@@ -13,9 +13,8 @@ import {
 import { getDatabase, listRecords } from "./database";
 import { CmsError } from "./errors";
 import { object, revision, text } from "./validation";
+import { pricingCategoryLabels as planCategoryLabels, pricingCategoryServices as categoryServices } from "@/lib/pricing-categories";
 
-const planCategoryLabels = { instagram: "مدیریت اینستاگرام", website: "طراحی وب‌سایت", support: "سئو و پشتیبانی" } as const;
-const categoryServices = { instagram: "instagram", website: "website", support: "seo" } as const;
 const hash = (value: string) => createHash("sha256").update(value).digest("hex");
 const normalizeDigits = (value: string) => value.replace(/[۰-۹]/g, digit => String(digit.charCodeAt(0) - 0x06f0)).replace(/[٠-٩]/g, digit => String(digit.charCodeAt(0) - 0x0660));
 

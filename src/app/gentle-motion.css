@@ -42,10 +42,6 @@
     animation-name: elita-turn;
     animation-duration: 4.4s;
   }
-  .portfolio-hero-preview[data-elita-motion] {
-    animation-name: elita-float;
-    animation-duration: 4.1s;
-  }
   .editorial-hero-seal[data-elita-motion] {
     --elita-turn: -10deg;
     animation-name: elita-turn;
@@ -152,7 +148,7 @@
     .instagram-card[data-elita-motion], .website-card[data-elita-motion] { --elita-rise: -5px; --elita-slide: -2px; }
     .ambient-orb[data-elita-motion], .visual-dot[data-elita-motion],
     .pricing-visual-orbit > span[data-elita-motion] { --elita-rise: -6px; }
-    .portfolio-hero-preview[data-elita-motion], .magazine-hero-note[data-elita-motion] { --elita-rise: -5px; }
+    .magazine-hero-note[data-elita-motion] { --elita-rise: -5px; }
     .editorial-hero-seal[data-elita-motion] { --elita-turn: -7deg; }
     .magazine-hero-bookmark[data-elita-motion] { --elita-turn: 6deg; }
     .about-orbits > i[data-elita-motion] { --elita-rise: -6px; --elita-slide: 2px; }

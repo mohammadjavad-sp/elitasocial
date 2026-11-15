@@ -28,7 +28,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## اجرای محلی و بررسی‌ها
 
-نیاز اعلامی پروژه: Node.js `22.19.0+` و npm. دستورات متداول:
+نیاز اعلامی پروژه: Node.js `22.18.0+` و npm. دستورات متداول:
 
 ```sh
 npm install

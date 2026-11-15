@@ -1,31 +1,22 @@
 /* Page surfaces follow the selected theme; illustrations keep their own palette. */
-html[data-theme="dark"] :is(.portfolio-card, .article-card, .pricing-card) {
+html[data-theme="dark"] :is(.article-card, .pricing-card) {
   background: var(--surface);
 }
 
-html[data-theme="dark"] :is(.portfolio-invitation, .magazine-featured, .magazine-empty, .article-takeaway, .article-consultation, .article-toc-mobile, .service-process-band, .service-audience, .service-plan-invitation) {
+html[data-theme="dark"] :is(.magazine-featured, .magazine-empty, .article-takeaway, .article-consultation, .article-toc-mobile, .service-process-band, .service-audience, .service-plan-invitation) {
   background: var(--surface-soft);
 }
 
-html[data-theme="dark"] :is(.portfolio-demo-notice, .project-demo, .project-dialog-notice, .magazine-demo-notice, .article-draft-notice, .article-tags a, .article-category-label) {
+html[data-theme="dark"] :is(.magazine-demo-notice, .article-draft-notice, .article-tags a, .article-category-label) {
   background: var(--surface-soft);
 }
 
-html[data-theme="dark"] :is(.portfolio-all-link, .portfolio-breadcrumb a, .portfolio-heading-mark, .project-detail-label, .project-card-arrow, .project-dialog-category, .editorial-hero-kicker, .editorial-hero-text-link) {
+html[data-theme="dark"] :is(.editorial-hero-kicker, .editorial-hero-text-link) {
   color: var(--accent-text);
 }
 
-html[data-theme="dark"] .project-close {
-  background: var(--surface);
-  color: var(--ink);
-}
-
-html[data-theme="dark"] :is(.project-dialog, .admin-delete-dialog, .admin-consultation-dialog)::backdrop {
+html[data-theme="dark"] :is(.admin-delete-dialog, .admin-consultation-dialog)::backdrop {
   background: rgb(10 7 15 / .78);
-}
-
-html[data-theme="dark"] .portfolio-filters button:hover:not([aria-pressed="true"]) {
-  color: var(--accent-text);
 }
 
 /* The hero's browser preview, stamp and paper remain small, light art accents. */

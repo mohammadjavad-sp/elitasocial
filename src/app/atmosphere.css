@@ -24,8 +24,7 @@
 
 .home-shell.magazine-shell,
 .home-shell.article-shell,
-.home-shell.service-shell,
-.home-shell.portfolio-shell {
+.home-shell.service-shell {
   background:
     radial-gradient(ellipse 550px 460px at -4% 3%, rgb(var(--color-tertiary-rgb) / .72), transparent 77%),
     radial-gradient(ellipse 570px 520px at 106% 15%, rgb(var(--color-secondary-rgb) / .27), transparent 78%),
@@ -97,7 +96,7 @@
   }
   .home-continuation::before { background-size: 175% 100%; background-position: center; }
   .home-shell.magazine-shell, .home-shell.article-shell,
-  .home-shell.service-shell, .home-shell.portfolio-shell { background-size: 150% 100%; background-position: center; }
+  .home-shell.service-shell { background-size: 150% 100%; background-position: center; }
   .site-ornament { width: 32px; opacity: .45; }
   .site-ornament-2, .site-ornament-3, .site-ornament-6,
   .site-ornament-8, .site-ornament-9, .site-ornament-12 { display: none; }
@@ -112,6 +111,6 @@
 @media print {
   .site-ornaments { display: none; }
   .home-shell, .home-shell.magazine-shell, .home-shell.article-shell,
-  .home-shell.service-shell, .home-shell.portfolio-shell { background: white; }
+  .home-shell.service-shell { background: white; }
   .home-continuation::before { display: none; }
 }

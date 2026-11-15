@@ -1,5 +1,5 @@
 /** Data sent between the administration interface and its authenticated API. */
-export const cmsCollections = ["articles", "services", "portfolio", "plans"] as const;
+export const cmsCollections = ["articles", "services", "plans"] as const;
 export type CmsCollection = typeof cmsCollections[number];
 export type CmsStatus = "draft" | "published";
 
@@ -31,6 +31,5 @@ export type CmsSession = {
 export const cmsCollectionLabels: Record<CmsCollection, string> = {
   articles: "مقاله‌ها",
   services: "خدمات",
-  portfolio: "نمونه‌کارها",
   plans: "پلن‌ها و قیمت‌ها",
 };

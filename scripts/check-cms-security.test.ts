@@ -41,6 +41,21 @@ test("CMS security boundaries use an isolated database", async t => {
   const cookie = setCookie.split(";")[0];
   const authHeaders = { cookie, "x-csrf-token": session.csrfToken };
 
+  await t.test("retired portfolio records stay stored but cannot be managed and do not appear in dashboard counts", async () => {
+    const db = getDatabase();
+    const now = new Date().toISOString();
+    db.prepare("INSERT INTO cms_records(id,collection,status,content_key,data,revision,created_at,updated_at) VALUES(?,'portfolio','published',?,?,1,?,?)")
+      .run("legacy-portfolio-test", "legacy-project", JSON.stringify({ title: "Legacy project" }), now, now);
+    const stats = await call("stats", "GET", undefined, { cookie });
+    assert.equal(stats.status, 200);
+    assert.equal(Object.hasOwn((await stats.json()).counts, "portfolio"), false);
+    for (const method of ["GET", "POST", "PUT", "DELETE"]) {
+      const resource = `records/portfolio${method === "PUT" || method === "DELETE" ? "/legacy-portfolio-test" : ""}`;
+      assert.equal((await call(resource, method, method === "GET" ? undefined : {}, authHeaders)).status, 400);
+    }
+    assert.equal(db.prepare("SELECT COUNT(*) AS total FROM cms_records WHERE id=?").get("legacy-portfolio-test")!.total, 1);
+  });
+
   await t.test("authentication cookies and private responses cannot be cached", async () => {
     for (const option of ["HttpOnly", "Secure", "SameSite=Lax", "Max-Age=28800"]) assert.ok(setCookie.includes(option));
     const response = await call("session", "GET", undefined, { cookie });

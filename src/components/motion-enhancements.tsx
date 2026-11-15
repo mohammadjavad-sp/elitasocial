@@ -11,7 +11,6 @@ const accents = [
   ".ambient-orb",
   ".little-star > svg",
   ".visual-dot",
-  ".portfolio-hero-preview",
   ".editorial-hero-seal",
   ".magazine-hero-note",
   ".magazine-hero-bookmark",

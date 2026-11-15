@@ -1,8 +1,9 @@
-import type { CmsCollection, CmsStatus } from "@/lib/cms-shared";
+import { cmsCollections, type CmsCollection, type CmsStatus } from "@/lib/cms-shared";
 import { CmsError } from "./errors";
+import { pricingCategoryIds } from "@/lib/pricing-categories";
 
 const categories = ["instagram", "website", "content", "seo"];
-const planCategories = ["instagram", "website", "support"];
+const planCategories = pricingCategoryIds;
 const fail = (field: string): never => { throw new CmsError(400, `مقدار «${field}» معتبر نیست.`); };
 export function object(value: unknown, field = "داده"): Record<string, unknown> { if (!value || typeof value !== "object" || Array.isArray(value)) return fail(field); return value as Record<string, unknown>; }
 export function text(value: unknown, field: string, max = 1000, min = 1): string {
@@ -30,7 +31,7 @@ function image(value: unknown) {
 }
 function titleDescription(value: unknown) { const item = object(value); return { title: text(item.title, "عنوان", 180), description: text(item.description, "توضیح", 3000) }; }
 
-export function collection(value: unknown): CmsCollection { return choice(value, ["articles", "services", "portfolio", "plans"], "مجموعه") as CmsCollection; }
+export function collection(value: unknown): CmsCollection { return choice(value, cmsCollections, "مجموعه") as CmsCollection; }
 export function status(value: unknown): CmsStatus { return choice(value, ["draft", "published"], "وضعیت") as CmsStatus; }
 export function revision(value: unknown): number { return typeof value === "number" && Number.isSafeInteger(value) && value > 0 ? value : fail("نسخه"); }
 
@@ -48,9 +49,6 @@ export function validateRecord(kind: CmsCollection, value: unknown): Record<stri
   }
   if (kind === "services") {
     return { slug: choice(d.slug, categories, "نشانی خدمت"), title: text(d.title, "عنوان", 220), shortTitle: text(d.shortTitle, "عنوان کوتاه", 120), headline: text(d.headline, "تیتر", 300), intro: text(d.intro, "مقدمه", 2000), description: text(d.description, "توضیح", 5000), audience: text(d.audience, "مخاطب", 3000), theme: choice(d.theme, ["pink", "lilac", "yellow", "mint"], "رنگ"), image: image(d.image), deliverables: list(d.deliverables, "خروجی‌ها", titleDescription, 20, 1), steps: list(d.steps, "مراحل", titleDescription, 15, 1), faqs: list(d.faqs, "پرسش‌ها", value => { const faq = object(value); return { question: text(faq.question, "پرسش", 500), answer: text(faq.answer, "پاسخ", 5000) }; }, 30), pricingCategory: d.pricingCategory === null ? null : choice(d.pricingCategory, planCategories, "دسته پلن"), pricingLabel: text(d.pricingLabel, "عنوان پلن", 180) };
-  }
-  if (kind === "portfolio") {
-    return { id: slug(d.id, "شناسه نمونه‌کار"), title: text(d.title, "عنوان", 220), category: choice(d.category, categories, "دسته"), discipline: text(d.discipline, "نوع همکاری", 300), theme: choice(d.theme, ["botanical", "cafe", "jewelry", "beauty", "studio", "travel", "interior", "wellness"], "قالب"), brand: text(d.brand, "برند", 120), headline: text(d.headline, "تیتر", 300), caption: text(d.caption, "خلاصه", 1000), description: text(d.description, "توضیح", 7000), deliverables: stringList(d.deliverables, "خروجی‌ها", 30, 1), isMock: bool(d.isMock, "نمایشی", true), ...(d.image === undefined || d.image === null ? {} : { image: image(d.image) }) };
   }
   const price = d.price;
   if (typeof price !== "number" || !Number.isFinite(price) || price < 0 || price > 1_000_000_000_000 || !Number.isSafeInteger(price)) return fail("قیمت");

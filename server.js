@@ -3,8 +3,8 @@
 // Production startup file for cPanel's Phusion Passenger integration.
 async function start() {
   const [major, minor] = process.versions.node.split(".").map(Number);
-  if (major < 22 || (major === 22 && minor < 19)) {
-    throw new Error("Elita Social requires Node.js 22.19.0 or newer.");
+  if (major < 22 || (major === 22 && minor < 18)) {
+    throw new Error("Elita Social requires Node.js 22.18.0 or newer.");
   }
 
   process.env.NODE_ENV = "production";

@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { AboutSection, ServicesSection } from "@/components/home-sections";
-import { ApproachSection } from "@/components/approach-section";
 import { BenefitsSection } from "@/components/benefits-section";
-import { FeaturedPortfolioSection } from "@/components/portfolio-preview";
+import { PortfolioInvitationSection } from "@/components/portfolio-preview";
 import { PricingSection } from "@/components/pricing-section";
 import { ContactSection } from "@/components/closing-sections";
 import { InsightsSection } from "@/components/insights-section";
@@ -35,10 +34,9 @@ export default async function Home() {
         <Hero />
         <div className="home-continuation">
           <AboutSection />
-          <FeaturedPortfolioSection projects={content.portfolio} />
+          <PortfolioInvitationSection />
           <PricingSection pricing={content.pricing} />
           <ServicesSection items={content.services} />
-          <ApproachSection />
           <BenefitsSection content={settings.home.benefits} />
           <InsightsSection articles={content.articles} />
           <ContactSection pricing={content.pricing} />

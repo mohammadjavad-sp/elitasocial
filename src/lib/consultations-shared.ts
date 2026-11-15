@@ -1,3 +1,5 @@
+import type { PricingCategoryId } from "./pricing-categories";
+
 /** Consultation information is only returned by the authenticated administration API. */
 export const consultationStatuses = ["new", "contacted", "completed", "archived"] as const;
 export type ConsultationStatus = typeof consultationStatuses[number];
@@ -19,7 +21,7 @@ export const consultationServiceLabels = {
 export type ConsultationService = keyof typeof consultationServiceLabels;
 export type ConsultationPlan = {
   id: string;
-  categoryId: "instagram" | "website" | "support";
+  categoryId: PricingCategoryId;
   name: string;
   categoryLabel: string;
   isMock: boolean;

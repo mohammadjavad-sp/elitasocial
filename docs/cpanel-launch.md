@@ -8,7 +8,7 @@
 
 | گزینه | مقدار |
 | --- | --- |
-| Node.js version | `22`، با نسخهٔ دقیق حداقل `22.19.0` |
+| Node.js version | `22`، با نسخهٔ دقیق حداقل `22.18.0` |
 | Application mode | `Production` |
 | Application root | `elita-social`، در پوشهٔ اصلی حساب و خارج از `public_html` |
 | Application URL | `elitasocial.ir`؛ مسیر زیر دامنه خالی یا `/` |
@@ -45,7 +45,7 @@ npm install --include=dev
 npm run check:host
 ```
 
-`check:host` نسخهٔ دقیق Node، API داخلی SQLite و تبدیل WebP با Sharp را بدون بازکردن دیتابیس یا خواندن رمز بررسی می‌کند. خطای قدیمی‌بودن Node یعنی ارائه‌دهنده باید نسخهٔ ۲۲ را به `22.19.0` یا بالاتر ارتقا دهد.
+`check:host` نسخهٔ دقیق Node، API داخلی SQLite، timeout روی دیتابیس موقتِ درون‌حافظه‌ای و تبدیل WebP با Sharp را بدون بازکردن دیتابیس سایت یا خواندن رمز بررسی می‌کند. خطای قدیمی‌بودن Node یعنی ارائه‌دهنده باید نسخهٔ ۲۲ را به `22.18.0` یا بالاتر ارتقا دهد.
 
 اگر Terminal ندارید، در Environment variables پنل `NPM_CONFIG_INCLUDE=dev` را اضافه کنید، Save بزنید و **Run NPM Install** را اجرا کنید. سپس در **Run JS Script**، نام `check:host` را اجرا کنید. نصب وابستگی‌های توسعه برای TypeScript و دستورهای CMS لازم است. اگر پنل این متغیر را به نصب منتقل نکرد و `tsx` یا `typescript` پیدا نشد، از پشتیبانی بخواهید در محیط فعال‌شدهٔ همین برنامه `npm install --include=dev` را اجرا کند.
 
@@ -93,6 +93,35 @@ npm run build
 
 یا در Run JS Script نام `build` را اجرا کنید؛ آماده‌سازی تصاویر نیز خودکار اجرا می‌شود. بعد از موفقیت build، در Setup Node.js App دکمهٔ **Restart** را بزنید. Passenger با `server.js` برنامه را اجرا می‌کند؛ پورت عمومی را خودش مدیریت می‌کند. برای این روش، فرایند دائمی دیگری با `npm start` در Terminal باز نکنید.
 
+اگر خطای Turbopack دربارهٔ مسیر `node_modules` خارج از ریشهٔ پروژه دیدید، ممکن است پنل این پوشه را به محیط Node بیرون از Application root پیوند داده باشد. در این حالت از Terminal محیط فعال‌شدهٔ همان برنامه اجرا کنید؛ این دستور آماده‌سازی تصاویر را نیز نگه می‌دارد:
+
+```sh
+npm run build -- --webpack
+```
+
+این راه جایگزین مربوط به ساختار symlink هاست است؛ محدودیت RAM یا نسخهٔ Node را رفع نمی‌کند.
+
+### خطای `spawn ... node EAGAIN` هنگام `tsc --showConfig`
+
+در حساب فعلی میهن‌وب‌هاست، این خطا با Webpack و حتی اجرای مستقیم Next با threadهای کمتر تکرار شد. خروجی نشان می‌دهد فرایند جداگانهٔ TypeScript ایجاد نشده است؛ مقدار دقیق محدودیت فرایند/thread یا RAM از این خروجی معلوم نیست. `next.config.ts` یک حالت اختیاری مخصوص build روی Node دارد که با `CPANEL_LOW_RESOURCE_BUILD=true` فعال می‌شود: یک worker، استفاده از worker thread، اجرای Webpack در فرایند اصلی و خواندن تنظیمات TypeScript از API به‌جای CLI جداگانه. بررسی TypeScript غیرفعال نمی‌شود. این حالت در Pages فعال نیست.
+
+بعد از انتقال نسخهٔ جدید `next.config.ts`، محیط Node خود برنامه را فعال کنید و در Application root اجرا کنید:
+
+```sh
+(
+set -e
+unset NODE_OPTIONS
+export CPANEL_LOW_RESOURCE_BUILD=true UV_THREADPOOL_SIZE=1 RAYON_NUM_THREADS=1
+node scripts/prepare-images.mjs
+node node_modules/next/dist/bin/next build --webpack
+node node_modules/typescript/bin/tsc --noEmit
+)
+```
+
+این دستورها بدون فرایند واسط npm و به‌ترتیب اجرا می‌شوند؛ آماده‌سازی تصاویرِ `prebuild` نیز حفظ می‌شود. اجرای مستقل `tsc` پس از build لازم است، چون checker مبتنی بر API در Next خطاهای فایل‌های test/spec را فیلتر می‌کند. `unset NODE_OPTIONS` فقط در subshell این دستور اثر دارد؛ گزینهٔ قبلی `--v8-pool-size=1` در بررسی محلی با worker threadهای این build خطای `ERR_WORKER_INVALID_EXEC_ARGV` ایجاد کرد و نباید در این مسیر اضافه شود.
+
+ساخت کامل این حالت و typecheck مستقل ابتدا با Node رسمی `22.18.0` روی Windows در کپی مستقل و دادهٔ ساختگی موفق بودند. در ۳۰ اکتبر ۲۰۲۶، خروجی Terminal ارسال‌شدهٔ کاربر از هاست Linux نیز تکمیل build و `tsc --noEmit` مستقل را با نشانگر `BUILD_AND_TYPECHECK_OK` تأیید کرد؛ خطای قبلی `EAGAIN` در این مسیر تکرار نشد. اجرای Passenger و بررسی دامنه هنوز مرحلهٔ بعد است. این تنظیم‌ها experimental هستند و منابع نامحدود ایجاد نمی‌کنند؛ threadها هم در سهمیهٔ CloudLinux حساب می‌شوند. اگر خطا در ساخت بعدی تکرار شد، خروجی جدید و صفحهٔ Resource Usage را برای بررسی محدودیت حساب به پشتیبانی بدهید. `ignoreBuildErrors` را برای عبور از خطا فعال نکنید. در ارتقای Next یا TypeScript، پشتیبانی از API و این گزینه‌ها دوباره بررسی شود.
+
 ## ۷. بررسی انتشار و ایندکس
 
 - `https://elitasocial.ir` و صفحه‌های خدمات، نمونه‌کار، پلن‌ها و مقاله باز شوند و عکس‌ها درست باشند.
@@ -105,14 +134,17 @@ npm run build
 
 | خطا | اقدام |
 | --- | --- |
-| `requires Node.js 22.19.0 or newer` | نسخهٔ دقیق Node انتخاب‌شده را با پشتیبانی بررسی کنید. |
+| `requires Node.js 22.18.0 or newer` | نسخهٔ دقیق Node انتخاب‌شده را با پشتیبانی بررسی کنید. |
 | `node:sqlite` در دسترس نیست | خروجی `check:host` را برای پشتیبانی بفرستید تا build نسخهٔ Node و پشتیبانی SQLite را بررسی کند. |
 | `Could not find a production build` | build روی همین Application root موفق نشده یا Restart به پوشهٔ دیگری اشاره دارد. |
 | `tsx` یا `typescript` پیدا نشد | نصب را با وابستگی‌های توسعه انجام دهید. |
 | `Killed` یا `ENOMEM` در build | خروجی خطا و محدودیت RAM/فرایند برنامه را برای پشتیبانی ارسال کنید. |
+| `EAGAIN` در `tsc --showConfig` | بخش حالت اختیاری build با منابع کمتر را دنبال کنید؛ اگر ادامه داشت، محدودیت فرایند/thread را با پشتیبانی بررسی کنید. |
 | خطای دسترسی به دیتابیس | مسیر واقعی، مالکیت و مجوز نوشتن `CMS_DATA_DIR` را بررسی کنید. |
 | خطای مبدأ یا `403` در ذخیره | HTTPS و انطباق `CMS_ORIGIN` با مبدأ واقعی دامنه را بررسی کنید؛ `www` نباید مبدأ متفاوتی برای فرم بسازد. |
 
-دسترسی واقعی cPanel، Passenger و SSL حساب کاربر از داخل این پروژه قابل تأیید نیست. آزمون محلی راه‌انداز با شبیه‌سازی Passenger جای اجرای `check:host`، build و بررسی دامنهٔ واقعی را نمی‌گیرد.
+در تصاویر ارسالی کاربر، اجرای `check:host` روی Linux با Node `22.18.0` و اجرای موفق `cms:migrate` پس از انتقال بکاپ دیده شد. خروجی Terminal بعدی کاربر در ۳۰ اکتبر ۲۰۲۶ تکمیل build با پروفایل بالا و typecheck مستقل را نیز تأیید کرد. دسترسی مستقیم به حساب در این مرحله وجود نداشت.
+
+درخواست عمومی فقط‌خواندنی به `https://elitasocial.ir/` با اعتبارسنجی پیش‌فرض گواهی، پاسخ ۲۰۰ و بدنهٔ ۵۱۰ بایت با عنوان «سرویس شما ایجاد شد» داد؛ ریشهٔ دامنه صفحهٔ پیش‌فرض میزبانی را نشان می‌داد. HTTPS این درخواست موفق بود، اما نمایش برنامهٔ الیتا هنوز تأیید نشده است. گام بعد Start App/Restart و بررسی اجرای Passenger و نمایش برنامه، هدایت HTTP/HTTPS، ورود مدیر، محتوای منتقل‌شده و رسانه‌ها و دریافت واقعی ایمیل است. از صفحهٔ پیش‌فرض، ایراد DNS یا گواهی نتیجه‌گیری نشود؛ این مشاهده به‌تنهایی مبنای حذف فایل‌های `public_html` نیست.
 
 منابع: [Node.js Selector در CloudLinux](https://docs.cloudlinux.com/cloudlinuxos/lve_manager/#node-js-selector)، [اتصال سرور Node در Passenger](https://www.phusionpassenger.com/docs/advanced_guides/in_depth/node/reverse_port_binding.html)، [سرور سفارشی Next.js](https://nextjs.org/docs/app/guides/custom-server)، [تنظیم include در npm](https://docs.npmjs.com/cli/commands/npm-install/#include).

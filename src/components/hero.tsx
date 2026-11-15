@@ -3,6 +3,7 @@ import { getSiteSettings } from "@/server/settings";
 import { Icon } from "./icons";
 import { sitePath } from "@/lib/site-path";
 import { ContactChannels } from "./contact-channels";
+import { portfolioInstagramUrl } from "@/lib/portfolio-destination";
 
 export async function Hero() {
   const { home: { hero, contact, brand } } = await getSiteSettings();
@@ -16,7 +17,7 @@ export async function Hero() {
           <a className="pill-button primary-button" href={contact.whatsapp} target="_blank" rel="noopener noreferrer">
             {hero.primaryLabel}<span className="button-circle"><Icon name="arrow" /></span>
           </a>
-          <a className="pill-button secondary-button" href={sitePath("/portfolio/")}>
+          <a className="pill-button secondary-button" href={portfolioInstagramUrl} target="_blank" rel="noopener noreferrer">
             {hero.secondaryLabel}<span className="button-circle"><Icon name="arrow" /></span>
           </a>
         </div>

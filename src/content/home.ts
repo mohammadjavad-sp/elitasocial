@@ -22,7 +22,6 @@ export const homeContent = {
   navigation: [
     { label: "خانه", href: "/" },
     { label: "خدمات", href: "/services/" },
-    { label: "نمونه‌کارها", href: "/portfolio/" },
     { label: "پلن‌ها", href: "/pricing/" },
     { label: "مجله الیتا", href: "/blog/" },
   ] satisfies NavigationItem[],
@@ -76,7 +75,7 @@ export const homeContent = {
     title: ["از اینستاگرام تا وب‌سایت،", "حرفه‌ای دیده شو"],
     description: "من الهه طاهری‌ام؛ در الیتا سوشیال با مدیریت اینستاگرام و طراحی وب‌سایت، به برندت کمک می‌کنم حضوری منسجم و حرفه‌ای در دنیای دیجیتال داشته باشه.",
     primaryLabel: "مشاوره و شروع همکاری",
-    secondaryLabel: "دیدن نمونه‌کارها",
+    secondaryLabel: "نمونه‌کارها در اینستاگرام",
     portrait: {
       src: "/images/elaheh-hero.jpg",
       alt: "الهه طاهری، بنیان‌گذار الیتا سوشیال",
@@ -90,7 +89,7 @@ export const homeContent = {
   },
 };
 
-export function getNavigation(page: "home" | "portfolio" | "services" | "blog" | "pricing" = "home"): NavigationItem[] {
+export function getNavigation(page: "home" | "services" | "blog" | "pricing" = "home"): NavigationItem[] {
   return homeContent.navigation.map((item) => ({
     ...item,
     href: page !== "home" && item.href?.startsWith("#") ? `/${item.href}` : item.href,

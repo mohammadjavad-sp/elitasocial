@@ -36,7 +36,8 @@ test("sitemap follows only the current published CMS content", async t => {
     assert.ok(!result.includes("/blog/draft-test"));
     assert.ok(!result.includes("/blog/category/seo"));
     assert.ok(!result.includes(`/services/${services[0].slug}`));
-    assert.equal(result.length, 7);
+    assert.equal(result.length, 6);
+    assert.ok(!result.includes("/portfolio"), "Removed gallery is not advertised in the sitemap");
   });
 
   await t.test("publishing appears on the next read without a rebuild", () => {
@@ -58,7 +59,7 @@ test("sitemap follows only the current published CMS content", async t => {
   await t.test("deleting published records never restores starter content", () => {
     deleteRecord("articles", draft.id, draft.revision);
     deleteRecord("services", service.id, service.revision);
-    assert.deepEqual(paths(), ["/", "/services", "/portfolio", "/pricing", "/blog"]);
+    assert.deepEqual(paths(), ["/", "/services", "/pricing", "/blog"]);
   });
 
   await t.test("URLs are unique, absolute, public and have no invented lastmod", () => {
@@ -77,7 +78,7 @@ test("sitemap follows only the current published CMS content", async t => {
   await t.test("malformed and unrouteable article slugs cannot enter discovery", () => {
     const invalid = ["category", "../admin", "draft?preview=1", "page#heading", "https://attacker.test/"];
     const result = buildPublicSitemap({ articles: invalid.map(slug => ({ ...article, slug })), services: [] });
-    assert.equal(result.length, 5);
+    assert.equal(result.length, 4);
   });
 
   await t.test("preview discovery is empty while public pages remain crawlable", async () => {

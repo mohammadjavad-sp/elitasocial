@@ -6,6 +6,8 @@ import { deleteMedia, maxUploadBytes, serveMedia, uploadMedia } from "./media";
 import { collection, object, revision, status, text, validateRecord } from "./validation";
 import { readSiteSettings, saveSiteSettings } from "./site-settings";
 import { deleteConsultation, listConsultations, submitConsultation, updateConsultation } from "./consultations";
+import { cmsCollections } from "@/lib/cms-shared";
+import { ensurePricingCategories } from "./pricing-migration";
 
 const privateHeaders = { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "same-origin" };
 function responseHeaders(additions?: HeadersInit) {
@@ -113,8 +115,9 @@ export async function handleCmsRequest(request: Request, context: RouteContext):
       return empty();
     }
     if (resource === "stats" && method === "GET" && segments.length === 1) {
-      const counts = { articles: 0, services: 0, portfolio: 0, plans: 0, media: 0, consultations: 0, newConsultations: 0 };
-      for (const row of getDatabase().prepare("SELECT collection,COUNT(*) AS total FROM cms_records GROUP BY collection").all()) counts[collection(row.collection)] = Number(row.total);
+      ensurePricingCategories();
+      const counts = { articles: 0, services: 0, plans: 0, media: 0, consultations: 0, newConsultations: 0 };
+      for (const kind of cmsCollections) counts[kind] = Number(getDatabase().prepare("SELECT COUNT(*) AS total FROM cms_records WHERE collection=?").get(kind)!.total);
       counts.media = Number(getDatabase().prepare("SELECT COUNT(*) AS total FROM cms_media").get()!.total);
       counts.consultations = Number(getDatabase().prepare("SELECT COUNT(*) AS total FROM cms_consultations").get()!.total);
       counts.newConsultations = Number(getDatabase().prepare("SELECT COUNT(*) AS total FROM cms_consultations WHERE status='new'").get()!.total);
@@ -122,6 +125,7 @@ export async function handleCmsRequest(request: Request, context: RouteContext):
     }
     if (resource === "records" && (segments.length === 2 || segments.length === 3)) {
       const kind = collection(second);
+      ensurePricingCategories();
       if (segments.length === 2 && method === "GET") return json({ records: listRecords(kind) });
       if (segments.length === 2 && method === "POST") {
         const payload = await body(request);
