@@ -18,24 +18,6 @@ function ensureCmsSchema(db: DatabaseSync) {
       id TEXT PRIMARY KEY CHECK(id='site'), data TEXT NOT NULL,
       revision INTEGER NOT NULL DEFAULT 1, updated_at TEXT NOT NULL
     );
-    CREATE TABLE IF NOT EXISTS cms_consultations (
-      id TEXT PRIMARY KEY, reference TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL, contact TEXT NOT NULL, contact_kind TEXT NOT NULL CHECK(contact_kind IN ('phone','email')),
-      service TEXT NOT NULL CHECK(service IN ('undecided','instagram','website','content','seo','multiple')),
-      message TEXT NOT NULL, plan TEXT,
-      status TEXT NOT NULL DEFAULT 'new' CHECK(status IN ('new','contacted','completed','archived')),
-      note TEXT NOT NULL DEFAULT '', revision INTEGER NOT NULL DEFAULT 1,
-      created_at TEXT NOT NULL, updated_at TEXT NOT NULL
-    );
-    CREATE INDEX IF NOT EXISTS cms_consultations_status_created ON cms_consultations(status,created_at DESC,id);
-    CREATE INDEX IF NOT EXISTS cms_consultations_created ON cms_consultations(created_at DESC,id);
-    CREATE TABLE IF NOT EXISTS cms_consultation_receipts (
-      request_id TEXT PRIMARY KEY, payload_hash TEXT NOT NULL, reference TEXT NOT NULL UNIQUE, created_at TEXT NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS cms_consultation_attempts (
-      key TEXT PRIMARY KEY, attempts INTEGER NOT NULL, expires_at INTEGER NOT NULL
-    );
-    CREATE INDEX IF NOT EXISTS cms_consultation_attempts_expiry ON cms_consultation_attempts(expires_at);
     INSERT INTO cms_meta(key,value) VALUES('schema_version','3')
       ON CONFLICT(key) DO UPDATE SET value=excluded.value WHERE CAST(cms_meta.value AS INTEGER)<3;
   `);

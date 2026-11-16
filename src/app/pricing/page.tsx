@@ -54,7 +54,7 @@ export default async function PricingPage() {
         <ol className="pricing-choice-steps">
           <li><span className="pricing-step-marker" aria-hidden="true">۰۱</span><div><h3>مسیرت را انتخاب کن</h3><p>مدیریت پیج، طراحی سایت یا رسیدگی به سایت فعلی؟ از تب‌های بالا خدمت موردنیازت را پیدا کن.</p></div></li>
           <li><span className="pricing-step-marker" aria-hidden="true">۰۲</span><div><h3>خروجی‌ها را کنار هم ببین</h3><p>امکانات، مبلغ و دورهٔ هر پلن را مقایسه کن و ببین کدام به اولویت‌ها و بودجه‌ات نزدیک‌تر است.</p></div></li>
-          <li><span className="pricing-step-marker" aria-hidden="true">۰۳</span><div><h3>دربارهٔ انتخابت گفتگو کنیم</h3><p>روی مشاورهٔ همان پلن بزن؛ نام پلن و خدمت به فرم منتقل می‌شود تا از همان نقطه گفتگو را شروع کنیم.</p></div></li>
+          <li><span className="pricing-step-marker" aria-hidden="true">۰۳</span><div><h3>دربارهٔ انتخابت گفتگو کنیم</h3><p>روی مشاورهٔ همان پلن بزن و از بخش «حالا نوبت برند توئه» راه ارتباطی دلخواهت را برای گفتگو انتخاب کن.</p></div></li>
         </ol>
       </section>
 

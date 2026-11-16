@@ -25,7 +25,7 @@
     transition: scale 380ms var(--interaction-ease);
   }
 
-  .home-shell :is(.contact-faq-list, .service-faq-list, .pricing-questions-list) summary > span:last-child,
+  .home-shell :is(.faq-list, .service-faq-list, .pricing-questions-list) summary > span:last-child,
   .home-shell .article-toc-mobile summary > span:last-child {
     transition: transform 180ms var(--interaction-ease);
   }

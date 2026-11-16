@@ -4,10 +4,10 @@ import { mkdtempSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { randomUUID } from "node:crypto";
 import { pricingContent } from "../src/content/pricing";
-import { pricingCategoryIds, pricingCategoryLabels, pricingCategoryServices } from "../src/lib/pricing-categories";
-import { planContactHref, readServiceSelection } from "../src/lib/service-selection";
+import { pricingCategoryIds, pricingCategoryLabels } from "../src/lib/pricing-categories";
+import { contactSectionHref } from "../src/lib/contact-destination";
+import { readPricingCategory, servicePricingHref } from "../src/lib/pricing-navigation";
 import { getStarterSeed } from "../src/server/seed";
 
 process.env.CMS_DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "elita-pricing-v2-"));
@@ -20,20 +20,21 @@ test("six ordered categories provide three sample plans and preserve the first t
   for (const category of pricingContent.categories) {
     assert.equal(category.plans.length, 3);
     for (const plan of category.plans) {
-      const href = new URL(planContactHref(category.id, plan.id), "https://example.test");
-      const selected = readServiceSelection(href.search);
-      assert.equal(selected.selectedPlan?.plan.id, plan.id);
-      assert.equal(selected.selectedPlan?.categoryId, category.id);
-      assert.equal(selected.selectedPlan?.categoryLabel, category.label);
+      assert.ok(plan.id);
+      const href = new URL(contactSectionHref(), "https://example.test");
+      assert.equal(href.hash, "#contact");
+      assert.equal(href.search, "");
     }
+    const categoryHref = new URL(servicePricingHref(category.id), "https://example.test");
+    assert.equal(readPricingCategory(categoryHref.search, pricingContent), category.id);
   }
+  assert.equal(readPricingCategory("?planCategory=unknown&plan=ig-start&service=instagram", pricingContent), null);
 });
 
 test("existing CMS receives only new categories once, keeping edits, drafts and later deletions intact", async () => {
   const { ensureSeed, getDatabase, listRecords, saveRecord, deleteRecord } = await import("../src/server/database");
   const { ensurePricingCategories } = await import("../src/server/pricing-migration");
   const { validateRecord } = await import("../src/server/validation");
-  const { submitConsultation } = await import("../src/server/consultations");
   const oldSeed = getStarterSeed().filter(item => item.collection !== "plans" || ["instagram", "website", "support"].includes(String(item.data.categoryId)));
   ensureSeed(oldSeed);
   const oldPlans = listRecords("plans");
@@ -57,12 +58,6 @@ test("existing CMS receives only new categories once, keeping edits, drafts and 
   for (const categoryId of pricingCategoryIds) {
     const plan = pricingContent.categories.find(category => category.id === categoryId)!.plans[0];
     assert.equal(validateRecord("plans", { ...plan, categoryId }).categoryId, categoryId);
-    const record = listRecords("plans").find(record => record.data.categoryId === categoryId)!;
-    if (record.status === "draft") saveRecord("plans", record.data, "published", record.id, record.revision);
-    const result = submitConsultation({ name: "Pricing QA", contact: `${categoryId}@example.test`, service: pricingCategoryServices[categoryId], message: "Testing category and selected plan context", plan: { id: record.data.id, categoryId }, website: "", requestId: randomUUID() }, new Request("https://example.test/api/cms/consultations", { method: "POST" }));
-    const saved = getDatabase().prepare("SELECT plan FROM cms_consultations WHERE reference=?").get(result.reference)!;
-    assert.equal(JSON.parse(String(saved.plan)).categoryId, categoryId);
-    assert.equal(JSON.parse(String(saved.plan)).categoryLabel, pricingCategoryLabels[categoryId]);
   }
   const removed = listRecords("plans").find(record => record.data.categoryId === "seo")!;
   deleteRecord("plans", removed.id, removed.revision);

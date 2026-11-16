@@ -8,11 +8,13 @@ import { Icon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
 import { getArticle, getArticleCategory, getRelatedArticles } from "@/content/articles";
 import { getNavigation } from "@/content/home";
-import { serviceContactHref } from "@/lib/service-selection";
+import { contactSectionHref } from "@/lib/contact-destination";
 import { sitePath } from "@/lib/site-path";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
 import { createPageMetadata } from "@/lib/seo";
+import { StructuredData } from "@/components/structured-data";
+import { articleStructuredData, breadcrumbStructuredData } from "@/lib/structured-data";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -34,12 +36,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
-  const { articles } = await getCmsContent();
+  const [{ articles, services }, settings] = await Promise.all([getCmsContent(), getSiteSettings()]);
   const article = getArticle(slug, articles);
   if (!article) notFound();
   const category = getArticleCategory(article.category);
   if (!category) notFound();
   const related = getRelatedArticles(article, 3, articles);
+  const relatedService = services.find(service => service.slug === article.category);
   const articleIndex = articles.findIndex((item) => item.slug === article.slug);
   const previous = articles[articleIndex - 1];
   const next = articles[articleIndex + 1];
@@ -51,6 +54,8 @@ export default async function ArticlePage({ params }: PageProps) {
       <a className="skip-link" href="#main-content">رفتن به محتوای مقاله</a>
       <Header activePage="blog" navigation={getNavigation("blog")} />
       <main id="main-content">
+        <StructuredData data={articleStructuredData(article, settings)} />
+        <StructuredData data={breadcrumbStructuredData([{ name: "خانه", path: "/" }, { name: "مجلهٔ الیتا", path: "/blog/" }, { name: category.label, path: `/blog/category/${category.slug}/` }, { name: article.title, path: `/blog/${article.slug}/` }])} />
         <article aria-labelledby="article-title">
           <header className="article-hero container">
             <nav className="article-breadcrumb" aria-label="مسیر صفحه">
@@ -85,7 +90,7 @@ export default async function ArticlePage({ params }: PageProps) {
               <nav className="article-tags" aria-label="موضوعات مقاله">{article.tags.map((tag) => <a key={tag} href={sitePath(`/blog/?q=${encodeURIComponent(tag)}#magazine-library`)}>{tag}</a>)}</nav>
               <div className="article-author"><span className="article-author-mark" aria-hidden="true"><Icon name="sparkle" /></span><div><h2>{article.author}</h2><p>یادداشت‌هایی دربارهٔ محتوا، طراحی و حضور دیجیتال برندها در مجلهٔ الیتا.</p></div></div>
               <ArticleActions title={article.title} />
-              <section className="article-consultation" aria-labelledby="article-consultation-title"><h2 id="article-consultation-title">این موضوع به کسب‌و‌کارت مربوط است؟</h2><p>دربارهٔ نیاز برندت بنویس تا قدم بعدی را با هم مشخص کنیم.</p><a className="pill-button" href={serviceContactHref(article.category)}>گفتگو دربارهٔ برندت<span className="button-circle"><Icon name="arrow" /></span></a></section>
+              <section className="article-contact-cta" aria-labelledby="article-contact-title"><h2 id="article-contact-title">این موضوع به کسب‌و‌کارت مربوط است؟</h2><p>برای گفتگو دربارهٔ نیاز برندت، راه ارتباطی دلخواهت را انتخاب کن.</p>{relatedService && <p>دربارهٔ <a href={sitePath(`/services/${relatedService.slug}/`)}>{relatedService.title}</a> و مراحل همکاری بیشتر بدان.</p>}<a className="pill-button" href={contactSectionHref()}>گفتگو دربارهٔ برندت<span className="button-circle"><Icon name="arrow" /></span></a></section>
             </div>
           </div>
 

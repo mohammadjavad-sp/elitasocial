@@ -27,12 +27,6 @@ export type SiteSettings = {
     insightsTitle: string[];
     insightsDescription: string;
     insightsActionLabel: string;
-    contactTitle: string[];
-    contactDescription: string;
-    contactInfoTitle: string;
-    contactInfoDescription: string;
-    contactFormTitle: string;
-    contactFormDescription: string;
     faqTitle: string;
     faqDescription: string;
   };
@@ -69,19 +63,13 @@ export function getDefaultSiteSettings(): SiteSettings {
       insightsTitle: ["چند دقیقه برای", "حضور بهترِ برندت"],
       insightsDescription: "یادداشت‌های کاربردی دربارهٔ محتوا، طراحی و ارتباط با مخاطب.",
       insightsActionLabel: "همهٔ مقاله‌های مجله",
-      contactTitle: ["از ایده‌ات بگو،", "قدم اول را با هم برداریم"],
-      contactDescription: "برای پیجت برنامه داری یا به یک وب‌سایت فکر می‌کنی؟ راه ارتباطی دلخواهت را انتخاب کن.",
-      contactInfoTitle: "مستقیم در ارتباط باشیم",
-      contactInfoDescription: "من الهه طاهری‌ام. دربارهٔ برندت و چیزی که می‌خوای بسازی، برام بنویس.",
-      contactFormTitle: "برندت به چی نیاز داره؟",
-      contactFormDescription: "درخواستت را بنویس؛ برای هماهنگی مشاوره از راه ارتباطی‌ای که وارد می‌کنی با تو تماس می‌گیریم.",
       faqTitle: "قبل از شروع، شاید سؤال تو هم باشه",
       faqDescription: "چند نکته دربارهٔ مسیر همکاری",
     },
   };
 }
 
-/** Action URLs follow the saved contact number; layout keys remain code-owned. */
+/** Saved values follow the current settings shape; layout keys remain code-owned. */
 export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
   const defaults = getDefaultSiteSettings();
   // Preserve intentional empty values; the former Rubika placeholder is upgraded below.
@@ -99,9 +87,6 @@ export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
   const settings = normalizeBrandText(fillDefaults(defaults, value) as SiteSettings);
   // Rubika used to be an icon-only placeholder in saved CMS settings.
   if (settings.home.contact.rubika === "") settings.home.contact.rubika = defaults.home.contact.rubika;
-  if (settings.sections.contactFormDescription === "اطلاعات را بنویس تا پیامت برای ادامهٔ گفتگو در واتساپ آماده شود.") {
-    settings.sections.contactFormDescription = defaults.sections.contactFormDescription;
-  }
   // Upgrade unchanged starter copy while preserving the owner's edited content.
   if (settings.sections.portfolioTitle === "هر برند، یک دنیای دیدنی") settings.sections.portfolioTitle = defaults.sections.portfolioTitle;
   if (["از ویترین یک فروشگاه تا قصهٔ یک پیج؛ چند ایده برای آنچه می‌توانیم با هم بسازیم.", "نمونه‌هایی از طراحی سایت، تولید محتوا و سئو؛ برای ایده گرفتن از آنچه می‌توانیم با هم بسازیم."].includes(settings.sections.portfolioDescription)) {
@@ -120,12 +105,5 @@ export function normalizeSiteSettings(value: SiteSettings): SiteSettings {
     : faq);
   settings.home.navigation = structuredClone(homeContent.navigation);
   settings.home.services.items = structuredClone(homeContent.services.items);
-  settings.home.benefits.items = settings.home.benefits.items.map((item, index) => {
-    const original = homeContent.benefits.items[index];
-    const href = new URL(settings.home.contact.whatsapp);
-    const message = new URL(original.href).searchParams.get("text");
-    if (message) href.searchParams.set("text", message);
-    return { ...item, href: href.toString() };
-  });
   return settings;
 }

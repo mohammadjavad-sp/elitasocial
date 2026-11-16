@@ -1,6 +1,33 @@
 import { articles as starterArticles, type Article } from "@/content/articles";
 import { pricingContent, type DemoPlan } from "@/content/pricing";
+import { services as starterServices, type ServiceDetail } from "@/content/services";
 import { retiredPortfolioCopy } from "./retired-portfolio-copy";
+
+const serviceSearchCopy = {
+  website: {
+    title: "طراحی سایت و توسعهٔ وب‌سایت",
+    headline: "طراحی سایت برای حضور حرفه‌ای برندت",
+    intro: "طراحی سایت متناسب با هویت برند، با ساختار روشن و نمایش مناسب در موبایل و دسکتاپ؛ از بررسی نیازها تا راه‌اندازی و تحویل وب‌سایت.",
+  },
+  instagram: {
+    title: "ادمینی اینستاگرام و مدیریت پیج",
+    headline: "ادمینی اینستاگرام با برنامه و هویت مشخص",
+    intro: "خدمات ادمینی اینستاگرام؛ از تقویم محتوا و انتشار پست، ریلز و استوری تا رسیدگی به دایرکت و کامنت، در محدودهٔ همکاری هماهنگ با برندت.",
+  },
+};
+
+/** Upgrade only untouched starter fields, including on existing CMS installations. */
+export function publicServiceCopy(service: ServiceDetail): ServiceDetail {
+  if (service.slug !== "website" && service.slug !== "instagram") return service;
+  const starter = starterServices.find(item => item.slug === service.slug)!;
+  const copy = serviceSearchCopy[service.slug];
+  return {
+    ...service,
+    title: service.title === starter.title ? copy.title : service.title,
+    headline: service.headline === starter.headline ? copy.headline : service.headline,
+    intro: service.intro === starter.intro ? copy.intro : service.intro,
+  };
+}
 
 // Only replace untouched starter copy. Saved editorial changes and metadata stay intact.
 export function publicPlanCopy<T extends DemoPlan>(plan: T): T {

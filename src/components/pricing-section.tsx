@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { pricingContent, type DemoPlan, type PricingContent } from "@/content/pricing";
-import { planContactHref, readServiceSelection } from "@/lib/service-selection";
+import { contactSectionHref } from "@/lib/contact-destination";
+import { readPricingCategory } from "@/lib/pricing-navigation";
 import { sitePath } from "@/lib/site-path";
 import { Icon } from "./icons";
 import { useSiteSettings } from "./site-settings-provider";
@@ -19,7 +20,7 @@ export function PricingSection({ pricing = pricingContent, variant = "home" }: {
   const [categoryId, setCategoryId] = useState("instagram");
   useEffect(() => {
     function selectFromUrl() {
-      const { categoryId: requestedCategory } = readServiceSelection(window.location.search, pricing);
+      const requestedCategory = readPricingCategory(window.location.search, pricing);
       setCategoryId(requestedCategory ?? "instagram");
     }
     selectFromUrl();
@@ -53,7 +54,7 @@ export function PricingSection({ pricing = pricingContent, variant = "home" }: {
           <h3>{plan.name}</h3><p className="plan-description">{plan.description}</p>
           <div className="plan-price"><data value={plan.price} dir="ltr">{formatPrice(plan.price)}</data><span>{plan.currency}<small>{plan.period}</small></span></div>
           <ul>{plan.features.map(feature => <li key={feature}><svg viewBox="0 0 20 20" aria-hidden="true" fill="none"><path d="m4 10 4 4 8-8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>{feature}</li>)}</ul>
-          <a className={`pill-button ${plan.recommended ? "" : "secondary-button"}`} href={planContactHref(category.id, plan.id)}>مشاوره دربارهٔ این پلن<span className="button-circle"><Icon name="arrow" /></span></a>
+          <a className={`pill-button ${plan.recommended ? "" : "secondary-button"}`} href={contactSectionHref()}>مشاوره دربارهٔ این پلن<span className="button-circle"><Icon name="arrow" /></span></a>
         </article>)}
       </div>
       {plans.length === 0 && <p className="pricing-footnote">برای پیشنهاد همکاری متناسب با این خدمت، با ما گفتگو کن.</p>}

@@ -61,7 +61,7 @@ test("CMS security boundaries use an isolated database", async t => {
     const response = await call("session", "GET", undefined, { cookie });
     assert.equal(response.status, 200);
     assert.equal(response.headers.get("cache-control"), "no-store");
-    assert.equal((await call("consultations")).status, 401);
+    assert.equal((await call("consultations")).status, 404);
   });
 
   await t.test("origin and CSRF are checked before mutations", async () => {
@@ -215,18 +215,20 @@ test("CMS security boundaries use an isolated database", async t => {
     assert.equal(Number(getDatabase().prepare("SELECT COUNT(*) AS total FROM cms_media").get()!.total), before);
   });
 
-  await t.test("consultations are private and retrying creates only one record", async () => {
-    const data = { requestId: randomUUID(), website: "", name: "Security Test", contact: "+989123456789", service: "website", message: "This is an isolated security regression test.", plan: null };
-    const first = await call("consultations", "POST", data);
-    assert.equal(first.status, 201);
-    const receipt = await first.json();
-    assert.deepEqual(Object.keys(receipt), ["reference"]);
-    const duplicate = await call("consultations", "POST", data);
-    assert.equal(duplicate.status, 201);
-    assert.deepEqual(await duplicate.json(), receipt);
-    assert.equal(Number(getDatabase().prepare("SELECT COUNT(*) AS total FROM cms_consultations").get()!.total), 1);
-    assert.equal((await call("consultations", "POST", { ...data, message: "A different request payload must not reuse a receipt." })).status, 409);
-    assert.equal((await call("consultations")).status, 401);
+  await t.test("retired request endpoints stay unavailable and old private data is not exposed or erased", async () => {
+    const db = getDatabase();
+    assert.equal(db.prepare("SELECT COUNT(*) AS total FROM sqlite_master WHERE type='table' AND name LIKE 'cms_consult%'").get()!.total, 0);
+    // Simulate an older installation without opening or copying any real requests.
+    db.exec("CREATE TABLE cms_consultations(id TEXT PRIMARY KEY, name TEXT NOT NULL)");
+    db.prepare("INSERT INTO cms_consultations(id,name) VALUES(?,?)").run("legacy-fixture", "Archived fixture");
+    for (const headers of [{}, authHeaders]) for (const method of ["GET", "POST", "PUT", "DELETE"]) {
+      const resource = `consultations${method === "PUT" || method === "DELETE" ? "/legacy-fixture" : ""}`;
+      assert.equal((await call(resource, method, method === "GET" ? undefined : {}, headers)).status, 404);
+    }
+    const stats = await (await call("stats", "GET", undefined, { cookie })).json();
+    assert.equal(Object.hasOwn(stats.counts, "consultations"), false);
+    assert.equal(Object.hasOwn(stats.counts, "newConsultations"), false);
+    assert.equal(db.prepare("SELECT COUNT(*) AS total FROM cms_consultations").get()!.total, 1);
   });
 
   await t.test("concurrent password changes cannot overwrite one another and revoke other sessions", async () => {

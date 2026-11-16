@@ -7,15 +7,14 @@ import type { CmsSiteSettings, SiteSettings } from "../../lib/site-settings";
 import { sitePath } from "../../lib/site-path";
 import type { CmsRequest } from "./record-editor";
 
-type Group = "identity" | "hero" | "about" | "approach" | "benefits" | "sections" | "footer" | "faqs" | "seo";
+type Group = "identity" | "hero" | "about" | "approach" | "sections" | "footer" | "faqs" | "seo";
 type FieldSpec = { path: string; label: string; multiline?: boolean; lines?: boolean; hint?: string; ltr?: boolean; maxLength?: number };
 const groups: { id: Group; label: string; description: string }[] = [
   { id: "identity", label: "برند و ارتباط", description: "نام برند و راه‌های ارتباطی در بخش‌های مختلف سایت استفاده می‌شوند." },
   { id: "hero", label: "ابتدای صفحه", description: "عنوان، معرفی و تصویر ابتدای صفحهٔ اصلی را ویرایش کن." },
   { id: "about", label: "دربارهٔ الیتا", description: "متن معرفی و دو تصویر بخش دربارهٔ الیتا." },
   { id: "approach", label: "خدمات و همکاری", description: "عنوان بخش خدمات و توضیح شیوهٔ همکاری؛ کارت‌های خدمات از بخش «خدمات» مدیریت می‌شوند." },
-  { id: "benefits", label: "مزیت‌های همکاری", description: "متن و تصاویر پنج بخش مزیت‌ها؛ ترتیب و مقصد دکمه‌ها حفظ می‌شود." },
-  { id: "sections", label: "بخش‌های پایانی", description: "دعوت به پیج اینستاگرام، پلن‌ها، مجله و فرم مشاوره." },
+  { id: "sections", label: "بخش‌های پایانی", description: "دعوت به پیج اینستاگرام، پلن‌ها، مجله و پرسش‌های متداول." },
   { id: "footer", label: "پایین سایت", description: "دعوت به همکاری و متن‌های فوتر، در همهٔ صفحه‌ها نمایش داده می‌شوند." },
   { id: "faqs", label: "پرسش‌های عمومی", description: "پرسش‌های عمومی صفحهٔ اصلی را اضافه، مرتب یا حذف کن." },
   { id: "seo", label: "عنوان و توضیح سایت", description: "عنوان و معرفی عمومی سایت؛ تنظیمات دامنه و ایندکس گوگل در مرحلهٔ انتشار نهایی انجام می‌شود." },
@@ -55,10 +54,6 @@ const fields: Partial<Record<Group, FieldSpec[]>> = {
     { path: "home.approach.featureDescription", label: "توضیح روی تصویر", multiline: true },
     { path: "home.approach.actionLabel", label: "متن دکمهٔ گفتگو" },
   ],
-  benefits: [
-    { path: "home.benefits.title", label: "عنوان مزیت‌ها", lines: true },
-    { path: "home.benefits.description", label: "معرفی مزیت‌ها", multiline: true },
-  ],
   sections: [
     { path: "sections.portfolioTitle", label: "عنوان دعوت به پیج اینستاگرام" },
     { path: "sections.portfolioDescription", label: "معرفی نمونه‌کارها در پیج", multiline: true },
@@ -69,12 +64,6 @@ const fields: Partial<Record<Group, FieldSpec[]>> = {
     { path: "sections.insightsTitle", label: "عنوان مجله", lines: true },
     { path: "sections.insightsDescription", label: "معرفی مجله", multiline: true },
     { path: "sections.insightsActionLabel", label: "دکمهٔ مجله" },
-    { path: "sections.contactTitle", label: "عنوان بخش مشاوره", lines: true },
-    { path: "sections.contactDescription", label: "معرفی مشاوره", multiline: true },
-    { path: "sections.contactInfoTitle", label: "عنوان راه‌های ارتباط" },
-    { path: "sections.contactInfoDescription", label: "توضیح راه‌های ارتباط", multiline: true },
-    { path: "sections.contactFormTitle", label: "عنوان فرم مشاوره" },
-    { path: "sections.contactFormDescription", label: "توضیح فرم مشاوره", multiline: true },
     { path: "sections.faqTitle", label: "عنوان پرسش‌های عمومی" },
     { path: "sections.faqDescription", label: "معرفی پرسش‌های عمومی", multiline: true },
   ],
@@ -193,7 +182,6 @@ export function SiteSettingsEditor({ request, onDirtyChange }: { request: CmsReq
     {active === "hero" && <><SettingsImage path="home.hero.portrait" label="تصویر اصلی" data={data} onChange={update} request={request} />{data.home.hero.services.map((_, index) => <fieldset className="admin-repeater" key={index}><legend>معرفی خدمت {new Intl.NumberFormat("fa-IR").format(index + 1)}</legend><div className="admin-fields-grid"><TextField spec={{ path: `home.hero.services.${index}.title`, label: "عنوان خدمت" }} data={data} onChange={update} /><TextField spec={{ path: `home.hero.services.${index}.caption`, label: "توضیح کوتاه" }} data={data} onChange={update} /></div></fieldset>)}</>}
     {active === "about" && <><SettingsImage path="home.about.image" label="تصویر اول معرفی" data={data} onChange={update} request={request} /><SettingsImage path="home.about.secondaryImage" label="تصویر دوم معرفی" data={data} onChange={update} request={request} /></>}
     {active === "approach" && <><SettingsImage path="home.approach.image" label="تصویر شیوهٔ همکاری" data={data} onChange={update} request={request} />{data.home.approach.values.map((_, index) => <fieldset className="admin-repeater" key={index}><legend>ارزش همکاری {new Intl.NumberFormat("fa-IR").format(index + 1)}</legend><div className="admin-fields-grid"><TextField spec={{ path: `home.approach.values.${index}.title`, label: "عنوان" }} data={data} onChange={update} /><TextField spec={{ path: `home.approach.values.${index}.text`, label: "توضیح", multiline: true }} data={data} onChange={update} /></div></fieldset>)}</>}
-    {active === "benefits" && data.home.benefits.items.map((item, index) => <fieldset className="admin-repeater" key={item.id}><legend>مزیت {new Intl.NumberFormat("fa-IR").format(index + 1)}</legend><div className="admin-fields-grid"><TextField spec={{ path: `home.benefits.items.${index}.title`, label: "عنوان" }} data={data} onChange={update} /><TextField spec={{ path: `home.benefits.items.${index}.description`, label: "توضیح", multiline: true }} data={data} onChange={update} /><TextField spec={{ path: `home.benefits.items.${index}.actionLabel`, label: "متن دکمهٔ گفتگو" }} data={data} onChange={update} /></div><SettingsImage path={`home.benefits.items.${index}.image`} label="تصویر مزیت" data={data} onChange={update} request={request} /></fieldset>)}
     {active === "faqs" && <FrequentlyAsked data={data} onChange={update} />}
     </div><div className="admin-save-bar admin-settings-save"><button className="admin-button" type="submit" disabled={!dirty || busy}>{busy ? "در حال ذخیره…" : "ذخیره و اعمال تنظیمات"}</button><span className="admin-help" role="status">{dirty ? "تغییرات ذخیره‌نشده داری." : "تغییر ذخیره‌نشده‌ای نداری."}</span>{snapshot.updatedAt && <small className="admin-settings-updated">آخرین ذخیره: {new Intl.DateTimeFormat("fa-IR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(snapshot.updatedAt))}</small>}</div></fieldset>{error && <div className="admin-error" role="alert"><p>{error}</p><p>تغییرات فرم حفظ شده‌اند. اگر تنظیمات هم‌زمان تغییر کرده، نسخهٔ تازه را در پنجره‌ای دیگر بررسی کن و تغییراتت را پیش از بارگذاری دوباره یادداشت کن.</p></div>}{success && <p className="admin-success" role="status">{success}</p>}</form></div></section>;
 }

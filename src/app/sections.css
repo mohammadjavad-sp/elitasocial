@@ -130,25 +130,6 @@
 .approach-value p { margin: 14px 0 0; color: var(--ink-on-accent); font-size: 15px; font-weight: 600; line-height: 2.1; }
 .value-symbol { position: absolute; left: 18px; top: 20px; display: grid; place-items: center; width: 32px; height: 32px; color: white; border-radius: 50%; background: var(--value-color); }
 .value-symbol svg { width: 17px; height: 17px; }
-.benefits-section { padding-block: 0 90px; }
-.benefits-grid { display: grid; gap: 12px; }
-.benefit-panel { position: relative; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; min-height: 84px; overflow: hidden; border-radius: 6px; isolation: isolate; color: white; background: var(--color-primary); }
-.benefit-photo { object-fit: cover; object-position: center; z-index: -2; }
-.benefit-shade { position: absolute; inset: 0; background: rgb(var(--color-primary-rgb) / 0.722); z-index: -1; }
-.benefit-panel.is-active { min-height: 360px; padding-top: 150px; }
-.benefit-panel.is-active .benefit-shade { background: linear-gradient(to top, rgb(var(--color-primary-rgb) / 0.98), rgb(var(--color-primary-rgb) / 0.78) 38%, rgb(var(--color-primary-rgb) / 0.051) 100%); }
-.benefit-heading { margin: 0; font-size: inherit; font-weight: 600; }
-.benefit-toggle { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; min-height: 84px; padding: 20px 22px; color: white; border: 0; background: transparent; font-size: 16px; font-weight: 600; text-align: right; }
-.benefit-indicator { display: grid; place-items: center; flex-shrink: 0; width: 29px; height: 29px; border-radius: 50%; border: 1px solid #ffffff70; font-size: 22px; line-height: 1; font-weight: 400; }
-.benefit-toggle:hover { background: #ffffff08; }
-.benefit-toggle:focus-visible { outline: 3px solid white; outline-offset: -6px; }
-.benefit-panel.is-active .benefit-toggle { min-height: 70px; padding-bottom: 12px; }
-.benefit-content { padding: 0 22px 17px; }
-.benefit-content p { margin: 0 0 10px; max-width: 490px; color: var(--color-quaternary); font-size: 13px; line-height: 2.3; }
-.benefit-content a { display: inline-flex; gap: 9px; align-items: center; min-height: 44px; max-width: 100%; color: white; font-size: 11px; font-weight: 600; text-underline-offset: 5px; }
-.benefit-content a:hover { text-decoration: underline; }
-.benefit-content a:focus-visible { outline-color: white; }
-.benefit-content a svg { width: 17px; height: 17px; }
 @media (min-width: 600px) {
   .section-heading { margin-bottom: 44px; }
   .section-heading h2 { font-size: 34px; }
@@ -162,10 +143,6 @@
   .approach-value p { font-size: 16px; }
   .approach-spark { left: -14px; top: 38px; }
   .approach-spark svg { width: 32px; height: 32px; }
-  .benefits-section { padding-bottom: 110px; }
-  .benefit-panel.is-active { min-height: 400px; }
-  .benefit-content p { max-width: 600px; font-size: 14px; }
-  .benefit-title { font-size: 18px; }
 }
 @media (min-width: 1050px) {
   .section-heading h2 { font-size: 36px; }
@@ -176,16 +153,4 @@
   .approach-value { display: flex; flex-direction: column; justify-content: center; padding: 29px; }
   .approach-value p { font-size: 17px; line-height: 1.95; }
   .approach-section { padding-bottom: 110px; }
-  .benefits-grid { display: flex; height: 445px; gap: 13px; }
-  .benefit-panel { flex: 1 1 0; min-height: 0; transition: flex-grow 250ms ease; }
-  .benefit-panel.is-active { flex-grow: 3.5; min-height: 0; padding-top: 0; }
-  .benefit-panel:not(.is-active) .benefit-heading { position: absolute; inset: 0; }
-  .benefit-panel:not(.is-active) .benefit-toggle { position: relative; height: 100%; padding: 20px 10px; justify-content: center; }
-  .benefit-panel:not(.is-active) .benefit-title { position: absolute; white-space: nowrap; transform: rotate(-90deg); font-size: 15px; }
-  .benefit-panel:not(.is-active) .benefit-indicator { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); }
-  .benefit-panel.is-active .benefit-heading { margin-top: auto; }
-  .benefit-panel.is-active .benefit-toggle { font-size: 19px; padding-inline: 25px; }
-  .benefit-content { padding-inline: 25px; }
-  .benefit-content p { font-size: 13px; }
-  .benefits-section { padding-bottom: 120px; }
 }

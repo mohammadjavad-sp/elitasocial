@@ -6,6 +6,12 @@ import { object, revision, text } from "./validation";
 
 const fail = (field: string): never => { throw new CmsError(400, `مقدار «${field}» معتبر نیست.`); };
 const immutableKeys = new Set(["id", "theme", "icon", "width", "height", "href"]);
+const retiredSettingsPaths = [
+  "$.home.benefits",
+  "$.sections.contactTitle", "$.sections.contactDescription",
+  "$.sections.contactInfoTitle", "$.sections.contactInfoDescription",
+  "$.sections.contactFormTitle", "$.sections.contactFormDescription",
+];
 
 function imageSource(value: unknown, field: string): string {
   const source = text(value, field, 220);
@@ -60,7 +66,7 @@ function cleanValue(value: unknown, template: unknown, path: string): unknown {
       if (value.length < 1 || value.length > 4) return fail(path);
       return value.map((entry, index) => text(entry, `${path}.${index}`, 500));
     }
-    // Fixed slots match the site's existing composition (hero, values, and benefits).
+    // Fixed slots match the site's existing hero and collaboration composition.
     if (value.length !== template.length) return fail(path);
     return template.map((entry, index) => cleanValue(value[index], entry, `${path}.${index}`));
   }
@@ -86,7 +92,21 @@ function snapshot(row: Record<string, unknown>): CmsSiteSettings {
 export function readSiteSettings(): CmsSiteSettings {
   const db = getDatabase();
   const existing = db.prepare("SELECT data,revision,updated_at FROM cms_settings WHERE id='site'").get();
-  if (existing) return snapshot(existing);
+  if (existing) {
+    const saved = JSON.parse(String(existing.data)) as { home?: Record<string, unknown>; sections?: Record<string, unknown> };
+    const retiredHome = saved.home && Object.hasOwn(saved.home, "benefits");
+    const retiredSections = retiredSettingsPaths.slice(1).some(path => saved.sections && Object.hasOwn(saved.sections, path.slice("$.sections.".length)));
+    if (retiredHome || retiredSections) {
+      // Retire removed sections from existing installations without rewriting other settings.
+      // Apply to the current row atomically so concurrent edits cannot be overwritten.
+      const placeholders = retiredSettingsPaths.map(() => "?").join(",");
+      const condition = retiredSettingsPaths.map(() => "json_type(data,?) IS NOT NULL").join(" OR ");
+      const migrated = db.prepare(`UPDATE cms_settings SET data=json_remove(data,${placeholders}),revision=revision+1,updated_at=? WHERE id='site' AND (${condition}) RETURNING data,revision,updated_at`)
+        .get(...retiredSettingsPaths, new Date().toISOString(), ...retiredSettingsPaths);
+      return snapshot(migrated || db.prepare("SELECT data,revision,updated_at FROM cms_settings WHERE id='site'").get()!);
+    }
+    return snapshot(existing);
+  }
   // A singleton is seeded independently of starter records, never replacing saved settings.
   db.prepare("INSERT OR IGNORE INTO cms_settings(id,data,revision,updated_at) VALUES('site',?,1,?)")
     .run(JSON.stringify(normalizeSiteSettings(getDefaultSiteSettings())), new Date().toISOString());

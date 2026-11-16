@@ -28,9 +28,6 @@
 .contact-actions > .contact-channels { max-width: 420px; }
 .contact-actions-overlay { gap: 9px; }
 .contact-actions-overlay > .contact-channels { max-width: 420px; }
-.benefit-content .contact-channels .contact-channel-link { font-size: 10px; gap: 4px; }
-.benefit-content .contact-channels svg { width: 18px; height: 18px; }
-.benefits-grid { min-height: 445px; }
 .contact-channel-email > span:last-child { min-width: 0; }
 .contact-channel-email strong { overflow-wrap: anywhere; font-size: 13px; }
 .contact-prepared .contact-channels { margin-top: 12px; }
@@ -66,9 +63,6 @@
 @media (max-width: 1049px) {
   .hero-contact-options { margin-inline: auto; }
   .hero-contact-options > .social-label { text-align: center; }
-}
-@media (min-width: 1050px) {
-  .benefits-grid { height: 495px; }
 }
 @media (max-width: 599px) {
   .contact-chooser.header-cta { display: none; }

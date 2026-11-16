@@ -2,6 +2,10 @@
 
 ممیزی اولیه مبتنی بر سورس موجود در ۳۰ اکتبر ۲۰۲۶ بود؛ مسیرها و نسخه‌ها از فایل‌های tracked و `package.json`/`package-lock.json` خوانده شدند و در آن مرحله build یا تست بازاجرا نشد. بررسی‌های بعدی استقرار در انتهای این سند و `docs/verification.md` ثبت شده‌اند.
 
+## وضعیت جاری — ۱۶ نوامبر ۲۰۲۶
+
+فرم عمومی، ارسال خودکار ایمیل و مدیریت/API درخواست‌ها حذف شده‌اند. ارتباط از دعوت فوتر با #contact انجام می‌شود. نصب تازه جدول درخواست نمی‌سازد؛ جدول‌های خصوصی قبلی آرشیو بدون API هستند. تنظیمات دو بخش حذف‌شده هنگام read/migrate اتمیک پاک می‌شوند؛ باقی تنظیمات و داده‌ها محفوظ‌اند. [جزئیات](docs/direct-contact.md).
+
 ## نمای کلی
 
 ```text
@@ -10,7 +14,7 @@ Browser
   ├─ پنل /admin (Client UI)
   └─ /api/cms/* (یک catch-all route روی Node runtime)
          ├─ auth / origin / CSRF / validation
-         ├─ domain services: content, settings, media, consultations
+         ├─ domain services: content, settings, media
          └─ node:sqlite + فایل رسانه روی دیسک پایدار
 
 static GitHub Pages build: صفحات و starter content؛ بدون route سروری CMS و SQLite
@@ -29,7 +33,7 @@ Node و Pages با متغیر انتخاب هدف build تفکیک می‌شون
 | `src/components/` | اجزای عمومی و تعاملی؛ `admin/` شامل UI پنل |
 | `src/content/` | starter content تایپ‌شده برای خانه، خدمات، پلن‌ها، نمونه‌کار و مقالات |
 | `src/lib/` | قراردادهای مشترک CMS، SEO، مسیر، تنظیمات، انتخاب خدمت، متن ایمیل، theme و manifest تصویر |
-| `src/server/` | فقط سرور: دیتابیس و repositoryها، احراز هویت، CMS API، validation، media، consultation و seed |
+| `src/server/` | فقط سرور: دیتابیس و repositoryها، احراز هویت، CMS API، validation، media و seed |
 | `scripts/` | ابزارهای آماده‌سازی asset/font، preflight هاست، اسکریپت‌های init/backup/migrate و بررسی‌های سفارشی |
 | `docs/` | راهنماهای معماری، استقرار، SEO، پنل، ایمیل، تصاویر و گزارش‌های بررسی |
 | `public/` | فونت Peyda، لوگو/favicon و assetهای وب؛ تصاویر responsive در آماده‌سازی تولید می‌شوند و Gitignore شده‌اند |
@@ -55,11 +59,13 @@ Node و Pages با متغیر انتخاب هدف build تفکیک می‌شون
 
 ## رندر و جریان داده
 
+در نسخهٔ ۱۶ نوامبر، پنل تصویری پنج‌تاییِ مزیت‌ها از UI، محتوا و تنظیمات حذف شده است. `readSiteSettings` در نصب‌های قبلی فقط property قدیمی `home.benefits` را با `json_remove` به‌صورت اتمیک حذف و revision را یک بار افزایش می‌دهد؛ دیگر فیلدها بازنویسی نمی‌شوند. normalize/validation مطابق شکل فعلی، این property را از خروجی و ذخیرهٔ کلاینت قدیمی کنار می‌گذارند. این پاک‌سازی با خواندن تنظیمات یا `cms:migrate` اعمال می‌شود و نیازی به reset جدول یا حساب‌ها ندارد.
+
 1. محتوای اولیه در `src/content/*` تعریف است؛ تنظیمات اولیه و مدل عمومی در `src/lib/site-settings.ts` است.
 2. در runtime Node، `src/server/content.ts` دادهٔ published CMS را در صورت وجود به صفحه‌ها می‌دهد و seed اولیه در دیتابیس با پرچم meta فقط یک بار درج می‌شود. تغییر published در درخواست بعدی روی خروجی صفحه اعمال می‌شود.
 3. مرورگر پنل از `/api/cms/*` می‌خواند/می‌نویسد. route به `handleCmsRequest` می‌رسد که Origin، نشست، CSRF، محدودیت payload، اعتبارسنجی و dispatch دامنه را اجرا می‌کند.
 4. SQLite با نام `elita.sqlite` در مسیر دادهٔ runtime که با تنظیم محیطی قابل انتخاب است نگهداری می‌شود. رسانه‌ها زیر همان data directory در فضای `media` هستند؛ API فایل فقط رسانهٔ ثبت‌شده را ارائه می‌کند.
-5. فرم مشاوره در Node، ورودی را در `cms_consultations` ثبت و کد پیگیری می‌دهد. پس از ثبت، مرورگر با `src/lib/consultation-email.ts` به FormSubmit درخواست می‌فرستد. static build مستقیماً فرم را به FormSubmit می‌دهد و DB/reference ندارد.
+5. دکمه‌های همکاری به دعوت تماس فوتر می‌روند؛ فرم و ثبت درخواست وجود ندارد.
 6. settings DB از طریق `src/server/site-settings.ts` normalize/validate می‌شود و provider مشترک آن را به UI می‌رساند.
 
 ## دیتابیس SQLite
@@ -75,9 +81,6 @@ Node و Pages با متغیر انتخاب هدف build تفکیک می‌شون
 | `cms_records` | collection (`articles/services/portfolio/plans`)، status (`draft/published`)، content key یکتا در collection، JSON، revision و تاریخ‌ها |
 | `cms_media` | URL و filename یکتا، alt، MIME، size، timestamp |
 | `cms_settings` | رکورد settings با JSON، revision و updated_at |
-| `cms_consultations` | کد پیگیری یکتا، نام/راه تماس/نوع تماس/خدمت/پیام/پلن، وضعیت، یادداشت داخلی، revision و تاریخ‌ها |
-| `cms_consultation_receipts` | request id و payload hash برای idempotency؛ reference یکتا |
-| `cms_consultation_attempts` | کلید محدودسازی، تعداد تلاش و انقضا |
 
 ویرایش رکورد/settings/مشاوره با revision خوش‌بینانه کنترل می‌شود. مدل دقیق و constraints را در `src/server/database.ts` بخوانید؛ این جدول خلاصه جای schema SQL نیست.
 
@@ -92,16 +95,14 @@ Node و Pages با متغیر انتخاب هدف build تفکیک می‌شون
 | `/logout` | POST | خروج و حذف نشست |
 | `/password` | PUT | تغییر رمز |
 | `/settings` | GET, PUT | تنظیمات سایت و revision |
-| `/records/:collection` | GET, POST | فهرست/ایجاد رکورد در یکی از چهار collection |
+| `/records/:collection` | GET, POST | فهرست/ایجاد رکورد در یکی از سه collection |
 | `/records/:collection/:id` | PUT, DELETE | به‌روزرسانی/حذف revisionدار |
 | `/media` | GET, POST | فهرست/بارگذاری multipart رسانه |
 | `/media/:id` | DELETE | حذف رسانهٔ بدون ارجاع |
 | `/files/:filename` | GET | ارائهٔ فایل رسانهٔ شناخته‌شده |
-| `/consultations` | POST عمومی، GET مدیریتی | ثبت فرم، یا فهرست مدیریتی با query search/filter/pagination |
-| `/consultations/:id` | PUT, DELETE | تغییر وضعیت/یادداشت یا حذف مدیریتی |
 | `/stats` | GET | شمارنده‌های داشبورد |
 
-API عمومیِ مشاهدهٔ درخواست با کد پیگیری در این dispatch دیده نمی‌شود. تعریف دقیق payloadها در `src/server/validation.ts` و `src/server/consultations.ts` است.
+مسیرهای حذف‌شدهٔ درخواست، پاسخ ۴۰۴ می‌دهند. تعریف payloadهای فعلی در `src/server/validation.ts` است.
 
 ## استقرار
 

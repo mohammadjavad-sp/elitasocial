@@ -3,7 +3,7 @@ html[data-theme="dark"] :is(.article-card, .pricing-card) {
   background: var(--surface);
 }
 
-html[data-theme="dark"] :is(.magazine-featured, .magazine-empty, .article-takeaway, .article-consultation, .article-toc-mobile, .service-process-band, .service-audience, .service-plan-invitation) {
+html[data-theme="dark"] :is(.magazine-featured, .magazine-empty, .article-takeaway, .article-contact-cta, .article-toc-mobile, .service-process-band, .service-audience, .service-plan-invitation) {
   background: var(--surface-soft);
 }
 
@@ -15,7 +15,7 @@ html[data-theme="dark"] :is(.editorial-hero-kicker, .editorial-hero-text-link) {
   color: var(--accent-text);
 }
 
-html[data-theme="dark"] :is(.admin-delete-dialog, .admin-consultation-dialog)::backdrop {
+html[data-theme="dark"] :is(.admin-delete-dialog)::backdrop {
   background: rgb(10 7 15 / .78);
 }
 
@@ -211,15 +211,15 @@ html[data-theme="dark"] .admin-access {
   background: radial-gradient(ellipse at 20% 15%, rgb(var(--color-secondary-rgb) / .18), transparent 55%), var(--background);
 }
 
-html[data-theme="dark"] :is(.admin-sidebar, .admin-topbar, .admin-access-card, .admin-stats > button, .admin-list-tools, .admin-field input, .admin-field select, .admin-field textarea, .admin-empty, .admin-record, .admin-delete-dialog, .admin-editor form, .admin-repeat-toolbar button, .admin-upload, .admin-media-card, .admin-account, .admin-settings-navigation, .admin-settings-layout > form, .admin-consultation-filters > button, .admin-consultation-search, .admin-consultation-card, .admin-consultation-dialog) {
+html[data-theme="dark"] :is(.admin-sidebar, .admin-topbar, .admin-access-card, .admin-stats > button, .admin-list-tools, .admin-field input, .admin-field select, .admin-field textarea, .admin-empty, .admin-record, .admin-delete-dialog, .admin-editor form, .admin-repeat-toolbar button, .admin-upload, .admin-media-card, .admin-account, .admin-settings-navigation, .admin-settings-layout > form, .admin-category-filters > button) {
   background: var(--surface);
 }
 
-html[data-theme="dark"] :is(.admin-guidance, .admin-consultation-plan, .admin-status-draft, .admin-consultation-count, .admin-consultation-status-new, .admin-consultation-status-contacted, .admin-consultation-status-archived) {
+html[data-theme="dark"] :is(.admin-guidance, .admin-status-draft, .admin-category-count) {
   background: var(--surface-soft);
 }
 
-html[data-theme="dark"] :is(.admin-brand, .admin-sidebar-bottom > a, .admin-topbar > a, .admin-text-link, .admin-stats strong, .admin-field > label, .admin-field > span, .admin-repeat-toolbar strong, .admin-repeat-toolbar button, .admin-empty h3, .admin-consultation-card-meta a, .admin-consultation-status-new, .admin-consultation-status-contacted) {
+html[data-theme="dark"] :is(.admin-brand, .admin-sidebar-bottom > a, .admin-topbar > a, .admin-text-link, .admin-stats strong, .admin-field > label, .admin-field > span, .admin-repeat-toolbar strong, .admin-repeat-toolbar button, .admin-empty h3) {
   color: var(--accent-text);
 }
 
@@ -227,7 +227,7 @@ html[data-theme="dark"] :is(.admin-guidance > p, .admin-media-picker > button) {
   color: var(--ink);
 }
 
-html[data-theme="dark"] :is(.admin-sidebar nav button:hover, .admin-sidebar nav button[aria-current], .admin-settings-navigation button:hover, .admin-settings-navigation button[aria-current], .admin-consultation-filters > button[aria-pressed="true"]) {
+html[data-theme="dark"] :is(.admin-sidebar nav button:hover, .admin-sidebar nav button[aria-current], .admin-settings-navigation button:hover, .admin-settings-navigation button[aria-current], .admin-category-filters > button[aria-pressed="true"]) {
   background: var(--surface-soft);
   color: var(--accent-text);
 }
@@ -256,7 +256,7 @@ html[data-theme="dark"] :is(.admin-field input, .admin-field textarea)::placehol
   color: var(--muted);
 }
 
-html[data-theme="dark"] :is(.admin-status-published, .admin-success, .admin-consultation-status-completed) {
+html[data-theme="dark"] :is(.admin-status-published, .admin-success) {
   color: #a8e7c5;
   background: #18392d;
   border-color: #387657;

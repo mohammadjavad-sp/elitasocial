@@ -86,27 +86,8 @@ html[data-theme="dark"] .offering-card > a { color: var(--service-art); }
 html[data-theme="dark"] .offering-card > a:focus-visible { outline-color: var(--focus-ring); }
 
 /* Brand-coloured photo captions and value cards keep their own light/dark roles. */
-html[data-theme="dark"] :is(.approach-feature, .benefit-panel, .contact-info, .footer-cta-band) { color: #fff; }
+html[data-theme="dark"] :is(.approach-feature, .footer-cta-band) { color: #fff; }
 html[data-theme="dark"] :is(.approach-value h3, .approach-value p) { color: var(--ink-on-accent); }
-html[data-theme="dark"] .contact-form-panel { background: var(--surface); border-color: var(--line); }
-html[data-theme="dark"] .contact-form label { color: var(--ink); }
-html[data-theme="dark"] .contact-form :is(input, select, textarea) {
-  color: var(--ink);
-  background: var(--background);
-  border-color: var(--color-secondary);
-}
-html[data-theme="dark"] .contact-form :is(input, textarea)::placeholder { color: var(--muted); opacity: 1; }
-html[data-theme="dark"] .contact-form select option { color: var(--ink); background: var(--surface); }
-html[data-theme="dark"] .contact-prepared { background: #1b352b; border-color: #56836b; }
-html[data-theme="dark"] .contact-prepared :is(p, a) { color: #c5f1d9; }
-html[data-theme="dark"] .contact-request-error { background: #3b242d; border-color: #af788b; }
-html[data-theme="dark"] .contact-request-error :is(p, a) { color: #ffd1df; }
-html[data-theme="dark"] .contact-prepared .pill-button { color: #fff; }
-html[data-theme="dark"] .contact-new-request { color: var(--accent-text); }
-html[data-theme="dark"] .contact-new-request:hover { color: var(--ink); }
-html[data-theme="dark"] .contact-new-request:focus-visible { outline-color: var(--focus-ring); }
-
-/* Labelled platform links stay distinguishable on both dark and purple panels. */
 html[data-theme="dark"] .contact-channels .contact-channel-link {
   --channel-color: var(--accent-text);
   color: var(--ink);

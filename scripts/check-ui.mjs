@@ -47,8 +47,7 @@ try {
     assert.equal(await page.locator('h1').count(), 1, 'One primary heading');
     const about = page.locator('#about');
     const services = page.locator('#services');
-    const benefits = page.locator('#benefits');
-    const sections = { about, services, benefits, ...Object.fromEntries(['portfolio', 'pricing', 'insights', 'contact'].map(id => [id, page.locator(`#${id}`)])) };
+    const sections = { about, services, ...Object.fromEntries(['portfolio', 'pricing', 'insights', 'faq', 'contact'].map(id => [id, page.locator(`#${id}`)])) };
     for (const section of Object.values(sections)) {
       await section.waitFor({ state: 'visible' });
       assert.equal(await section.locator('h2:visible').count(), 1, 'Each section has a descriptive visible heading');
@@ -66,33 +65,7 @@ try {
     assert.equal(await about.locator('img').count(), 2, 'About uses two marketing photos');
     assert(await about.locator('img').evaluateAll(images => images.every(img => !decodeURIComponent(img.src).includes('elaheh'))), 'About no longer reuses the founder portraits');
     assert.equal(await page.locator('#approach').count(), 0, 'Removed collaboration section is not rendered');
-    assert.equal(await benefits.locator('img').count(), 5, 'Benefits includes five photo panels');
-
-    const benefitButtons = benefits.locator('button[aria-expanded][aria-controls]');
-    assert.equal(await benefitButtons.count(), 5, 'Five accessible benefit disclosures');
-    assert.equal(await benefits.locator('button[aria-expanded="true"]').count(), 1, 'One benefit initially expanded');
-    for (let index = 0; index < 5; index++) {
-      const button = benefitButtons.nth(index);
-      const panelId = await button.getAttribute('aria-controls');
-      const panel = page.locator(`[id="${panelId}"]`);
-      assert.equal(await panel.count(), 1, 'Each benefit controls a real description');
-      assert((await button.innerText()).trim().length > 3, 'Benefit has a descriptive button label');
-      if (await button.getAttribute('aria-expanded') !== 'true') {
-        await button.focus();
-        await page.keyboard.press(index % 2 ? 'Space' : 'Enter');
-      }
-      assert.equal(await button.getAttribute('aria-expanded'), 'true', 'Keyboard opens benefit');
-      assert.equal(await benefits.locator('button[aria-expanded="true"]').count(), 1, 'Only one benefit is expanded at a time');
-      assert(await panel.isVisible(), 'Active benefit description is visible');
-      assert((await panel.innerText()).trim().length > 20, 'Expanded benefit provides useful information');
-      for (let other = 0; other < 5; other++) {
-        if (other === index) continue;
-        const otherId = await benefitButtons.nth(other).getAttribute('aria-controls');
-        assert.equal(await page.locator(`[id="${otherId}"]`).isVisible(), false, 'Inactive benefit description is hidden');
-      }
-    }
-    await benefitButtons.first().focus();
-    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#benefits').count(), 0, 'Retired section is not rendered');
     assert.equal(await sections.portfolio.locator('.portfolio-card, .project-open, dialog').count(), 0, 'On-site project gallery has been removed');
     const portfolioLink = sections.portfolio.locator('a.portfolio-social-action');
     assert.equal(await portfolioLink.getAttribute('href'), 'https://www.instagram.com/elita.nasl/', 'Work samples lead to the Instagram account');
@@ -122,13 +95,11 @@ try {
         assert.match(await plan.locator('.plan-price').innerText(), /تومان/, 'Plan states its currency');
         assert.match(await plan.locator('.plan-price small').innerText(), index === 1 || index === 4 ? /پروژه‌ای/ : /ماهانه/, 'Plan states the correct pricing period');
         assert(await plan.locator('li').count() >= 4, 'Plan includes useful scope details');
-        const consultation = new URL(await plan.locator('a').getAttribute('href'), page.url());
-        assert.equal(consultation.origin, new URL(baseURL).origin, 'Plan consultation opens the site contact form');
-        assert.equal(consultation.pathname, new URL(baseURL).pathname, 'Plan consultation preserves the deployment subpath');
-        assert.equal(consultation.hash, '#contact', 'Plan consultation targets the contact form');
-        assert.equal(consultation.searchParams.get('planCategory'), ['instagram', 'website', 'seo', 'support', 'redesign', 'content'][index], 'Consultation preserves the selected pricing category');
-        assert.equal(consultation.searchParams.get('service'), ['instagram', 'website', 'seo', 'seo', 'website', 'content'][index], 'Consultation preserves the selected service');
-        assert(consultation.searchParams.get('plan')?.startsWith(['ig-', 'web-', 'seo-', 'care-', 'redesign-', 'content-'][index]), 'Consultation identifies the selected plan');
+        const destination = new URL(await plan.locator('a').getAttribute('href'), page.url());
+        assert.equal(destination.origin, new URL(baseURL).origin, 'Plan contact stays on the deployed site');
+        assert.equal(destination.pathname, new URL(baseURL).pathname, 'Plan contact preserves deployment prefix');
+        assert.equal(destination.hash, '#contact', 'Plan points to the footer contact invitation');
+        assert.equal(destination.search, '', 'Plan no longer carries removed form parameters');
         prices.push(amount);
       }
       assert(prices.every((amount, planIndex) => planIndex === 0 || amount > prices[planIndex - 1]), 'Increasing plan scope has increasing sample pricing');
@@ -159,43 +130,15 @@ try {
       const homeResponse = await page.goto(baseURL, { waitUntil: 'networkidle' });
       assert.equal(homeResponse?.status(), 200, 'Homepage loads after visiting an article');
     }
-    const form = sections.contact.locator('form.contact-form');
-    const urlBeforeForm = page.url();
-    const submit = form.locator('button[type="submit"]');
-    await submit.click();
-    assert.equal(await form.evaluate(element => element.checkValidity()), false, 'Empty request form is blocked by required field validation');
-    assert.equal(await page.locator('.contact-prepared').count(), 0, 'Invalid request creates no WhatsApp message');
-    await form.locator('#contact-name').fill('تست رابط کاربری');
-    await form.locator('#contact-way').fill('invalid-contact');
-    await form.locator('#contact-message').fill('این یک متن آزمایشی برای بررسی فرم است.');
-    await submit.click();
-    assert.equal(await form.locator('#contact-way').evaluate(element => element.validity.valid), false, 'Malformed contact information is rejected');
-    await form.locator('#contact-way').fill('preview@example.com');
-    await form.locator('#contact-service').selectOption({ label: 'طراحی وب‌سایت' });
-    // Keep this visual check read-only on the live Node form: only the static
-    // preview prepares a WhatsApp message without storing a real consultation.
-    if ((await submit.innerText()).includes('واتساپ')) {
-    await submit.click();
-    const preparedLink = form.locator('.contact-prepared a');
-    await preparedLink.waitFor({ state: 'visible' });
-    const preparedURL = new URL(await preparedLink.getAttribute('href'));
-    assert.equal(preparedURL.hostname, 'wa.me');
-    for (const expected of ['تست رابط کاربری', 'preview@example.com', 'طراحی وب‌سایت', 'این یک متن آزمایشی']) assert(preparedURL.searchParams.get('text')?.includes(expected), 'Composed message contains submitted information');
-    assert(await form.locator('.contact-prepared').evaluate(element => document.activeElement === element), 'Prepared message feedback receives focus');
-    assert.equal(page.url(), urlBeforeForm, 'Form prepares a message without navigation or sending');
-    await form.locator('#contact-name').fill('');
-    assert.equal(await form.locator('.contact-prepared').count(), 0, 'Editing form clears stale prepared message');
-    }
-    await form.locator('#contact-name').fill('');
-    await form.locator('#contact-way').fill('');
-    await form.locator('#contact-message').fill('');
-    const faq = sections.contact.locator('details').first();
+    assert.equal(await page.locator('form.contact-form').count(), 0, 'Removed form is absent');
+    assert(await sections.contact.evaluate(section => section.classList.contains('footer-cta-band')), 'Contact fragment identifies footer invitation');
+    const faq = sections.faq.locator('details').first();
     await faq.locator('summary').focus();
     await page.keyboard.press('Enter');
     assert.equal(await faq.getAttribute('open'), '', 'FAQ opens with keyboard');
     assert(await faq.locator('p').isVisible(), 'FAQ answer becomes visible');
     await page.keyboard.press('Enter');
-    const clippedContent = await page.locator('main section h2, main section p:not(.sr-only), #services article, #benefits button, .project-card-title, .pricing-card').evaluateAll(elements => elements.flatMap(element => {
+    const clippedContent = await page.locator('main section h2, main section p:not(.sr-only), #services article, .project-card-title, .pricing-card').evaluateAll(elements => elements.flatMap(element => {
       const rect = element.getBoundingClientRect();
       if (!rect.width || !rect.height) return [];
       return rect.left < -1 || rect.right > innerWidth + 1 || element.scrollWidth > element.clientWidth + 1
@@ -269,7 +212,7 @@ try {
     await page.evaluate(() => { document.activeElement instanceof HTMLElement && document.activeElement.blur(); scrollTo(0, 0); });
     await page.screenshot({ path: path.join(output, `${viewport.name}.png`), fullPage: true, animations: 'disabled' });
     assert.deepEqual(failedLocalAssets, [], `${viewport.name}: local deployment assets load successfully`);
-    results.push({ viewport, layout, typography, failedLocalAssets, homePathTested: new URL(baseURL).pathname, whatsappLinks: whatsapp.length, upcomingItems: upcoming.length, menuTested, sectionsTested: Object.keys(sections), serviceCards: 4, benefitPanels: 5, benefitKeyboardTested: true, servicesNavigationTested: true, featuredDialogTested: true, pricingCategoriesTested: 3, pricingPlansTested: 9, articlePagesTested: 3, contactValidationAndCompositionTested: true, faqKeyboardTested: true, title: await page.title() });
+    results.push({ viewport, layout, typography, failedLocalAssets, homePathTested: new URL(baseURL).pathname, whatsappLinks: whatsapp.length, upcomingItems: upcoming.length, menuTested, sectionsTested: Object.keys(sections), serviceCards: 4, servicesNavigationTested: true, featuredDialogTested: true, pricingCategoriesTested: 6, pricingPlansTested: 18, articlePagesTested: 3, faqKeyboardTested: true, title: await page.title() });
     await page.close();
   }
   assert.deepEqual(errors, [], 'No unhandled browser errors');

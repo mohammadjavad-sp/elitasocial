@@ -7,11 +7,14 @@ import { ServiceArt } from "@/components/service-art";
 import { SiteFooter } from "@/components/site-footer";
 import { getNavigation } from "@/content/home";
 import { sitePath } from "@/lib/site-path";
-import { serviceContactHref, servicePricingHref } from "@/lib/service-selection";
+import { contactSectionHref } from "@/lib/contact-destination";
+import { servicePricingHref } from "@/lib/pricing-navigation";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
 import { createPageMetadata } from "@/lib/seo";
 import { portfolioInstagramUrl } from "@/lib/portfolio-destination";
+import { StructuredData } from "@/components/structured-data";
+import { breadcrumbStructuredData } from "@/lib/structured-data";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -34,8 +37,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   const { services } = await getCmsContent();
   const service = services.find(item => item.slug === slug);
   if (!service) notFound();
-  const consultationHref = serviceContactHref(service.slug);
-  const pricingHref = service.pricingCategory ? servicePricingHref(service.pricingCategory) : consultationHref;
+  const contactHref = contactSectionHref();
+  const pricingHref = service.pricingCategory ? servicePricingHref(service.pricingCategory) : contactHref;
   const relatedServices = services.filter((item) => item.slug !== service.slug);
 
   return (
@@ -43,13 +46,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
       <a className="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
       <Header activePage="services" navigation={getNavigation("services")} />
       <main id="main-content">
+        <StructuredData data={breadcrumbStructuredData([{ name: "خانه", path: "/" }, { name: "خدمات", path: "/services/" }, { name: service.shortTitle, path: `/services/${service.slug}/` }])} />
         <section className="service-detail-hero container" aria-labelledby="service-detail-title">
           <div>
             <nav className="service-breadcrumb" aria-label="مسیر صفحه"><a href={sitePath("/")}>خانه</a><span aria-hidden="true">/</span><a href={sitePath("/services/")}>خدمات</a><span aria-hidden="true">/</span><span aria-current="page">{service.shortTitle}</span></nav>
             <p className="eyebrow"><Icon name="sparkle" />{service.title}</p>
             <h1 id="service-detail-title">{service.headline}</h1>
             <p className="service-lead">{service.intro}</p>
-            <div className="service-hero-actions"><a className="pill-button" href={consultationHref}>مشاوره دربارهٔ این خدمت<span className="button-circle"><Icon name="arrow" /></span></a><a className="service-text-link" href="#service-deliverables">چه چیزی دریافت می‌کنم؟<Icon name="arrow" /></a></div>
+            <div className="service-hero-actions"><a className="pill-button" href={contactHref}>مشاوره دربارهٔ این خدمت<span className="button-circle"><Icon name="arrow" /></span></a><a className="service-text-link" href="#service-deliverables">چه چیزی دریافت می‌کنم؟<Icon name="arrow" /></a></div>
           </div>
           <div className="service-detail-visual"><Image src={sitePath(service.image.src)} alt={service.image.alt} fill sizes="(min-width: 1400px) 550px, (max-width: 800px) 90vw, 42vw" preload /><div className="service-detail-art"><ServiceArt type={service.slug} /></div><span className="service-detail-image-label">{service.shortTitle}<Icon name="sparkle" /></span></div>
         </section>
@@ -63,9 +67,9 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
         <section className="service-process-band" id="service-process" aria-labelledby="service-process-title"><div className="container"><div className="service-process-heading"><div><p className="service-kicker">یک مسیر مشترک</p><h2 id="service-process-title">از اولین گفتگو تا تحویل کار</h2></div><p>در هر مرحله می‌دانی کجای مسیر هستیم و قدم بعدی چیست.</p></div><ol className="service-detail-steps">{service.steps.map((step, index) => <li key={step.title}><span>{new Intl.NumberFormat("fa-IR", { minimumIntegerDigits: 2 }).format(index + 1)}</span><h3>{step.title}</h3><p>{step.description}</p></li>)}</ol></div></section>
 
-        <section className="service-faq-section container" id="service-faq" aria-labelledby="service-faq-title"><div className="section-heading"><h2 id="service-faq-title">قبل از شروع، شاید بپرسی...</h2><p>اگر پرسش دیگری داری، در فرم مشاوره بنویس تا درباره‌اش صحبت کنیم.</p></div><div className="service-faq-list">{service.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div></section>
+        <section className="service-faq-section container" id="service-faq" aria-labelledby="service-faq-title"><div className="section-heading"><h2 id="service-faq-title">قبل از شروع، شاید بپرسی...</h2><p>اگر پرسش دیگری داری، از راه‌های ارتباطی پایین صفحه با ما در میان بگذار.</p></div><div className="service-faq-list">{service.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div></section>
 
-        <section className="service-plan-invitation container" aria-labelledby="service-plan-invitation-title"><div><p className="service-kicker">قدم بعدی برای برند تو</p><h2 id="service-plan-invitation-title">دربارهٔ {service.shortTitle} صحبت کنیم</h2><p>{service.pricingCategory ? "پلن‌ها برای آشنایی اولیه با ساختار همکاری نمایش داده شده‌اند؛ محدوده و هزینهٔ نهایی پس از بررسی نیازت مشخص می‌شود." : "نیاز محتوایی برندت را بگو تا دربارهٔ قالب، حجم کار و هزینه با هم هماهنگ کنیم."}</p><div className="service-hero-actions"><a className="pill-button" href={consultationHref}>درخواست مشاوره<span className="button-circle"><Icon name="arrow" /></span></a>{service.pricingCategory && <a className="service-text-link" href={pricingHref}>{service.pricingLabel}<Icon name="arrow" /></a>}</div></div><div className="service-plan-art" aria-hidden="true"><ServiceArt type={service.slug} /></div></section>
+        <section className="service-plan-invitation container" aria-labelledby="service-plan-invitation-title"><div><p className="service-kicker">قدم بعدی برای برند تو</p><h2 id="service-plan-invitation-title">دربارهٔ {service.shortTitle} صحبت کنیم</h2><p>{service.pricingCategory ? "پلن‌ها برای آشنایی اولیه با ساختار همکاری نمایش داده شده‌اند؛ محدوده و هزینهٔ نهایی پس از بررسی نیازت مشخص می‌شود." : "نیاز محتوایی برندت را بگو تا دربارهٔ قالب، حجم کار و هزینه با هم هماهنگ کنیم."}</p><div className="service-hero-actions"><a className="pill-button" href={contactHref}>درخواست مشاوره<span className="button-circle"><Icon name="arrow" /></span></a>{service.pricingCategory && <a className="service-text-link" href={pricingHref}>{service.pricingLabel}<Icon name="arrow" /></a>}</div></div><div className="service-plan-art" aria-hidden="true"><ServiceArt type={service.slug} /></div></section>
 
         <section className="service-related container" aria-labelledby="service-related-title"><div className="service-related-heading"><h2 id="service-related-title">برای قدم‌های بعدی برندت</h2><a className="service-text-link" href={portfolioInstagramUrl} target="_blank" rel="noopener noreferrer">دیدن نمونه‌کارها در اینستاگرام<Icon name="arrow" /></a></div><div className="service-related-grid">{relatedServices.map((item) => <a className={`service-related-card service-theme-${item.theme}`} href={sitePath(`/services/${item.slug}/`)} key={item.slug}><ServiceArt type={item.slug} /><h3>{item.shortTitle}</h3><span>آشنایی با این خدمت<Icon name="arrow" /></span></a>)}</div></section>
       </main>

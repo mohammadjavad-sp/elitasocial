@@ -2,16 +2,17 @@ import type { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { AboutSection, ServicesSection } from "@/components/home-sections";
-import { BenefitsSection } from "@/components/benefits-section";
 import { PortfolioInvitationSection } from "@/components/portfolio-preview";
 import { PricingSection } from "@/components/pricing-section";
-import { ContactSection } from "@/components/closing-sections";
+import { FrequentlyAskedSection } from "@/components/frequently-asked-section";
 import { InsightsSection } from "@/components/insights-section";
 import { SiteFooter } from "@/components/site-footer";
 import { getNavigation } from "@/content/home";
 import { getCmsContent } from "@/server/content";
 import { getSiteSettings } from "@/server/settings";
 import { createPageMetadata } from "@/lib/seo";
+import { StructuredData } from "@/components/structured-data";
+import { brandStructuredData } from "@/lib/structured-data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo, home: { brand } } = await getSiteSettings();
@@ -31,15 +32,15 @@ export default async function Home() {
       <div className="ambient-orb" aria-hidden="true" />
       <Header navigation={getNavigation()} />
       <main id="main-content">
+        <StructuredData data={brandStructuredData(settings)} />
         <Hero />
         <div className="home-continuation">
           <AboutSection />
           <PortfolioInvitationSection />
           <PricingSection pricing={content.pricing} />
           <ServicesSection items={content.services} />
-          <BenefitsSection content={settings.home.benefits} />
           <InsightsSection articles={content.articles} />
-          <ContactSection pricing={content.pricing} />
+          <FrequentlyAskedSection />
         </div>
       </main>
       <SiteFooter />
