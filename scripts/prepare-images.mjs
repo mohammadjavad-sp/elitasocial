@@ -3,6 +3,8 @@ import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
+sharp.concurrency(1);
+
 // Keep the original full-resolution files. Derivatives never enlarge a source.
 // The content hash changes URLs when either the source or encoder settings change.
 const root = process.cwd();

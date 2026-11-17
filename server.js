@@ -10,6 +10,13 @@ async function start() {
   process.env.NODE_ENV = "production";
   process.chdir(__dirname);
 
+  // Native libraries on shared hosts must not size their pools from all host CPUs.
+  // Also set these in cPanel: Node/libuv can initialise before this file is loaded.
+  process.env.UV_THREADPOOL_SIZE ||= "1";
+  process.env.VIPS_CONCURRENCY = "1";
+  process.env.RAYON_NUM_THREADS ||= "1";
+  require("sharp").concurrency(1);
+
   const passenger = typeof PhusionPassenger !== "undefined" ? PhusionPassenger : null;
   if (passenger) {
     // Next may create internal servers; select our public server explicitly.
@@ -39,6 +46,27 @@ async function start() {
     console.error("Elita Social HTTP server failed:", error.message);
     process.exit(1);
   });
+
+  let stopping = false;
+  function shutdown() {
+    if (stopping) return;
+    stopping = true;
+    // Finish active requests, but do not keep an old process alive indefinitely.
+    const deadline = setTimeout(() => {
+      server.closeAllConnections?.();
+      process.exit(0);
+    }, 10_000);
+    deadline.unref();
+    server.close(() => {
+      Promise.resolve().then(() => app.close()).then(
+        () => process.exit(0),
+        () => process.exit(1),
+      );
+    });
+    server.closeIdleConnections?.();
+  }
+  process.on("SIGTERM", shutdown);
+  process.on("SIGINT", shutdown);
 
   if (passenger) {
     server.listen("passenger");

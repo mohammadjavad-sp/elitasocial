@@ -6,14 +6,16 @@ const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/$/, "");
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Opt in on shared hosts that cannot spawn the separate TypeScript CLI.
-  ...(lowResourceBuild ? {
-    experimental: {
+  experimental: {
+    // Bound on-demand CMS image transforms independently of the build profile.
+    imgOptConcurrency: 1,
+    ...(lowResourceBuild ? {
       cpus: 1,
       workerThreads: true,
       webpackBuildWorker: false,
       useTypeScriptCli: false,
-    },
-  } : {}),
+    } : {}),
+  },
   turbopack: { root: process.cwd() },
   outputFileTracingRoot: process.cwd(),
   outputFileTracingExcludes: {

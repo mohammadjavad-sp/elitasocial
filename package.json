@@ -13,6 +13,7 @@
     "start": "next start --hostname 0.0.0.0",
     "start:cpanel": "node server.js",
     "check:host": "node scripts/check-host.mjs",
+    "check:runtime": "node --test scripts/check-runtime.test.mjs",
     "typecheck": "tsc --noEmit",
     "check:ui": "node scripts/check-ui.mjs",
     "check:portfolio": "node scripts/check-portfolio.mjs",
@@ -24,7 +25,7 @@
     "cms:migrate": "node --conditions=react-server --import tsx scripts/cms-migrate.ts"
   },
   "dependencies": {
-    "next": "16.4.3",
+    "next": "16.4.6",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "server-only": "0.0.1",

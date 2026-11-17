@@ -8,6 +8,9 @@ import { cmsDataDirectory, getDatabase, mediaFromRow, mediaIsReferenced } from "
 import { CmsError } from "./errors";
 import { text } from "./validation";
 
+// Also applies when launched with next start rather than the cPanel startup file.
+sharp.concurrency(1);
+
 export const maxUploadBytes = 8 * 1024 * 1024;
 const maxDecodedPixels = 40_000_000;
 const maxAnimationFrames = 100;
