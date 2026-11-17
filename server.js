@@ -15,6 +15,8 @@ async function start() {
   process.env.UV_THREADPOOL_SIZE ||= "1";
   process.env.VIPS_CONCURRENCY = "1";
   process.env.RAYON_NUM_THREADS ||= "1";
+  // Next's SWC binding creates its own Tokio runtime, separately from Rayon/libuv.
+  process.env.TURBO_TASKS_AVAILABLE_PARALLELISM ||= "1";
   require("sharp").concurrency(1);
 
   const passenger = typeof PhusionPassenger !== "undefined" ? PhusionPassenger : null;

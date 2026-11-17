@@ -7,7 +7,7 @@ import test from 'node:test';
 const source = readFileSync(new URL('../server.js', import.meta.url), 'utf8');
 async function fixture(passenger = false) {
   const process = Object.assign(new EventEmitter(), { env: {}, versions: { node: '22.18.0' }, chdir() {}, exit(code) { exits.push(code); } });
-  const exits = [], deadlines = [], calls = { sharp: [], close: 0, nextClose: 0, idle: 0, all: 0, listen: null, passenger: null };
+  const exits = [], deadlines = [], calls = { sharp: [], close: 0, nextClose: 0, idle: 0, all: 0, listen: null, passenger: null, nativeParallelism: null };
   let completeClose;
   const server = Object.assign(new EventEmitter(), {
     listen(value) { calls.listen = value; },
@@ -22,7 +22,7 @@ async function fixture(passenger = false) {
     setTimeout(callback, delay) { const timer = { callback, delay, unref() {} }; deadlines.push(timer); return timer; },
     require(name) {
       if (name === 'node:http') return { createServer() { return server; } };
-      if (name === 'next') return () => app;
+      if (name === 'next') { calls.nativeParallelism = process.env.TURBO_TASKS_AVAILABLE_PARALLELISM; return () => app; }
       if (name === 'sharp') return { concurrency(value) { calls.sharp.push(value); } };
       throw new Error(`Unexpected import: ${name}`);
     },
@@ -36,7 +36,8 @@ test('startup preserves Passenger integration and bounds image workers before Ne
   assert.equal(f.calls.passenger, false);
   assert.equal(f.calls.listen, 'passenger');
   assert.deepEqual(f.calls.sharp, [1]);
-  for (const name of ['UV_THREADPOOL_SIZE','VIPS_CONCURRENCY','RAYON_NUM_THREADS']) assert.equal(f.process.env[name], '1');
+  for (const name of ['UV_THREADPOOL_SIZE','VIPS_CONCURRENCY','RAYON_NUM_THREADS','TURBO_TASKS_AVAILABLE_PARALLELISM']) assert.equal(f.process.env[name], '1');
+  assert.equal(f.calls.nativeParallelism, '1', 'Native pool cap is set before Next can load SWC');
   assert.equal(f.process.env.NODE_OPTIONS, undefined);
 });
 

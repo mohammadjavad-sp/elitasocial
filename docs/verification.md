@@ -1,5 +1,9 @@
 # نتیجه بررسی این مرحله
 
+## کنترل native پس از مشاهدهٔ 96NLWP روی هاست — ۱۷ نوامبر ۲۰۲۶
+
+تأیید مالک: نصب، check:host، migration، build Next16.4.6 و typecheck روی Linux موفق‌اند. برنامه پس از Start یک PID با96NLWP داشت؛ پس کنترل تصویر برای حل تعداد کل کافی نبود. سورس exact-tag و آزمایش فرایند تازه با binding نصب‌شده، کنترل TURBO_TASKS_AVAILABLE_PARALLELISM را تأیید کردند. startup این مقدار را قبل از requireNext تنظیم می‌کند و آزمون ترتیب load آن را می‌سنجد. اثر روی هاست هنوز تا Save/Restart با env پنل و ps بعدی تأیید نشده است. ممیزی عمومی دامنه بعد از Start همهٔ صفحات/robots/sitemap/404 را PASS و دو هشدار HTTP/www را گزارش کرد.
+
 ## اصلاح runtime و Next.js — ۱۷ نوامبر ۲۰۲۶
 
 - 3 آزمون startup/Passenger و shutdown: موفق؛ توقف تکراری فقط یک بار اجرا می‌شود، درخواست جاری مهلت دارد و deadline فرایند باقی‌مانده را خارج می‌کند. آزمون سیگنال/Passenger شبیه‌سازی‌شده است؛ اجرای Linux هاست هنوز مشاهده نشده است.
